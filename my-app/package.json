@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gcp-build": "npm run build",
+    "deploy": "gcloud config set project adopt-a-pal && gcloud app deploy app.yaml --version=0-1-0"
   },
   "dependencies": {
     "eslint": "8.38.0",
