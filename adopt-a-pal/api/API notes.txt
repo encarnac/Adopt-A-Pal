@@ -1,0 +1,10 @@
+React runs on port 3000
+Flask runs on port 5000
+    we've set flask to run on 8080, and need to do the same for react
+
+activate virtual env
+.\env\Scripts\activate
+
+run `yarn create-app` to build
+
+

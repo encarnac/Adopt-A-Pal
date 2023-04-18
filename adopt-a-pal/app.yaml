@@ -1,0 +1,15 @@
+runtime: python39
+
+instance_class: F1
+
+# handlers:
+# - url: /static
+#   static_dir: static
+# - url: /.*
+#   script: auto\
+
+handlers:
+- url: /api/.*
+  script: auto
+
+entrypoint: cd api && gunicorn main:app --bind :$PORT --workers 1 --threads 8

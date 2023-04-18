@@ -1,0 +1,22 @@
+--- running locally ---
+to create latest build: 
+    yarn create-app
+
+to start front-end:
+    yarn start
+
+to start back-end:
+activate virtual environment:
+    .\env\Scripts\activate
+install dependencies:
+    pip install -r requirements.txt
+start server:
+    yarn start-api
+
+
+--- for depoloyment ---
+unix/GCP version of create-app in package.json, "Scripts":
+    "create-app": "yarn build && rm -r api/build && cp -r build api/build",
+
+windows version of create-app in package.json, "Scripts":
+    "create-app": "yarn build && del /S /Q api\\build && xcopy /E /I build api\\build",
