@@ -8,3 +8,7 @@ activate virtual env
 run `yarn create-app` to build
 
 
+LAST LEFT:
+trying to get gunocorn deployment to work
+    Check official google docs for requirements page.
+

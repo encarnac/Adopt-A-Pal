@@ -1,10 +1,10 @@
 import datetime
 import os
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, make_response, render_template
 
-app = Flask(__name__)
-
+# app = Flask(__name__)
+app = Flask(__name__, static_folder='./build', static_url_path='./build/static')
 
 @app.route('/')
 def root():
@@ -17,6 +17,15 @@ def root():
 
     return render_template('index.html', times=dummy_times)
 
+@app.route("/api/endpoint", methods=["GET"])
+def endpoint():
+    resp = make_response({"cat": 15})
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    return resp
+
+@app.route('/api/hello')
+def hello():
+    return jsonify(message='Hello World!')
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
@@ -33,9 +42,6 @@ if __name__ == '__main__':
 # [END gae_python3_render_template]
 # [END gae_python38_render_template]
 
-@app.route('/api/hello')
-def hello():
-    return jsonify(message='Hello World!')
 
 if __name__ == '__main__':
     app.run()
