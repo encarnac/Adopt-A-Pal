@@ -9,6 +9,5 @@ run `yarn create-app` to build
 
 
 LAST LEFT:
-trying to get gunocorn deployment to work
-    Check official google docs for requirements page.
+    cloudbuild is almost working, check step5 of build docker
 
