@@ -13,7 +13,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",  
+    "start": "react-scripts start",
     "start-api": "cd api && flask run --no-debugger",
     "build": "react-scripts build",
     "create-app-win": "yarn build && del /S /Q api\\build && xcopy /E /I build api\\build",
@@ -21,7 +21,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  
   "eslintConfig": {
     "extends": [
       "react-app",

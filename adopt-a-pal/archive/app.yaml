@@ -18,7 +18,7 @@
 #   FLASK_APP: api/main
 #   GUNICORN_CMD_ARGS: '--bind=0.0.0.0:8080 --workers=1 --threads=8 app:app'
 
-# entrypoint: gunicorn -b :$PORT api.main:app
+# entrypoint: gunicorn -b :8080 api.main:app
 
 
 
