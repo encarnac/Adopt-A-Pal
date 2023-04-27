@@ -1,11 +1,13 @@
 import datetime
-import os
+import os, sys
 import json
-from google.cloud import datastore
-from flask import Flask, jsonify, make_response, render_template, request, Response
+from google.cloud import datastore, storage
+from flask import Flask, jsonify, make_response, request, Response
 
+sys.path.insert(0, os.getcwd()+"/GCP_func")
+sys.path.append(os.path.abspath("/adopt-a-pal/api"))
+# from GCP_func import upload_pic, bucket_metadata
 
-# app = Flask(__name__)
 app = Flask(__name__, static_folder='./build', static_url_path='/')
 client = datastore.Client()
 
@@ -24,17 +26,17 @@ MISSING_ATTRIBUTES = {
 
 @app.route('/')
 def root():
-    # return render_template('index.html')
     return app.send_static_file('index.html')
 
-@app.route("/api/endpoint", methods=["GET"])
-def endpoint():
-    resp = make_response({"cat": 15})
-    resp.headers["Access-Control-Allow-Origin"] = "*"
-    return resp
+# @app.route("/api/endpoint", methods=["GET"])
+# def endpoint():
+#     resp = make_response({"cat": 15})
+#     resp.headers["Access-Control-Allow-Origin"] = "*"
+#     return resp
 
 @app.route('/api/hello')
 def hello():
+    print(bucket_metadata("adopt-a-pal-pics"))
     return jsonify(message='Hello World!')
 
 @app.route('/api/animals', methods=["GET", "POST"])
@@ -91,24 +93,24 @@ def animals():
             "added": datetime.datetime.now()
         }
 
-        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
-            return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
-                mimetype='application/json')
+        # if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
+        #     return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
+        #         mimetype='application/json')
 
-        dispositions = []
+        # dispositions = []
 
-        if content["disposition_animals"] is True:
-            dispositions.append("Good with other animals")
+        # if content["disposition_animals"] is True:
+        #     dispositions.append("Good with other animals")
 
-        if content["disposition_children"] is True:
-            dispositions.append("Good with children")
+        # if content["disposition_children"] is True:
+        #     dispositions.append("Good with children")
 
-        if content["disposition_leash"] is True:
-            dispositions.append("Animal must be leashed at all times")
+        # if content["disposition_leash"] is True:
+        #     dispositions.append("Animal must be leashed at all times")
 
-        animal.update({
-            "dispositions": dispositions
-        })
+        # animal.update({
+        #     "dispositions": dispositions
+        # })
 
         entity.update(animal)
 
@@ -118,14 +120,70 @@ def animals():
         new_animal_key = client.key(ANIMALS, int(eid))
         res = client.get(key=new_animal_key)
         res["id"] = int(eid)
+        # Upload pic of pet to bucket.
+        upload_pic(content["pic_url"], content["pic_name"])
 
         return Response(json.dumps(res, default=str), status=201,
                         mimetype='application/json')
     else:
         return jsonify(message='405')
 
+def bucket_metadata(bucket_name):
+    """Prints out a bucket's metadata."""
+    # bucket_name = 'your-bucket-name'
 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
 
+    print(f"ID: {bucket.id}")
+    print(f"Name: {bucket.name}")
+    print(f"Storage Class: {bucket.storage_class}")
+    print(f"Location: {bucket.location}")
+    print(f"Location Type: {bucket.location_type}")
+    print(f"Cors: {bucket.cors}")
+    print(f"Default Event Based Hold: {bucket.default_event_based_hold}")
+    print(f"Default KMS Key Name: {bucket.default_kms_key_name}")
+    print(f"Metageneration: {bucket.metageneration}")
+    print(
+        f"Public Access Prevention: {bucket.iam_configuration.public_access_prevention}"
+    )
+    print(f"Retention Effective Time: {bucket.retention_policy_effective_time}")
+    print(f"Retention Period: {bucket.retention_period}")
+    print(f"Retention Policy Locked: {bucket.retention_policy_locked}")
+    print(f"Requester Pays: {bucket.requester_pays}")
+    print(f"Self Link: {bucket.self_link}")
+    print(f"Time Created: {bucket.time_created}")
+    print(f"Versioning Enabled: {bucket.versioning_enabled}")
+    print(f"Labels: {bucket.labels}")
+
+def upload_pic(source_file_name, destination_blob_name):
+    """Uploads a file to the bucket."""
+    # The ID of your GCS bucket
+    # bucket_name = "your-bucket-name"
+    # The path to your file to upload
+    # source_file_name = "local/path/to/file"
+    # The ID of your GCS object
+    # destination_blob_name = "storage-object-name"
+    bucket_name = "adopt-a-pal-pics"
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    # Optional: set a generation-match precondition to avoid potential race conditions
+    # and data corruptions. The request to upload is aborted if the object's
+    # generation number does not match your precondition. For a destination
+    # object that does not yet exist, set the if_generation_match precondition to 0.
+    # If the destination object already exists in your bucket, set instead a
+    # generation-match precondition using its generation number.
+    generation_match_precondition = 0
+
+    blob.upload_from_filename(source_file_name, if_generation_match=generation_match_precondition)
+
+    print(
+        f"File {source_file_name} uploaded to {destination_blob_name}."
+    )
+    
+    
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
