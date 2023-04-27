@@ -1,18 +1,31 @@
 import datetime
 import os
-from google.cloud import datastore
-from flask import Flask, jsonify, make_response,request, render_template
-import constants
 import json
+from google.cloud import datastore
+from flask import Flask, jsonify, make_response, render_template, request, Response
+
 
 # app = Flask(__name__)
 app = Flask(__name__, static_folder='./build', static_url_path='/')
 client = datastore.Client()
+
+
+ANIMALS = "animals"
+
+MISSING_DISPOSITIONS = {
+    "ERROR": "ANIMAL REQUIRES ATLEAST ONE DISPOSITION."
+}
+
+REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability"]
+
+MISSING_ATTRIBUTES = {
+    "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY)."
+}
+
 @app.route('/')
 def root():
     # return render_template('index.html')
     return app.send_static_file('index.html')
-
 
 @app.route("/api/endpoint", methods=["GET"])
 def endpoint():
@@ -24,51 +37,95 @@ def endpoint():
 def hello():
     return jsonify(message='Hello World!')
 
-# Gets pets
-@app.route('/api/pets', methods=['POST','GET'])
-def lodgings_get_post():
-    if request.method == 'POST':
-        content = request.get_json()
-        new_lodging = datastore.entity.Entity(key=client.key(constants.pals))
-        new_lodging.update({"name": content["name"], "description":
-        content["description"],
-        "price": content["price"]})
-        client.put(new_lodging)
-        return str(new_lodging.key.id)
-    if request.method == 'GET':
-        query = client.query(kind=constants.pals)
+@app.route('/api/animals', methods=["GET", "POST"])
+def animals():
+    if request.method == "GET":
+        query = client.query(kind=ANIMALS)
+
+        species = request.args.get("species")
+        breed = request.args.get("breed")
+        disposition_animals = request.args.get("disposition_animals")
+        disposition_children = request.args.get("disposition_children")
+        disposition_leash = request.args.get("disposition_leash")
+
+        if species:
+            query.add_filter("species", "=", species)
+
+        if breed:
+            query.add_filter("breed", "=", breed)
+
+        if disposition_animals:
+            if disposition_animals.lower() == "true":
+                query.add_filter("dispositions", "=", "Good with other animals")
+
+        if disposition_children:
+            if disposition_children.lower() == "true":
+                query.add_filter("dispositions", "=", "Good with children")
+
+        if disposition_leash:
+                if disposition_leash.lower() == "true":
+                    query.add_filter("dispositions", "=", "Animal must be leashed at all times")
+
         results = list(query.fetch())
+
         for e in results:
             e["id"] = e.key.id
-        return json.dumps(results)
-    else:
-        return 'Method not recognized'
-
-# edit pal data
-@app.route('/api/<id>', methods=['PUT','DELETE','GET'])
-def lodgings_put_delete(id):
-    if request.method == 'PUT':
+        return Response(json.dumps(results, default=str), status=200,
+                        mimetype='application/json')
+        
+    elif request.method == "POST":
         content = request.get_json()
-        lodging_key = client.key(constants.pals, int(id))
-        lodging = client.get(key=lodging_key)
-        lodging.update({"name": content["name"], "description":
-        content["description"],
-        "price": content["price"]})
-        client.put(lodging)
-        return ('',200)
-    elif request.method == 'DELETE':
-        key = client.key(constants.pals, int(id))
-        client.delete(key)
-        return ('',200)
-    elif request.method == 'GET':
-        lodging_key = client.key(constants.lodgings, int(id))
-        lodging = client.get(key=lodging_key)
-        return json.dumps(lodging)
+
+        entity = datastore.Entity(key=client.key(ANIMALS))
+
+        for key in REQUIRED_ANIMAL_ATTRIBUTES:
+            if key not in content:
+                return Response(json.dumps(MISSING_ATTRIBUTES), status=400,
+                        mimetype='application/json')
+
+        animal = {
+            "name": content["name"],
+            "species": content["species"],
+            "breed": content["breed"],
+            "availability": content["availability"],
+            "added": datetime.datetime.now()
+        }
+
+        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
+            return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
+                mimetype='application/json')
+
+        dispositions = []
+
+        if content["disposition_animals"] is True:
+            dispositions.append("Good with other animals")
+
+        if content["disposition_children"] is True:
+            dispositions.append("Good with children")
+
+        if content["disposition_leash"] is True:
+            dispositions.append("Animal must be leashed at all times")
+
+        animal.update({
+            "dispositions": dispositions
+        })
+
+        entity.update(animal)
+
+        client.put(entity)
+
+        eid = entity.key.id
+        new_animal_key = client.key(ANIMALS, int(eid))
+        res = client.get(key=new_animal_key)
+        res["id"] = int(eid)
+
+        return Response(json.dumps(res, default=str), status=201,
+                        mimetype='application/json')
     else:
-        return 'Method not recognized'
+        return jsonify(message='405')
+
 
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
-    # app.run(host='127.0.0.1', port=5000, debug=True)
