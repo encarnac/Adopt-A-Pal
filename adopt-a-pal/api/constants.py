@@ -1,3 +1,3 @@
 lodgings = "lodgings"
-pal = "pal"
+pals = "pals"
 user = "user"

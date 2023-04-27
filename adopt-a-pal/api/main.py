@@ -29,18 +29,41 @@ def hello():
 def lodgings_get_post():
     if request.method == 'POST':
         content = request.get_json()
-        new_lodging = datastore.entity.Entity(key=client.key(constants.lodgings))
+        new_lodging = datastore.entity.Entity(key=client.key(constants.pals))
         new_lodging.update({"name": content["name"], "description":
         content["description"],
         "price": content["price"]})
         client.put(new_lodging)
         return str(new_lodging.key.id)
-    elif request.method == 'GET':
-        query = client.query(kind=constants.lodgings)
+    if request.method == 'GET':
+        query = client.query(kind=constants.pals)
         results = list(query.fetch())
         for e in results:
             e["id"] = e.key.id
         return json.dumps(results)
+    else:
+        return 'Method not recognized'
+
+# edit pal data
+@app.route('/api/<id>', methods=['PUT','DELETE','GET'])
+def lodgings_put_delete(id):
+    if request.method == 'PUT':
+        content = request.get_json()
+        lodging_key = client.key(constants.pals, int(id))
+        lodging = client.get(key=lodging_key)
+        lodging.update({"name": content["name"], "description":
+        content["description"],
+        "price": content["price"]})
+        client.put(lodging)
+        return ('',200)
+    elif request.method == 'DELETE':
+        key = client.key(constants.pals, int(id))
+        client.delete(key)
+        return ('',200)
+    elif request.method == 'GET':
+        lodging_key = client.key(constants.lodgings, int(id))
+        lodging = client.get(key=lodging_key)
+        return json.dumps(lodging)
     else:
         return 'Method not recognized'
 
