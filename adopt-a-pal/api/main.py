@@ -134,14 +134,14 @@ def animals():
 
 @app.route("/api/animals/<eid>", methods=["GET", "PATCH", "DELETE"])
 def animal_get_patch_delete(eid):
+
+    try:
+        int(eid)
+    except ValueError:
+        return Response(json.dumps(INVALID_INPUT), status=403,
+                    mimetype='application/json')    
+
     if request.method == "GET":
-
-        try:
-            int(eid)
-        except ValueError:
-            return Response(json.dumps(INVALID_INPUT), status=403,
-                        mimetype='application/json')
-
         animal_key = client.key(ANIMALS, int(eid))
         res = client.get(animal_key)
 
@@ -159,7 +159,16 @@ def animal_get_patch_delete(eid):
         pass
 
     elif request.method == "DELETE":
-        pass
+        animal_key = client.key(ANIMALS, int(eid))
+        res = client.get(animal_key)
+
+        if not res:
+            return Response(json.dumps(ANIMAL_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+        client.delete(animal_key)
+        
+        return Response(status=204)
 
     else:
         return Response(json.dumps(ERROR_405), status=405,
