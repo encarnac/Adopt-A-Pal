@@ -22,6 +22,14 @@ MISSING_ATTRIBUTES = {
     "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY)."
 }
 
+ANIMAL_NOT_FOUND = {
+    "ERROR": "ANIMAL NOT FOUND."
+}
+
+INVALID_INPUT = {
+    "ERROR" : "INVALID INPUT."
+}
+
 @app.route('/')
 def root():
     # return render_template('index.html')
@@ -124,7 +132,38 @@ def animals():
     else:
         return jsonify(message='405')
 
+@app.route("/api/animals/<eid>", methods=["GET", "PATCH", "DELETE"])
+def animal_get_patch_delete(eid):
+    if request.method == "GET":
 
+        try:
+            int(eid)
+        except ValueError:
+            return Response(json.dumps(INVALID_INPUT), status=403,
+                        mimetype='application/json')
+
+        animal_key = client.key(ANIMALS, int(eid))
+        res = client.get(animal_key)
+
+        if not res:
+            return Response(json.dumps(ANIMAL_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+        res["id"] = int(eid)
+
+        return Response(json.dumps(res, default=str), status=200,
+                        mimetype='application/json')
+
+
+    elif request.method == "PATCH":
+        pass
+
+    elif request.method == "DELETE":
+        pass
+
+    else:
+        return Response(json.dumps(ERROR_405), status=405,
+                        mimetype='application/json')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
