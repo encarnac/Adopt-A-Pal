@@ -195,10 +195,6 @@ def animal_get_patch_delete(eid):
 
         dispositions = []
 
-        for d in REQUIRED_DISPOSITIONS:
-            if d not in content:
-                return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
-
         if not (bool(content.get("disposition_animals")) and bool(content.get("disposition_children")) and bool(content.get("disposition_leash"))):
             return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
 
