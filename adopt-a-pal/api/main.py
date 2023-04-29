@@ -211,9 +211,8 @@ def animal_get_patch_delete(eid):
             if d not in content:
                 return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
 
-        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
-            return Response(json.dumps(ALL_FALSE_DISPOSITIONS), status=400,
-                mimetype='application/json')
+        if not (bool(content.get("disposition_animals")) and bool(content.get("disposition_children")) and bool(content.get("disposition_leash"))):
+            return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
 
         if content["disposition_animals"] is True:
             dispositions.append("Good with other animals")
