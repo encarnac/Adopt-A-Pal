@@ -3,6 +3,7 @@ import os, sys
 import json
 from google.cloud import datastore, storage
 from flask import Flask, jsonify, make_response, request, Response
+import random
 
 sys.path.insert(0, os.getcwd()+"/GCP_func")
 sys.path.append(os.path.abspath("/adopt-a-pal/api"))
@@ -90,38 +91,51 @@ def animals():
             "species": content["species"],
             "breed": content["breed"],
             "availability": content["availability"],
-            "added": datetime.datetime.now()
+            "added": datetime.datetime.now(),
+            "avatars":[]
         }
 
-        # if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
-        #     return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
-        #         mimetype='application/json')
+        if not (bool(content.get("disposition_animals")) and bool(content.get("disposition_children")) and bool(content.get("disposition_leash"))):
+            return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
 
-        # dispositions = []
+        dispositions = []
 
-        # if content["disposition_animals"] is True:
-        #     dispositions.append("Good with other animals")
+        if content["disposition_animals"] is True:
+            dispositions.append("Good with other animals")
 
-        # if content["disposition_children"] is True:
-        #     dispositions.append("Good with children")
+        if content["disposition_children"] is True:
+            dispositions.append("Good with children")
 
-        # if content["disposition_leash"] is True:
-        #     dispositions.append("Animal must be leashed at all times")
+        if content["disposition_leash"] is True:
+            dispositions.append("Animal must be leashed at all times")
 
-        # animal.update({
-        #     "dispositions": dispositions
-        # })
+        animal.update({
+            "dispositions": dispositions
+        })
+
+        # Upload pic of pet to bucket, add pic url to datastore list
+        random.seed()
+        if content["pic1"]:
+            prefix = random.randrange(9999999)
+            pic_url = upload_pic(content["pic1"], content["pic_name"] + str(prefix))
+            animal['avatars'].append(pic_url)
+        
+        if content["pic2"]:
+            prefix = random.randrange(9999999)
+            pic_url = upload_pic(content["pic2"], content["pic_name"] + str(prefix))
+            animal['avatars'].append(pic_url)
+        
+        if content["pic3"]:
+            prefix = random.randrange(9999999)
+            pic_url = upload_pic(content["pic3"], content["pic_name"] + str(prefix))
+            animal['avatars'].append(pic_url)
 
         entity.update(animal)
-
         client.put(entity)
-
         eid = entity.key.id
         new_animal_key = client.key(ANIMALS, int(eid))
         res = client.get(key=new_animal_key)
         res["id"] = int(eid)
-        # Upload pic of pet to bucket.
-        upload_pic(content["pic_url"], content["pic_name"])
 
         return Response(json.dumps(res, default=str), status=201,
                         mimetype='application/json')
@@ -178,10 +192,11 @@ def upload_pic(source_file_name, destination_blob_name):
     generation_match_precondition = 0
 
     blob.upload_from_filename(source_file_name, if_generation_match=generation_match_precondition)
-
-    print(
-        f"File {source_file_name} uploaded to {destination_blob_name}."
-    )
+    blob.make_public()
+    return blob.public_url
+    # print(
+    #     f"File {source_file_name} uploaded to {destination_blob_name}."
+    # )
     
     
 if __name__ == '__main__':
