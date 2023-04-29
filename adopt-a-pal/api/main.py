@@ -109,14 +109,13 @@ def animals():
             "avatars":[]
         }
 
-<<<<<<< HEAD
+
         for d in REQUIRED_DISPOSITIONS:
             if d not in content:
                 return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
 
         if not (bool(content.get("disposition_animals")) and bool(content.get("disposition_children")) and bool(content.get("disposition_leash"))):
             return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
->>>>>>> 0e76867170996c2917c9934ad70f0ddeab0dd96d
 
         dispositions = []
 
@@ -162,7 +161,6 @@ def animals():
     else:
         return jsonify(message='405')
 
-<<<<<<< HEAD
 @app.route("/api/animals/<eid>", methods=["GET", "PUT", "DELETE"])
 def animal_get_patch_delete(eid):
 
@@ -254,7 +252,7 @@ def bucket_metadata(bucket_name):
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
->>>>>>> 0e76867170996c2917c9934ad70f0ddeab0dd96d
+
 
     print(f"ID: {bucket.id}")
     print(f"Name: {bucket.name}")
