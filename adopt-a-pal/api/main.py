@@ -30,6 +30,8 @@ INVALID_INPUT = {
     "ERROR" : "INVALID INPUT."
 }
 
+REQUIRED_DISPOSITIONS = ["disposition_animals", "disposition_children", "disposition_leash"]
+
 @app.route('/')
 def root():
     # return render_template('index.html')
@@ -132,7 +134,7 @@ def animals():
     else:
         return jsonify(message='405')
 
-@app.route("/api/animals/<eid>", methods=["GET", "PATCH", "DELETE"])
+@app.route("/api/animals/<eid>", methods=["GET", "PUT", "DELETE"])
 def animal_get_patch_delete(eid):
 
     try:
@@ -155,8 +157,52 @@ def animal_get_patch_delete(eid):
                         mimetype='application/json')
 
 
-    elif request.method == "PATCH":
-        pass
+    elif request.method == "PUT":
+        content = request.get_json()
+
+        for key in REQUIRED_ANIMAL_ATTRIBUTES:
+            if key not in content:
+                return Response(json.dumps(MISSING_ATTRIBUTES), status=400,
+                        mimetype='application/json')
+
+        animal_key = client.key(ANIMALS, int(eid))
+        res = client.get(animal_key)
+
+        if not res:
+            return Response(json.dumps(ANIMAL_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+
+        for key in REQUIRED_ANIMAL_ATTRIBUTES:
+            res[key] = content[key]
+
+        dispositions = []
+
+        for d in REQUIRED_DISPOSITIONS:
+            if d not in content:
+                return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
+
+        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
+            return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
+                mimetype='application/json')
+
+        if content["disposition_animals"] is True:
+            dispositions.append("Good with other animals")
+
+        if content["disposition_children"] is True:
+            dispositions.append("Good with children")
+
+        if content["disposition_leash"] is True:
+            dispositions.append("Animal must be leashed at all times")
+
+        res["dispositions"] = dispositions
+
+        client.put(res)
+
+        res["id"] = int(eid)
+
+        return Response(json.dumps(res, default=str), status=200,
+                        mimetype='application/json')
 
     elif request.method == "DELETE":
         animal_key = client.key(ANIMALS, int(eid))
@@ -167,7 +213,7 @@ def animal_get_patch_delete(eid):
                         mimetype='application/json')
 
         client.delete(animal_key)
-        
+
         return Response(status=204)
 
     else:
