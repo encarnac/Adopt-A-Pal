@@ -12,7 +12,7 @@ client = datastore.Client()
 
 ANIMALS = "animals"
 
-MISSING_DISPOSITIONS = {
+ALL_FALSE_DISPOSITIONS = {
     "ERROR": "ANIMAL REQUIRES ATLEAST ONE DISPOSITION."
 }
 
@@ -31,6 +31,10 @@ INVALID_INPUT = {
 }
 
 REQUIRED_DISPOSITIONS = ["disposition_animals", "disposition_children", "disposition_leash"]
+
+MISSING_DISPOSITIONS = {
+    "ERROR": "ANIMAL IS MISSING DISPOSITION(S)."
+}
 
 @app.route('/')
 def root():
@@ -101,8 +105,12 @@ def animals():
             "added": datetime.datetime.now()
         }
 
+        for d in REQUIRED_DISPOSITIONS:
+            if d not in content:
+                return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
+
         if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
-            return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
+            return Response(json.dumps(ALL_FALSE_DISPOSITIONS), status=400,
                 mimetype='application/json')
 
         dispositions = []
@@ -183,7 +191,7 @@ def animal_get_patch_delete(eid):
                 return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
 
         if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
-            return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
+            return Response(json.dumps(ALL_FALSE_DISPOSITIONS), status=400,
                 mimetype='application/json')
 
         if content["disposition_animals"] is True:
