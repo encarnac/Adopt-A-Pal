@@ -15,7 +15,7 @@ client = datastore.Client()
 
 ANIMALS = "animals"
 
-ALL_FALSE_DISPOSITIONS = {
+MISSING_DISPOSITIONS = {
     "ERROR": "ANIMAL REQUIRES ATLEAST ONE DISPOSITION."
 }
 
@@ -33,11 +33,6 @@ INVALID_INPUT = {
     "ERROR" : "INVALID INPUT."
 }
 
-REQUIRED_DISPOSITIONS = ["disposition_animals", "disposition_children", "disposition_leash"]
-
-MISSING_DISPOSITIONS = {
-    "ERROR": "ANIMAL IS MISSING DISPOSITION(S)."
-}
 
 @app.route('/')
 def root():
@@ -108,11 +103,6 @@ def animals():
             "added": datetime.datetime.now(),
             "avatars":[]
         }
-
-
-        for d in REQUIRED_DISPOSITIONS:
-            if d not in content:
-                return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
 
         if not (bool(content.get("disposition_animals")) and bool(content.get("disposition_children")) and bool(content.get("disposition_leash"))):
             return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
