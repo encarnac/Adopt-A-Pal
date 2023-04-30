@@ -19,11 +19,25 @@ MISSING_DISPOSITIONS = {
     "ERROR": "ANIMAL REQUIRES ATLEAST ONE DISPOSITION."
 }
 
-REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability"]
+REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability", "pic_name"]
 
 MISSING_ATTRIBUTES = {
-    "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY)."
+    "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY, pic_name)."
 }
+
+ANIMAL_NOT_FOUND = {
+    "ERROR": "ANIMAL NOT FOUND."
+}
+
+INVALID_INPUT = {
+    "ERROR" : "INVALID INPUT."
+}
+
+PIC_ATTRIBUTES = ["pic1", "pic2", "pic3"]
+
+PLACEHOLDER_IMAGE = "https://storage.cloud.google.com/adopt-a-pal-pics/placeholder.jpg"
+
+REQUIRED_DISPOSITIONS = ["disposition_animals", "disposition_children", "disposition_leash"]
 
 @app.route('/')
 def root():
@@ -95,8 +109,13 @@ def animals():
             "avatars":[]
         }
 
-        if not (bool(content.get("disposition_animals")) and bool(content.get("disposition_children")) and bool(content.get("disposition_leash"))):
-            return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
+        for d in REQUIRED_DISPOSITIONS:
+            if d not in content:
+                return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
+
+        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
+            return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
+                mimetype='application/json')
 
         dispositions = []
 
@@ -113,22 +132,15 @@ def animals():
             "dispositions": dispositions
         })
 
-        # Upload pic of pet to bucket, add pic url to datastore list
+        #check for pic 1-3, if missing use placeholder.jpg, else upload photo
         random.seed()
-        if content["pic1"]:
-            prefix = random.randrange(9999999)
-            pic_url = upload_pic(content["pic1"], content["pic_name"] + str(prefix))
-            animal['avatars'].append(pic_url)
-        
-        if content["pic2"]:
-            prefix = random.randrange(9999999)
-            pic_url = upload_pic(content["pic2"], content["pic_name"] + str(prefix))
-            animal['avatars'].append(pic_url)
-        
-        if content["pic3"]:
-            prefix = random.randrange(9999999)
-            pic_url = upload_pic(content["pic3"], content["pic_name"] + str(prefix))
-            animal['avatars'].append(pic_url)
+        for pic in PIC_ATTRIBUTES:
+            if pic not in content:
+                animal['avatars'].append(PLACEHOLDER_IMAGE)
+            else:
+                prefix = random.randrange(9999999)
+                pic_url = upload_pic(content[pic], content["pic_name"] + str(prefix))
+                animal['avatars'].append(pic_url)
 
         entity.update(animal)
         client.put(entity)
@@ -141,6 +153,105 @@ def animals():
                         mimetype='application/json')
     else:
         return jsonify(message='405')
+
+@app.route("/api/animals/<eid>", methods=["GET", "PUT", "DELETE"])
+def animal_get_patch_delete(eid):
+
+    try:
+        int(eid)
+    except ValueError:
+        return Response(json.dumps(INVALID_INPUT), status=403,
+                    mimetype='application/json')    
+
+    if request.method == "GET":
+        animal_key = client.key(ANIMALS, int(eid))
+        res = client.get(animal_key)
+
+        if not res:
+            return Response(json.dumps(ANIMAL_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+        res["id"] = int(eid)
+
+        return Response(json.dumps(res, default=str), status=200,
+                        mimetype='application/json')
+
+
+    elif request.method == "PUT":
+        content = request.get_json()
+
+        for key in REQUIRED_ANIMAL_ATTRIBUTES:
+            if key not in content:
+                return Response(json.dumps(MISSING_ATTRIBUTES), status=400,
+                        mimetype='application/json')
+
+        animal_key = client.key(ANIMALS, int(eid))
+        res = client.get(animal_key)
+
+        if not res:
+            return Response(json.dumps(ANIMAL_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+
+        for key in REQUIRED_ANIMAL_ATTRIBUTES:
+            res[key] = content[key]
+
+        dispositions = []
+
+        for d in REQUIRED_DISPOSITIONS:
+            if d not in content:
+                return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
+
+        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
+            return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
+                mimetype='application/json')
+
+        if content["disposition_animals"] is True:
+            dispositions.append("Good with other animals")
+
+        if content["disposition_children"] is True:
+            dispositions.append("Good with children")
+
+        if content["disposition_leash"] is True:
+            dispositions.append("Animal must be leashed at all times")
+
+        res["dispositions"] = dispositions
+
+        #if pic not in edit request, use same photo, else upload new photo
+        new_pics = [] 
+        random.seed()
+        for index, pic in enumerate(PIC_ATTRIBUTES):
+            if pic not in content:
+                new_pics.append(res["avatars"][index])
+            else:
+                prefix = random.randrange(9999999)
+                pic_url = upload_pic(content[pic], content["pic_name"] + str(prefix))
+                new_pics.append(pic_url)
+
+        res["avatars"] = new_pics
+
+        client.put(res)
+
+        res["id"] = int(eid)
+
+        return Response(json.dumps(res, default=str), status=200,
+                        mimetype='application/json')
+
+    elif request.method == "DELETE":
+        animal_key = client.key(ANIMALS, int(eid))
+        res = client.get(animal_key)
+
+        if not res:
+            return Response(json.dumps(ANIMAL_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+        client.delete(animal_key)
+
+        return Response(status=204)
+
+    else:
+        return Response(json.dumps(ERROR_405), status=405,
+                        mimetype='application/json')
 
 def bucket_metadata(bucket_name):
     """Prints out a bucket's metadata."""
