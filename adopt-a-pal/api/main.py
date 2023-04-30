@@ -19,10 +19,10 @@ MISSING_DISPOSITIONS = {
     "ERROR": "ANIMAL REQUIRES ATLEAST ONE DISPOSITION."
 }
 
-REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability"]
+REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability", "pic_name"]
 
 MISSING_ATTRIBUTES = {
-    "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY)."
+    "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY, pic_name)."
 }
 
 ANIMAL_NOT_FOUND = {
@@ -36,6 +36,8 @@ INVALID_INPUT = {
 PIC_ATTRIBUTES = ["pic1", "pic2", "pic3"]
 
 PLACEHOLDER_IMAGE = "https://storage.cloud.google.com/adopt-a-pal-pics/placeholder.jpg"
+
+REQUIRED_DISPOSITIONS = ["disposition_animals", "disposition_children", "disposition_leash"]
 
 @app.route('/')
 def root():
@@ -107,8 +109,13 @@ def animals():
             "avatars":[]
         }
 
-        if not (bool(content.get("disposition_animals")) and bool(content.get("disposition_children")) and bool(content.get("disposition_leash"))):
-            return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
+        for d in REQUIRED_DISPOSITIONS:
+            if d not in content:
+                return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
+
+        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
+            return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
+                mimetype='application/json')
 
         dispositions = []
 
@@ -191,8 +198,13 @@ def animal_get_patch_delete(eid):
 
         dispositions = []
 
-        if not (bool(content.get("disposition_animals")) and bool(content.get("disposition_children")) and bool(content.get("disposition_leash"))):
-            return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
+        for d in REQUIRED_DISPOSITIONS:
+            if d not in content:
+                return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
+
+        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
+            return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
+                mimetype='application/json')
 
         if content["disposition_animals"] is True:
             dispositions.append("Good with other animals")
