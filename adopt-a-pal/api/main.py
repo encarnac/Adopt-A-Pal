@@ -33,6 +33,9 @@ INVALID_INPUT = {
     "ERROR" : "INVALID INPUT."
 }
 
+PIC_ATTRIBUTES = ["pic1", "pic2", "pic3"]
+
+PLACEHOLDER_IMAGE = "https://storage.cloud.google.com/adopt-a-pal-pics/placeholder.jpg"
 
 @app.route('/')
 def root():
@@ -122,22 +125,15 @@ def animals():
             "dispositions": dispositions
         })
 
-        # Upload pic of pet to bucket, add pic url to datastore list
+        #check for pic 1-3, if missing use placeholder.jpg, else upload photo
         random.seed()
-        if content["pic1"]:
-            prefix = random.randrange(9999999)
-            pic_url = upload_pic(content["pic1"], content["pic_name"] + str(prefix))
-            animal['avatars'].append(pic_url)
-        
-        if content["pic2"]:
-            prefix = random.randrange(9999999)
-            pic_url = upload_pic(content["pic2"], content["pic_name"] + str(prefix))
-            animal['avatars'].append(pic_url)
-        
-        if content["pic3"]:
-            prefix = random.randrange(9999999)
-            pic_url = upload_pic(content["pic3"], content["pic_name"] + str(prefix))
-            animal['avatars'].append(pic_url)
+        for pic in PIC_ATTRIBUTES:
+            if pic not in content:
+                animal['avatars'].append(PLACEHOLDER_IMAGE)
+            else:
+                prefix = random.randrange(9999999)
+                pic_url = upload_pic(content[pic], content["pic_name"] + str(prefix))
+                animal['avatars'].append(pic_url)
 
         entity.update(animal)
         client.put(entity)
@@ -209,6 +205,19 @@ def animal_get_patch_delete(eid):
 
         res["dispositions"] = dispositions
 
+        #if pic not in edit request, use same photo, else upload new photo
+        new_pics = [] 
+        random.seed()
+        for index, pic in enumerate(PIC_ATTRIBUTES):
+            if pic not in content:
+                new_pics.append(res["avatars"][index])
+            else:
+                prefix = random.randrange(9999999)
+                pic_url = upload_pic(content[pic], content["pic_name"] + str(prefix))
+                new_pics.append(pic_url)
+
+        res["avatars"] = new_pics
+
         client.put(res)
 
         res["id"] = int(eid)
@@ -238,7 +247,6 @@ def bucket_metadata(bucket_name):
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
-
 
     print(f"ID: {bucket.id}")
     print(f"Name: {bucket.name}")
