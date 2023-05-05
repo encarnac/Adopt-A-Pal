@@ -332,6 +332,53 @@ def user_get_patch_delete(eid):
                         mimetype='application/json')
 
 
+# Function takes user id and pal id, adds/removes pal id from user list of pals
+@app.route("/api/users/<uid>/<eid>", methods=["POST", "DELETE"])
+def user_add_delete_pal(uid,eid):
+    try:
+        int(uid)
+        int(eid)
+    except ValueError:
+        return Response(json.dumps(INVALID_INPUT), status=403,
+                    mimetype='application/json')    
+
+    if request.method == "POST":
+        content = request.get_json()
+        res = client.get(client.key(USERS, int(uid)))
+        # user_key = client.key(USERS, int(uid))
+        # res = client.get(user_key)
+        if not res:
+            return Response(json.dumps(USER_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+        if eid not in content["pals"]:
+            content["pals"].append(eid)
+
+        client.put(res)
+        return Response(json.dumps(res, default=str), status=200,
+                        mimetype='application/json')
+
+
+    elif request.method == "DELETE":
+        # res = client.get(client.key(USERS, int(uid)))
+        user_key = client.key(USERS, int(uid))
+        res = client.get(user_key)
+
+        if not res:
+            return Response(json.dumps(USER_NOT_FOUND), status=404,
+                        mimetype='application/json')
+        
+        if eid in res["pals"]:
+            res["pals"].remove(eid)
+        client.put(res)
+
+        return Response(status=204)
+
+    else:
+        return Response(json.dumps("ERROR_405"), status=405,
+                        mimetype='application/json')
+
+
 def bucket_metadata(bucket_name):
     """Prints out a bucket's metadata."""
     # bucket_name = 'your-bucket-name'
