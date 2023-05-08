@@ -15,7 +15,7 @@ const Header = () => {
             <h1 className="font-bold text-[55px] text-[#714949] md:text-left">
               Swipe. <span className="text-[#FF7578]">Adopt.</span> Love.
             </h1>
-            <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[7em] rounded-full font-medium font-small my-6 mx-auto md:mx-0 py-2">
+            <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[8em] rounded-full font-medium font-small my-6 mx-auto md:mx-0 py-2">
               Get Started
             </button>
           </div>

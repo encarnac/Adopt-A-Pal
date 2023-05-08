@@ -2,6 +2,8 @@ import { React } from "react";
 import { Link } from "react-router-dom";
 
 function NavBar(props) {
+  const handleModalState = props.handleModalState;
+
   return (
     <div className="fixed top-0 left-0 right-0 bg-[#FFDDD2]">
       <div className="max-w-[80vw] mx-auto flex justify-between items-center pt=6 my-5">
@@ -46,7 +48,7 @@ function NavBar(props) {
 
             {/* NAVIGATION LINKS */}
             <div className="right menu flex text-2xl font-medium">
-            <ul className='hidden lg:flex'>
+              <ul className="hidden lg:flex">
                 <li className="text-[#FA8C01] list-none mx-3">
                   <a href="#">Home</a>
                 </li>
@@ -64,10 +66,11 @@ function NavBar(props) {
         {/* ACCOUNT LINKS */}
         <div className="right">
           <div className="menu flex gap-3 items-center text-2xl font-medium">
-            <Link to="/login">
-              <li className="text-[#714949] hover:text-[#856a6a] list-none mx-3">
-                Login
-              </li>
+            <Link 
+              className="text-[#714949] hover:text-[#856a6a] list-none mx-3"
+              onClick={() => handleModalState("login")}
+            >
+              Login
             </Link>
             <Link to="/signup">
               <button className="text-white font-medium px-4 py-2 rounded-full bg-[#F2968F] hover:bg-[#ef8e87] ">

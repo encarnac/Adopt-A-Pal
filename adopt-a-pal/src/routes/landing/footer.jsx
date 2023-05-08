@@ -1,3 +1,4 @@
+
 const Footer = () => {
   return (
     <div
@@ -48,7 +49,7 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        
+
         {/* BOTTOM */}
         <div className="opacity-60 pt-2 mt-5 text-[20px]">
           <p>© All Rights Reserved</p>
