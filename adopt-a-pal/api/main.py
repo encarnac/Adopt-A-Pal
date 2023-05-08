@@ -250,7 +250,7 @@ def animal_get_patch_delete(eid):
         return Response(status=204)
 
     else:
-        return Response(json.dumps(ERROR_405), status=405,
+        return Response(json.dumps("ERROR_405"), status=405,
                         mimetype='application/json')
 
 def bucket_metadata(bucket_name):
