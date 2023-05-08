@@ -11,7 +11,6 @@ function Landing( props ) {
             <Header/>
             <Features/>
             <Footer/>
-            
         </>
     );
 };

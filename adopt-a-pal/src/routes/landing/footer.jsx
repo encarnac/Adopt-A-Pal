@@ -1,11 +1,12 @@
 const Footer = () => {
   return (
     <div
-      className="mt-[5em] w-full rounded-t-[55px] bg-white text-[#714949] shadow-xl"
+      className=" w-full rounded-t-[55px] bg-white text-[#714949] shadow-xl"
       id="contact-us"
     >
       <div className="xl:px-40 pb-12 lg:px-20 md:px-10 sm:px-5 px-10">
         <div className="w-full pt-12 flex flex-col sm:flex-row space-y-2 justify-between">
+          {/* LEFT COLUMN - CALL TO ACTION BUTTON */}
           <div className="w-full sm:w-2/5 pr-6 flex flex-col space-y-4">
             <p className="opacity-60 text-[55px] text-[#714949] font-bold">
               Ready to find the <span className="text-[#FF7578]">one</span>?
@@ -14,6 +15,8 @@ const Footer = () => {
               Get Started
             </button>
           </div>
+
+          {/* RIGHT COLUMN - SOCIAL ICON LINKS */}
           <div className="flex space-x-5 text-[40px]">
             <a href="https://github.com/Spatch7/Adopt-A-Pal">
               <svg
@@ -43,6 +46,8 @@ const Footer = () => {
             </a>
           </div>
         </div>
+        
+        {/* COPYRIGHT */}
         <div className="opacity-60 pt-2 mt-5 text-[20px]">
           <p>© All Rights Reserved</p>
         </div>
