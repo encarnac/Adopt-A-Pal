@@ -333,8 +333,9 @@ def user_get_patch_delete(eid):
 
 
 # Function takes user id and pal id, adds/removes pal id from user list of pals
+# TODO verify user is admin or the current user.
 @app.route("/api/users/<uid>/<eid>", methods=["POST", "DELETE"])
-def user_add_delete_pal(uid,eid):
+def user_add_delete_pal(uid, eid):
     try:
         int(uid)
         int(eid)
@@ -343,17 +344,13 @@ def user_add_delete_pal(uid,eid):
                     mimetype='application/json')    
 
     if request.method == "POST":
-        content = request.get_json()
         res = client.get(client.key(USERS, int(uid)))
-        # user_key = client.key(USERS, int(uid))
-        # res = client.get(user_key)
         if not res:
             return Response(json.dumps(USER_NOT_FOUND), status=404,
                         mimetype='application/json')
-
-        if eid not in content["pals"]:
-            content["pals"].append(eid)
-
+        
+        if eid not in res["pals"]:
+            res["pals"].append(eid)
         client.put(res)
         return Response(json.dumps(res, default=str), status=200,
                         mimetype='application/json')
