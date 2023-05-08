@@ -1,7 +1,7 @@
 const Header = () => {
   return (
     <>
-      <div className="w-fullpy-16 min-h-screen flex items-center px-4" id="header">
+      <div className="w-fullpy-16 min-h-screen flex items-center px-4" id="#">
         <div className="max-w-[1240px] mx-auto grid md:grid-cols-2">
           {/*HEADER IMG*/}
           <img

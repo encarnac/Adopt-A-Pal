@@ -48,7 +48,7 @@ function NavBar(props) {
             <div className="right menu flex text-2xl font-medium">
             <ul className='hidden lg:flex'>
                 <li className="text-[#FA8C01] list-none mx-3">
-                  <a href="#header">Home</a>
+                  <a href="#">Home</a>
                 </li>
                 <li className="text-[#714949] hover:text-[#856a6a] list-none mx-3">
                   <a href="#features">Features</a>

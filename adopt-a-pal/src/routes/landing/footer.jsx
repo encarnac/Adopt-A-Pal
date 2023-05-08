@@ -7,13 +7,13 @@ const Footer = () => {
       {/* FOOTER CONTAINER */}
       <div className="xl:px-40 pb-12 px-20  ">
         {/* TOP */}
-        <div className="w-full pt-12 flex flex-col md:flex-row space-y-5 md:justify-between justify-evenly">
+        <div className="w-full pt-12 flex flex-col md:flex-row space-y-5 md:justify-between">
           {/* LEFT COLUMN - CALL TO ACTION BUTTON */}
           <div className=" sm:w-2/5 flex flex-col space-y-5 justify-items-center">
             <p className="opacity-60 text-[35px] md:text-[55px] text-[#714949] text-start font-bold">
               Ready to find the <span className="text-[#FF7578]">one</span>?
             </p>
-            <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[7em] rounded-full font-medium font-small my-6-0 py-2">
+            <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[7em] rounded-full font-medium text-[23px] my-6-0 py-2">
               Get Started
             </button>
           </div>
