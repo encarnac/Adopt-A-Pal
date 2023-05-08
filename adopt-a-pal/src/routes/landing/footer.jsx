@@ -4,14 +4,16 @@ const Footer = () => {
       className=" w-full rounded-t-[55px] bg-white text-[#714949] shadow-xl"
       id="contact-us"
     >
-      <div className="xl:px-40 pb-12 lg:px-20 md:px-10 sm:px-5 px-10">
-        <div className="w-full pt-12 flex flex-col sm:flex-row space-y-2 justify-between">
+      {/* FOOTER CONTAINER */}
+      <div className="xl:px-40 pb-12 px-20  ">
+        {/* TOP */}
+        <div className="w-full pt-12 flex flex-col md:flex-row space-y-5 md:justify-between justify-evenly">
           {/* LEFT COLUMN - CALL TO ACTION BUTTON */}
-          <div className="w-full sm:w-2/5 pr-6 flex flex-col space-y-4">
-            <p className="opacity-60 text-[55px] text-[#714949] font-bold">
+          <div className=" sm:w-2/5 flex flex-col space-y-5 justify-items-center">
+            <p className="opacity-60 text-[35px] md:text-[55px] text-[#714949] text-start font-bold">
               Ready to find the <span className="text-[#FF7578]">one</span>?
             </p>
-            <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[7em] rounded-full font-medium font-small mx-10 my-6-0 py-2">
+            <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[7em] rounded-full font-medium font-small my-6-0 py-2">
               Get Started
             </button>
           </div>
@@ -47,7 +49,7 @@ const Footer = () => {
           </div>
         </div>
         
-        {/* COPYRIGHT */}
+        {/* BOTTOM */}
         <div className="opacity-60 pt-2 mt-5 text-[20px]">
           <p>© All Rights Reserved</p>
         </div>
