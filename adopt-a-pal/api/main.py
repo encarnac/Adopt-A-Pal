@@ -15,11 +15,15 @@ client = datastore.Client()
 
 ANIMALS = "animals"
 
+USERS = "users"
+
 MISSING_DISPOSITIONS = {
     "ERROR": "ANIMAL REQUIRES ATLEAST ONE DISPOSITION."
 }
 
 REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability", "pic_name"]
+
+REQUIRED_USER_ATTRIBUTES = ["firstname", "lastname", "email", "city", "phone", "pals"]
 
 MISSING_ATTRIBUTES = {
     "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY, pic_name)."
@@ -27,6 +31,14 @@ MISSING_ATTRIBUTES = {
 
 ANIMAL_NOT_FOUND = {
     "ERROR": "ANIMAL NOT FOUND."
+}
+
+USER_NOT_FOUND = {
+    "ERROR": "USER DOES NOT EXIST"
+}
+
+USER_BAD_PERM = {
+    "ERROR": "USER DOES NOT HAVE PERMISSSION TO ACCESS THIS"
 }
 
 INVALID_INPUT = {
@@ -113,19 +125,19 @@ def animals():
             if d not in content:
                 return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
 
-        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
+        if (bool(content["disposition_animals"]) is not True) and (bool(content["disposition_children"]) is not True) and (bool(content["disposition_leash"]) is not True):
             return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
                 mimetype='application/json')
 
         dispositions = []
 
-        if content["disposition_animals"] is True:
+        if bool(content["disposition_animals"]) is True:
             dispositions.append("Good with other animals")
 
-        if content["disposition_children"] is True:
+        if bool(content["disposition_children"]) is True:
             dispositions.append("Good with children")
 
-        if content["disposition_leash"] is True:
+        if bool(content["disposition_leash"]) is True:
             dispositions.append("Animal must be leashed at all times")
 
         animal.update({
@@ -202,17 +214,17 @@ def animal_get_patch_delete(eid):
             if d not in content:
                 return Response(json.dumps(MISSING_DISPOSITIONS), status=400, mimetype='application/json')
 
-        if (content["disposition_animals"] is not True) and (content["disposition_children"] is not True) and (content["disposition_leash"] is not True):
+        if (bool(content["disposition_animals"]) is not True) and (bool(content["disposition_children"]) is not True) and (bool(content["disposition_leash"]) is not True):
             return Response(json.dumps(MISSING_DISPOSITIONS), status=400,
                 mimetype='application/json')
 
-        if content["disposition_animals"] is True:
+        if bool(content["disposition_animals"]) is True:
             dispositions.append("Good with other animals")
 
-        if content["disposition_children"] is True:
+        if bool(content["disposition_children"]) is True:
             dispositions.append("Good with children")
 
-        if content["disposition_leash"] is True:
+        if bool(content["disposition_leash"]) is True:
             dispositions.append("Animal must be leashed at all times")
 
         res["dispositions"] = dispositions
@@ -250,8 +262,119 @@ def animal_get_patch_delete(eid):
         return Response(status=204)
 
     else:
-        return Response(json.dumps(ERROR_405), status=405,
+        return Response(json.dumps("ERROR_405"), status=405,
                         mimetype='application/json')
+
+
+@app.route("/api/users/<eid>", methods=["GET", "PUT", "DELETE"])
+def user_get_patch_delete(eid):
+    try:
+        int(eid)
+    except ValueError:
+        return Response(json.dumps(INVALID_INPUT), status=403,
+                    mimetype='application/json')    
+
+    if request.method == "GET":
+        user_key = client.key(USERS, int(eid))
+        res = client.get(user_key)
+
+        if not res:
+            return Response(json.dumps(USER_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+        res["id"] = int(eid)
+
+        return Response(json.dumps(res, default=str), status=200,
+                        mimetype='application/json')
+
+
+    elif request.method == "PUT":
+        content = request.get_json()
+
+        # User Attributes: ["firstname", "lastname", "email", "city", "phone", "pals"]
+        for key in REQUIRED_USER_ATTRIBUTES:
+            if key not in content:
+                return Response(json.dumps(MISSING_ATTRIBUTES), status=400,
+                        mimetype='application/json')
+
+        user_key = client.key(USERS, int(eid))
+        res = client.get(user_key)
+
+        if not res:
+            return Response(json.dumps(USER_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+
+        for key in REQUIRED_USER_ATTRIBUTES:
+            res[key] = content[key]
+
+        client.put(res)
+
+        res["id"] = int(eid)
+
+        return Response(json.dumps(res, default=str), status=200,
+                        mimetype='application/json')
+
+    elif request.method == "DELETE":
+        user_key = client.key(USERS, int(eid))
+        res = client.get(user_key)
+
+        if not res:
+            return Response(json.dumps(USER_NOT_FOUND), status=404,
+                        mimetype='application/json')
+
+        client.delete(user_key)
+
+        return Response(status=204)
+
+    else:
+        return Response(json.dumps("ERROR_405"), status=405,
+                        mimetype='application/json')
+
+
+# Function takes user id and pal id, adds/removes pal id from user list of pals
+# TODO verify user is admin or the current user.
+@app.route("/api/users/<uid>/<eid>", methods=["POST", "DELETE"])
+def user_add_delete_pal(uid, eid):
+    try:
+        int(uid)
+        int(eid)
+    except ValueError:
+        return Response(json.dumps(INVALID_INPUT), status=403,
+                    mimetype='application/json')    
+
+    if request.method == "POST":
+        res = client.get(client.key(USERS, int(uid)))
+        if not res:
+            return Response(json.dumps(USER_NOT_FOUND), status=404,
+                        mimetype='application/json')
+        
+        if eid not in res["pals"]:
+            res["pals"].append(eid)
+        client.put(res)
+        return Response(json.dumps(res, default=str), status=200,
+                        mimetype='application/json')
+
+
+    elif request.method == "DELETE":
+        # res = client.get(client.key(USERS, int(uid)))
+        user_key = client.key(USERS, int(uid))
+        res = client.get(user_key)
+
+        if not res:
+            return Response(json.dumps(USER_NOT_FOUND), status=404,
+                        mimetype='application/json')
+        
+        if eid in res["pals"]:
+            res["pals"].remove(eid)
+        client.put(res)
+
+        return Response(status=204)
+
+    else:
+        return Response(json.dumps("ERROR_405"), status=405,
+                        mimetype='application/json')
+
 
 def bucket_metadata(bucket_name):
     """Prints out a bucket's metadata."""

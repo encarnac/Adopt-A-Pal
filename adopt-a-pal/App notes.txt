@@ -1,29 +1,7 @@
------ running locally -----
-    to create latest build (use win if on windows, unix for unix systems): 
-        yarn create-app-win
-    or
-        yarn create-app-unix          
+       
+    --- for depoloyment ---
+    unix/GCP version of create-app in package.json, "Scripts":
+        "create-app-unix": "yarn build && rm -r api/build && cp -r build api/build",
 
-    -- to start just front-end:
-        yarn start
-
-    -- to start just back-end:
-        navigate to api folder,
-        activate virtual environment (on windows, open windows powershell with admin):
-            cd api
-            .\env\Scripts\activate
-            
-        install dependencies:
-            pip install -r requirements.txt
-        start server:
-            yarn start-api
-        if you want a gunicorn/waitress server, run:
-            waitress-serve --listen=*:5000 api.main:app
-
-
-        --- for depoloyment ---
-        unix/GCP version of create-app in package.json, "Scripts":
-            "create-app-unix": "yarn build && rm -r api/build && cp -r build api/build",
-
-        windows version of create-app in package.json, "Scripts":
-            "create-app-win": "yarn build && del /S /Q api\\build && xcopy /E /I build api\\build",
+    windows version of create-app in package.json, "Scripts":
+        "create-app-win": "yarn build && del /S /Q api\\build && xcopy /E /I build api\\build",
