@@ -12,6 +12,7 @@
         activate virtual environment (on windows, open windows powershell with admin):
             cd api
             .\env\Scripts\activate
+            (linux): source env/bin/activate
             
         install dependencies:
             pip install -r requirements.txt
