@@ -57,7 +57,7 @@ module.exports = {
 
           error: "#FF4651",
 
-          // "--rounded-btn": "25px",
+          "--rounded-btn": "25px",
           "--rounded-box": "35px",
         },
       },

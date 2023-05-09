@@ -6,10 +6,10 @@ function NavBar(props) {
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-[#FFDDD2]">
-      <div className="max-w-[80vw] mx-auto flex justify-between items-center pt=6 my-5">
-        <div className="left flex items-center font-bold text-[#714949] text-2xl">
-          <div className="flex gap-10">
-            <div className="flex gap-2">
+      <div className="max-w-[80vw] mx-auto my-2 flex justify-between items-center">
+        <div className="left flex items-center font-bold text-taupe text-2xl">
+          <div className="flex items-center gap-10">
+            <div className="flex items-center gap-2">
               {/* LOGO & TITLE */}
               <svg
                 width="35"
@@ -43,7 +43,7 @@ function NavBar(props) {
                   fill="#714949"
                 />
               </svg>
-              Adopt-a-Pal
+              <span className="inline-block align-baseline text-taupe">Adopt-a-Pal</span>
             </div>
 
             {/* NAVIGATION LINKS */}
@@ -66,15 +66,15 @@ function NavBar(props) {
         {/* ACCOUNT LINKS */}
         <div className="right">
           <div className="menu flex flex-row gap-3 items-center text-2xl font-medium">
-            <Link 
+            <Link
               className="text-[#714949] hover:text-[#856a6a] list-none mx-3"
               onClick={() => handleModalState("login")}
             >
               Login
             </Link>
             <Link to="/signup">
-              <button className="text-white font-medium px-4 py-2 rounded-full bg-[#F2968F] hover:bg-[#ef8e87] ">
-                Signup
+              <button className="text-white font-medium px-4 py-2 rounded-full bg-primary hover:bg-[#ef8e87] ">
+                Sign Up
               </button>
             </Link>
           </div>
