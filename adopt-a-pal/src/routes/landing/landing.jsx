@@ -3,26 +3,32 @@ import NavBar from './navbar';
 import Header from './header';
 import Features from './features';
 import Footer from './footer';
-import Modal from './modal';
+import LoginModal from '../LoginModal';
+import SignupModal from "../SignupModal";
 
 function Landing( props ) {
-    // State of the modal is set to either login, signup, or false and is toggled by NavBar/Modal and displayed in Landing
-    const [modalState, setModalState] = useState( false );
-    
+  // State of the login modal is toggled by NavBar/Modal and displayed over Landing
+  const [loginModal, setLoginModal] = useState(false);
+  const handleLoginModal = (e) => {
+    setLoginModal(e);
+  };
 
-    const handleModalState = (e) => {
-        setModalState(e);
-    };
+  // State of the signup modal is toggled by NavBar/Modal and displayed over Landing
+  const [signupModal, setSignupModal] = useState(false);
+  const handleSignupModal = (e) => {
+    setSignupModal(e);
+  };
 
-    return (
-      <>
-        <Modal {...{ modalState, handleModalState }} />
-        <NavBar {...{ handleModalState }} />
-        <Header />
-        <Features />
-        <Footer />
-      </>
-    );
+  return (
+    <>
+      <LoginModal {...{ loginModal, handleLoginModal }} />
+      <SignupModal {...{ signupModal, handleSignupModal }} />
+      <NavBar {...{ handleLoginModal, handleSignupModal }} />
+      <Header {...{ signupModal, handleSignupModal }} />
+      <Features />
+      <Footer {...{ signupModal, handleSignupModal }} />
+    </>
+  );
 };
 
 export default Landing;

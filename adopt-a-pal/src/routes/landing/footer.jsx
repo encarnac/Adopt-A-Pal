@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 
-const Footer = () => {
+function Footer(props) {
+  const handleSignupModal = props.handleSignupModal;
   return (
     <div
       className=" w-full rounded-t-[55px] bg-white text-[#714949] shadow-xl"
@@ -14,9 +16,12 @@ const Footer = () => {
             <p className="opacity-60 text-[35px] md:text-[55px] text-[#714949] text-start font-bold">
               Ready to find the <span className="text-[#FF7578]">one</span>?
             </p>
+             <div className="flex flex-row md:justify-start">
+            <Link onClick={() => handleSignupModal(true)}>
             <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[7em] rounded-full font-medium text-[23px] my-6-0 py-2">
               Get Started
             </button>
+            </Link></div>
           </div>
 
           {/* RIGHT COLUMN - SOCIAL ICON LINKS */}
@@ -57,6 +62,6 @@ const Footer = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Footer;

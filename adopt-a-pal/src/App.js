@@ -1,7 +1,7 @@
 // import HelloWorld from './HelloWorld';
 import Landing from './routes/landing/landing';
-import Login from './routes/login/login';
-import Signup from './routes/signup';
+// import Login from './routes/login/login';
+// import Signup from './routes/signup';
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -23,15 +23,7 @@ function App() {
       path: "/",
       element: <Landing />,
       
-    },
-    {
-      path: "/login",
-      element: <Login />,
-    },
-    {
-      path: "/signup",
-      element: <Signup />,
-    },
+    }
   ]);
 
   return (

@@ -2,7 +2,8 @@ import { React } from "react";
 import { Link } from "react-router-dom";
 
 function NavBar(props) {
-  const handleModalState = props.handleModalState;
+  const handleLoginModal = props.handleLoginModal;
+  const handleSignupModal = props.handleSignupModal;
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-[#FFDDD2]">
@@ -43,7 +44,9 @@ function NavBar(props) {
                   fill="#714949"
                 />
               </svg>
-              <span className="inline-block align-baseline text-taupe">Adopt-a-Pal</span>
+              <span className="inline-block align-baseline text-taupe">
+                Adopt-a-Pal
+              </span>
             </div>
 
             {/* NAVIGATION LINKS */}
@@ -68,11 +71,11 @@ function NavBar(props) {
           <div className="menu flex flex-row gap-3 items-center text-2xl font-medium">
             <Link
               className="text-[#714949] hover:text-[#856a6a] list-none mx-3"
-              onClick={() => handleModalState("login")}
+              onClick={() => handleLoginModal(true)}
             >
               Login
             </Link>
-            <Link to="/signup">
+            <Link onClick={() => handleSignupModal(true)}>
               <button className="text-white font-medium px-4 py-2 rounded-full bg-primary hover:bg-[#ef8e87] ">
                 Sign Up
               </button>
