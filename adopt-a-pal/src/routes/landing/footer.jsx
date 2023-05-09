@@ -1,4 +1,7 @@
-const Footer = () => {
+import { Link } from "react-router-dom";
+
+function Footer(props) {
+  const handleSignupModal = props.handleSignupModal;
   return (
     <div
       className=" w-full rounded-t-[55px] bg-white text-[#714949] shadow-xl"
@@ -13,17 +16,20 @@ const Footer = () => {
             <p className="opacity-60 text-[35px] md:text-[55px] text-[#714949] text-start font-bold">
               Ready to find the <span className="text-[#FF7578]">one</span>?
             </p>
+             <div className="flex flex-row md:justify-start">
+            <Link onClick={() => handleSignupModal(true)}>
             <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[7em] rounded-full font-medium text-[23px] my-6-0 py-2">
               Get Started
             </button>
+            </Link></div>
           </div>
 
           {/* RIGHT COLUMN - SOCIAL ICON LINKS */}
           <div className="flex space-x-5 text-[40px]">
             <a href="https://github.com/Spatch7/Adopt-A-Pal">
               <svg
-                stroke="currentColor"
-                fill="currentColor"
+                stroke="#714949"
+                fill="#714949"
                 stroke-width="0"
                 viewBox="0 0 1024 1024"
                 height="1em"
@@ -35,8 +41,8 @@ const Footer = () => {
             </a>
             <a href="unknown@gmail.com">
               <svg
-                stroke="currentColor"
-                fill="currentColor"
+                stroke="#714949"
+                fill="#714949"
                 stroke-width="0"
                 viewBox="0 0 512 512"
                 height="1em"
@@ -48,7 +54,7 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        
+
         {/* BOTTOM */}
         <div className="opacity-60 pt-2 mt-5 text-[20px]">
           <p>© All Rights Reserved</p>
@@ -56,6 +62,6 @@ const Footer = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Footer;

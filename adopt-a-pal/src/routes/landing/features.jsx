@@ -17,7 +17,7 @@ const Features = () => {
           {/* CARD 1 */}
           <div class="h-200 min-w-[15rem] bg-white rounded-[35px] px-10 lg:px-14 py-10 lg:py-0 flex flex-col justify-center shadow-xl duration-300 hover:scale-105 gap-4">
             <img className="mx-auto bg-transparent" src={PetShelter} alt="/" />
-            <h2 className="text-xl text-[#735858] leading-10 font-bold text-center bg-transparent">
+            <h2 className="text-2xl text-[#735858] leading-8 font-bold text-center bg-transparent">
               ADOPT FROM NON-PROFIT ANIMAL SHELTERS
             </h2>
           </div>
@@ -25,7 +25,7 @@ const Features = () => {
           {/* CARD 2 */}
           <div class=" min-w-[15rem] bg-white rounded-[35px] px-10 lg:px-14 py-10 lg:py-20 flex flex-col justify-center shadow-xl duration-300 hover:scale-105 gap-4">
             <img className="mx-auto bg-transparent" src={PetOwner} alt="/" />
-            <h2 className="text-xl text-[#735858] leading-10 font-bold text-center bg-transparent">
+            <h2 className="text-2xl text-[#735858] leading-8 font-bold text-center bg-transparent">
               SEARCH BY TYPE, BREED, DISPOSITION, AND MORE!
             </h2>
           </div>
@@ -33,7 +33,7 @@ const Features = () => {
           {/* CARD 3 */}
           <div class="h-250 min-w-[15rem] bg-white rounded-[35px] px-10 lg:px-14 py-10 flex flex-col justify-center shadow-xl duration-300 hover:scale-105 gap-4">
             <img className="mx-auto bg-transparent" src={Pets} alt="/" />
-            <h2 className="text-xl text-[#735858] leading-10 font-bold text-center bg-transparent">
+            <h2 className="text-2xl text-[#735858] leading-8 font-bold text-center bg-transparent">
               GET NEWS & UPDATES ON THE NEWEST PETS
             </h2>
           </div>
