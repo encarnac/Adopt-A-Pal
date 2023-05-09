@@ -23,8 +23,8 @@ const Footer = () => {
           <div className="flex space-x-5 text-[40px]">
             <a href="https://github.com/Spatch7/Adopt-A-Pal">
               <svg
-                stroke="currentColor"
-                fill="currentColor"
+                stroke="#714949"
+                fill="#714949"
                 stroke-width="0"
                 viewBox="0 0 1024 1024"
                 height="1em"
@@ -36,8 +36,8 @@ const Footer = () => {
             </a>
             <a href="unknown@gmail.com">
               <svg
-                stroke="currentColor"
-                fill="currentColor"
+                stroke="#714949"
+                fill="#714949"
                 stroke-width="0"
                 viewBox="0 0 512 512"
                 height="1em"

@@ -65,7 +65,7 @@ function NavBar(props) {
 
         {/* ACCOUNT LINKS */}
         <div className="right">
-          <div className="menu flex gap-3 items-center text-2xl font-medium">
+          <div className="menu flex flex-row gap-3 items-center text-2xl font-medium">
             <Link 
               className="text-[#714949] hover:text-[#856a6a] list-none mx-3"
               onClick={() => handleModalState("login")}
