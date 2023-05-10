@@ -18,7 +18,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "gunicorn -b :8080 api.main:app",
     "start-api": "cd api && flask run --no-debugger",
     "build": "react-scripts build",
     "create-app-win": "yarn build && del /S /Q api\\build && xcopy /E /I build api\\build",
