@@ -277,7 +277,13 @@ def animal_get_patch_delete(eid):
 @app.route("/api/users", methods=["GET", "POST"])
 def user_get_post():
     if request.method == "GET":
-        pass
+        query = client.query(kind=USERS)
+        results = list(query.fetch())
+
+        for e in results:
+            e["id"] = e.key.id
+        return Response(json.dumps(results, default=str), status=200,
+                        mimetype='application/json')
     elif request.method == "POST":
         content = request.get_json()
 
