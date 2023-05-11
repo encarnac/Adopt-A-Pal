@@ -4,6 +4,7 @@ import json
 from google.cloud import datastore, storage
 from flask import Flask, jsonify, make_response, request, Response
 import random
+import bcrypt
 
 sys.path.insert(0, os.getcwd()+"/GCP_func")
 sys.path.append(os.path.abspath("/adopt-a-pal/api"))
@@ -22,8 +23,6 @@ MISSING_DISPOSITIONS = {
 }
 
 REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability", "pic_name"]
-
-REQUIRED_USER_ATTRIBUTES = ["firstname", "lastname", "email", "city", "phone", "pals"]
 
 MISSING_ATTRIBUTES = {
     "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY, pic_name)."
@@ -50,6 +49,16 @@ PIC_ATTRIBUTES = ["pic1", "pic2", "pic3"]
 PLACEHOLDER_IMAGE = "https://storage.cloud.google.com/adopt-a-pal-pics/placeholder.jpg"
 
 REQUIRED_DISPOSITIONS = ["disposition_animals", "disposition_children", "disposition_leash"]
+
+REQUIRED_USER_ATTRIBUTES = ["firstname", "lastname", "address", "city", "state", "phone", "email", "password"]
+
+MISSING_USER_ATTRIBUTES = {
+    "ERROR": "USER MISSING REQUIRED ATTRIBUTES (firstname, lastname, address, city, state, phone, email, password)."
+}
+
+EMAIL_IN_USE = {
+    "ERROR": "THIS EMAIL ADDRESS IS ALREADY IN USE."
+}
 
 @app.route('/')
 def root():
@@ -261,6 +270,58 @@ def animal_get_patch_delete(eid):
 
         return Response(status=204)
 
+    else:
+        return Response(json.dumps("ERROR_405"), status=405,
+                        mimetype='application/json')
+
+@app.route("/api/users", methods=["GET", "POST"])
+def user_get_post():
+    if request.method == "GET":
+        pass
+    elif request.method == "POST":
+        content = request.get_json()
+
+        entity = datastore.Entity(key=client.key(USERS))
+
+        for key in REQUIRED_USER_ATTRIBUTES:
+            if key not in content:
+                return Response(json.dumps(MISSING_USER_ATTRIBUTES), status=400,
+                        mimetype='application/json')
+
+
+        b = content["password"].encode("utf-8")
+        salt = bcrypt.gensalt()
+
+        user = {
+            "firstname": content["firstname"],
+            "lastname": content["lastname"],
+            "address": content["address"],
+            "city": content["city"],
+            "state": content["state"],
+            "phone": content["phone"],
+            "email": content["email"],
+            "password": bcrypt.hashpw(b, salt),
+            "salt": salt
+        }
+
+        # check if email already in datastore
+        query = client.query(kind=USERS)
+        query.add_filter("email", "=", user["email"])
+        results = list(query.fetch())
+
+        if len(results) > 0:
+            return Response(json.dumps(EMAIL_IN_USE), status=409,
+                mimetype='application/json')
+
+        entity.update(user)
+        client.put(entity)
+        eid = entity.key.id
+        new_user_key = client.key(USERS, int(eid))
+        res = client.get(key=new_user_key)
+        res["id"] = int(eid)
+
+        return Response(json.dumps(res, default=str), status=201,
+                        mimetype='application/json')
     else:
         return Response(json.dumps("ERROR_405"), status=405,
                         mimetype='application/json')
