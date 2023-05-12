@@ -120,6 +120,65 @@ def admin_required_on_post_put_delete(f):
 
     return decorated
 
+def admin_required_on_get(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if (request.method == "GET"):
+            # checks if header contains token
+            if "Authorization" in request.headers:
+                token = request.headers.get('Authorization').split()[1]
+            else:
+                return Response(json.dumps("Missing token"), status=401,
+                            mimetype='application/json')
+
+            # try to decode
+            try:
+                decoded = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+            except:
+                return Response(json.dumps("Invalid token"), status=401,
+                    mimetype='application/json')
+
+            # if decoded jwt contains admin role continue
+            if decoded["role"] == "admin":
+                return f(*args, **kwargs)
+
+            # else 403
+            return Response(json.dumps("403 Forbidden"), status=403,
+                mimetype='application/json')
+        else:
+            return f(*args, **kwargs)
+
+    return decorated
+
+def admin_required_on_all(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+
+        # checks if header contains token
+        if "Authorization" in request.headers:
+            token = request.headers.get('Authorization').split()[1]
+        else:
+            return Response(json.dumps("Missing token"), status=401,
+                        mimetype='application/json')
+
+        # try to decode
+        try:
+            decoded = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+        except:
+            return Response(json.dumps("Invalid token"), status=401,
+                mimetype='application/json')
+
+        # if decoded jwt contains admin role continue
+        if decoded["role"] == "admin":
+            return f(*args, **kwargs)
+
+        # else 403
+        return Response(json.dumps("403 Forbidden"), status=403,
+            mimetype='application/json')
+
+
+    return decorated
+
 @app.route('/api/animals', methods=["GET", "POST"])
 @admin_required_on_post_put_delete
 def animals():
@@ -322,6 +381,7 @@ def animal_get_patch_delete(eid):
                         mimetype='application/json')
 
 @app.route("/api/users", methods=["GET", "POST"])
+@admin_required_on_get
 def user_get_post():
     if request.method == "GET":
         query = client.query(kind=USERS)
@@ -372,6 +432,8 @@ def user_get_post():
         new_user_key = client.key(USERS, int(eid))
         res = client.get(key=new_user_key)
         res["id"] = int(eid)
+        del res["salt"]
+        del res["password"]
 
         return Response(json.dumps(res, default=str), status=201,
                         mimetype='application/json')
@@ -381,11 +443,12 @@ def user_get_post():
 
 
 @app.route("/api/users/<eid>", methods=["GET", "PUT", "DELETE"])
+@admin_required_on_all
 def user_get_patch_delete(eid):
     try:
         int(eid)
     except ValueError:
-        return Response(json.dumps(INVALID_INPUT), status=403,
+        return Response(json.dumps(INVALID_INPUT), status=400,
                     mimetype='application/json')    
 
     if request.method == "GET":
@@ -421,6 +484,13 @@ def user_get_patch_delete(eid):
 
         for key in REQUIRED_USER_ATTRIBUTES:
             res[key] = content[key]
+
+
+        # rehash and salt password
+        b = content["password"].encode("utf-8")
+        salt = bcrypt.gensalt()
+        res["password"] = bcrypt.hashpw(b, salt)
+        res["salt"] = salt
 
         client.put(res)
 
@@ -493,7 +563,7 @@ def login():
 
 # for testing purposes
 @app.route("/api/adminonly", methods=["GET"])
-@admin_required_on_post_put_delete
+@admin_required_on_all
 def adminonly():
     if request.method == "GET":
         return Response(json.dumps("Hello Admin"), status=200,
