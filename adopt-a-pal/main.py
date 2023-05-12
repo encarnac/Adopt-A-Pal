@@ -90,6 +90,36 @@ def hello():
     print(bucket_metadata("adopt-a-pal-pics"))
     return jsonify(message='Hello World!')
 
+def admin_required_on_post_put_delete(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if (request.method == "POST") or (request.method == "POST") or (request.method == "DELETE"):
+            # checks if header contains token
+            if "Authorization" in request.headers:
+                token = request.headers.get('Authorization').split()[1]
+            else:
+                return Response(json.dumps("Missing token"), status=401,
+                            mimetype='application/json')
+
+            # try to decode
+            try:
+                decoded = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+            except:
+                return Response(json.dumps("Invalid token"), status=401,
+                    mimetype='application/json')
+
+            # if decoded jwt contains admin role continue
+            if decoded["role"] == "admin":
+                return f(*args, **kwargs)
+
+            # else 403
+            return Response(json.dumps("403 Forbidden"), status=403,
+                mimetype='application/json')
+        else:
+            return f(*args, **kwargs)
+
+    return decorated
+
 @app.route('/api/animals', methods=["GET", "POST"])
 def animals():
     if request.method == "GET":
@@ -458,6 +488,19 @@ def login():
     else:
         return Response(json.dumps("ERROR_405"), status=405,
                 mimetype='application/json')
+
+# for testing purposes
+@app.route("/api/adminonly", methods=["GET"])
+@admin_required_on_post_put_delete
+def adminonly():
+    if request.method == "GET":
+        return Response(json.dumps("Hello Admin"), status=200,
+            mimetype='application/json')
+
+    else:
+        return Response(json.dumps("ERROR_405"), status=405,
+            mimetype='application/json')
+
 
 
 # Function takes user id and pal id, adds/removes pal id from user list of pals
