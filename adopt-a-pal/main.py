@@ -5,6 +5,8 @@ from google.cloud import datastore, storage
 from flask import Flask, jsonify, make_response, request, Response
 import random
 import bcrypt
+import jwt
+from functools import wraps
 
 sys.path.insert(0, os.getcwd()+"/GCP_func")
 sys.path.append(os.path.abspath("/adopt-a-pal/api"))
@@ -59,6 +61,19 @@ MISSING_USER_ATTRIBUTES = {
 EMAIL_IN_USE = {
     "ERROR": "THIS EMAIL ADDRESS IS ALREADY IN USE."
 }
+
+REQUIRED_SESSION_ATTRIBUTES = ["email", "password"]
+
+MISSING_SESSION_ATTRIBUTES = {
+    "ERROR": "Missing email or password."
+}
+
+INVALID_CREDS = {
+    "ERROR": "Invalid credentials"
+}
+
+# UNDERSTAND THAT THIS IS NOT THE CORRECT OR SAFE WAY OF STORING SECRET KEY, ALSO THIS IS NOT A GOOD KEY 
+app.config["SECRET_KEY"] = "thisisasecretkey"
 
 @app.route('/')
 def root():
@@ -397,6 +412,52 @@ def user_get_patch_delete(eid):
     else:
         return Response(json.dumps("ERROR_405"), status=405,
                         mimetype='application/json')
+
+
+@app.route('/api/sessions', methods=["POST"])
+def login():
+    if request.method == "POST":
+        content = request.get_json()
+
+        for attribute in REQUIRED_SESSION_ATTRIBUTES:
+            if attribute not in content:
+                return Response(json.dumps(MISSING_SESSION_ATTRIBUTES), status=400,
+                        mimetype='application/json')
+
+        query = client.query(kind="users")
+        query.add_filter("email", "=", content["email"])
+        results = list(query.fetch())
+
+        # email not found
+        if len(results) == 0:
+            return Response(json.dumps(INVALID_CREDS), status=400,
+                        mimetype='application/json')
+
+        res = results[0]
+
+        stored_username = res["email"]
+        stored_password = res["password"]
+        stored_salt = res["salt"]
+
+        given_password = content["password"].encode("utf-8")
+        given_hashed = bcrypt.hashpw(given_password, stored_salt)
+
+        if given_hashed == stored_password:
+            if stored_username == "admin@adoptapal.com":
+                token = jwt.encode({"user": stored_username, "id": res.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30), "role": "admin"}, app.config["SECRET_KEY"])
+                return Response(json.dumps({"token": token}), status=200,
+            mimetype='application/json')
+            else:
+                token = jwt.encode({"user": stored_username, "id": res.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30), "role": "user"}, app.config["SECRET_KEY"])
+                return Response(json.dumps({"token": token}), status=200,
+            mimetype='application/json')
+
+        return Response(json.dumps(INVALID_CREDS), status=400,
+            mimetype='application/json')
+
+    else:
+        return Response(json.dumps("ERROR_405"), status=405,
+                mimetype='application/json')
 
 
 # Function takes user id and pal id, adds/removes pal id from user list of pals
