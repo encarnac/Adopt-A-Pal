@@ -93,7 +93,7 @@ def hello():
 def admin_required_on_post_put_delete(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if (request.method == "POST") or (request.method == "POST") or (request.method == "DELETE"):
+        if (request.method == "POST") or (request.method == "PUT") or (request.method == "DELETE"):
             # checks if header contains token
             if "Authorization" in request.headers:
                 token = request.headers.get('Authorization').split()[1]
@@ -121,6 +121,7 @@ def admin_required_on_post_put_delete(f):
     return decorated
 
 @app.route('/api/animals', methods=["GET", "POST"])
+@admin_required_on_post_put_delete
 def animals():
     if request.method == "GET":
         query = client.query(kind=ANIMALS)
@@ -221,6 +222,7 @@ def animals():
         return jsonify(message='405')
 
 @app.route("/api/animals/<eid>", methods=["GET", "PUT", "DELETE"])
+@admin_required_on_post_put_delete
 def animal_get_patch_delete(eid):
 
     try:
