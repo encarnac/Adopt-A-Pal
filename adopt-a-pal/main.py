@@ -4,6 +4,9 @@ import json
 from google.cloud import datastore, storage
 from flask import Flask, jsonify, make_response, request, Response
 import random
+import bcrypt
+import jwt
+from functools import wraps
 
 sys.path.insert(0, os.getcwd()+"/GCP_func")
 sys.path.append(os.path.abspath("/adopt-a-pal/api"))
@@ -22,8 +25,6 @@ MISSING_DISPOSITIONS = {
 }
 
 REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability", "pic_name"]
-
-REQUIRED_USER_ATTRIBUTES = ["firstname", "lastname", "email", "city", "phone", "pals"]
 
 MISSING_ATTRIBUTES = {
     "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY, pic_name)."
@@ -51,6 +52,29 @@ PLACEHOLDER_IMAGE = "https://storage.cloud.google.com/adopt-a-pal-pics/placehold
 
 REQUIRED_DISPOSITIONS = ["disposition_animals", "disposition_children", "disposition_leash"]
 
+REQUIRED_USER_ATTRIBUTES = ["firstname", "lastname", "address", "city", "state", "phone", "email", "password"]
+
+MISSING_USER_ATTRIBUTES = {
+    "ERROR": "USER MISSING REQUIRED ATTRIBUTES (firstname, lastname, address, city, state, phone, email, password)."
+}
+
+EMAIL_IN_USE = {
+    "ERROR": "THIS EMAIL ADDRESS IS ALREADY IN USE."
+}
+
+REQUIRED_SESSION_ATTRIBUTES = ["email", "password"]
+
+MISSING_SESSION_ATTRIBUTES = {
+    "ERROR": "Missing email or password."
+}
+
+INVALID_CREDS = {
+    "ERROR": "Invalid credentials"
+}
+
+# UNDERSTAND THAT THIS IS NOT THE CORRECT OR SAFE WAY OF STORING SECRET KEY, ALSO THIS IS NOT A GOOD KEY 
+app.config["SECRET_KEY"] = "thisisasecretkey"
+
 @app.route('/')
 def root():
     return app.send_static_file('index.html')
@@ -66,7 +90,97 @@ def hello():
     print(bucket_metadata("adopt-a-pal-pics"))
     return jsonify(message='Hello World!')
 
+def admin_required_on_post_put_delete(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if (request.method == "POST") or (request.method == "PUT") or (request.method == "DELETE"):
+            # checks if header contains token
+            if "Authorization" in request.headers:
+                token = request.headers.get('Authorization').split()[1]
+            else:
+                return Response(json.dumps("Missing token"), status=401,
+                            mimetype='application/json')
+
+            # try to decode
+            try:
+                decoded = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+            except:
+                return Response(json.dumps("Invalid token"), status=401,
+                    mimetype='application/json')
+
+            # if decoded jwt contains admin role continue
+            if decoded["role"] == "admin":
+                return f(*args, **kwargs)
+
+            # else 403
+            return Response(json.dumps("403 Forbidden"), status=403,
+                mimetype='application/json')
+        else:
+            return f(*args, **kwargs)
+
+    return decorated
+
+def admin_required_on_get(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if (request.method == "GET"):
+            # checks if header contains token
+            if "Authorization" in request.headers:
+                token = request.headers.get('Authorization').split()[1]
+            else:
+                return Response(json.dumps("Missing token"), status=401,
+                            mimetype='application/json')
+
+            # try to decode
+            try:
+                decoded = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+            except:
+                return Response(json.dumps("Invalid token"), status=401,
+                    mimetype='application/json')
+
+            # if decoded jwt contains admin role continue
+            if decoded["role"] == "admin":
+                return f(*args, **kwargs)
+
+            # else 403
+            return Response(json.dumps("403 Forbidden"), status=403,
+                mimetype='application/json')
+        else:
+            return f(*args, **kwargs)
+
+    return decorated
+
+def admin_required_on_all(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+
+        # checks if header contains token
+        if "Authorization" in request.headers:
+            token = request.headers.get('Authorization').split()[1]
+        else:
+            return Response(json.dumps("Missing token"), status=401,
+                        mimetype='application/json')
+
+        # try to decode
+        try:
+            decoded = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+        except:
+            return Response(json.dumps("Invalid token"), status=401,
+                mimetype='application/json')
+
+        # if decoded jwt contains admin role continue
+        if decoded["role"] == "admin":
+            return f(*args, **kwargs)
+
+        # else 403
+        return Response(json.dumps("403 Forbidden"), status=403,
+            mimetype='application/json')
+
+
+    return decorated
+
 @app.route('/api/animals', methods=["GET", "POST"])
+@admin_required_on_post_put_delete
 def animals():
     if request.method == "GET":
         query = client.query(kind=ANIMALS)
@@ -167,6 +281,7 @@ def animals():
         return jsonify(message='405')
 
 @app.route("/api/animals/<eid>", methods=["GET", "PUT", "DELETE"])
+@admin_required_on_post_put_delete
 def animal_get_patch_delete(eid):
 
     try:
@@ -265,13 +380,75 @@ def animal_get_patch_delete(eid):
         return Response(json.dumps("ERROR_405"), status=405,
                         mimetype='application/json')
 
+@app.route("/api/users", methods=["GET", "POST"])
+@admin_required_on_get
+def user_get_post():
+    if request.method == "GET":
+        query = client.query(kind=USERS)
+        results = list(query.fetch())
+
+        for e in results:
+            e["id"] = e.key.id
+        return Response(json.dumps(results, default=str), status=200,
+                        mimetype='application/json')
+    elif request.method == "POST":
+        content = request.get_json()
+
+        entity = datastore.Entity(key=client.key(USERS))
+
+        for key in REQUIRED_USER_ATTRIBUTES:
+            if key not in content:
+                return Response(json.dumps(MISSING_USER_ATTRIBUTES), status=400,
+                        mimetype='application/json')
+
+
+        b = content["password"].encode("utf-8")
+        salt = bcrypt.gensalt()
+
+        user = {
+            "firstname": content["firstname"],
+            "lastname": content["lastname"],
+            "address": content["address"],
+            "city": content["city"],
+            "state": content["state"],
+            "phone": content["phone"],
+            "email": content["email"],
+            "password": bcrypt.hashpw(b, salt),
+            "salt": salt
+        }
+
+        # check if email already in datastore
+        query = client.query(kind=USERS)
+        query.add_filter("email", "=", user["email"])
+        results = list(query.fetch())
+
+        if len(results) > 0:
+            return Response(json.dumps(EMAIL_IN_USE), status=409,
+                mimetype='application/json')
+
+        entity.update(user)
+        client.put(entity)
+        eid = entity.key.id
+        new_user_key = client.key(USERS, int(eid))
+        res = client.get(key=new_user_key)
+        res["id"] = int(eid)
+        del res["salt"]
+        del res["password"]
+
+        return Response(json.dumps(res, default=str), status=201,
+                        mimetype='application/json')
+    else:
+        return Response(json.dumps("ERROR_405"), status=405,
+                        mimetype='application/json')
+
 
 @app.route("/api/users/<eid>", methods=["GET", "PUT", "DELETE"])
+@admin_required_on_all
 def user_get_patch_delete(eid):
     try:
         int(eid)
     except ValueError:
-        return Response(json.dumps(INVALID_INPUT), status=403,
+        return Response(json.dumps(INVALID_INPUT), status=400,
                     mimetype='application/json')    
 
     if request.method == "GET":
@@ -308,6 +485,13 @@ def user_get_patch_delete(eid):
         for key in REQUIRED_USER_ATTRIBUTES:
             res[key] = content[key]
 
+
+        # rehash and salt password
+        b = content["password"].encode("utf-8")
+        salt = bcrypt.gensalt()
+        res["password"] = bcrypt.hashpw(b, salt)
+        res["salt"] = salt
+
         client.put(res)
 
         res["id"] = int(eid)
@@ -330,6 +514,65 @@ def user_get_patch_delete(eid):
     else:
         return Response(json.dumps("ERROR_405"), status=405,
                         mimetype='application/json')
+
+
+@app.route('/api/sessions', methods=["POST"])
+def login():
+    if request.method == "POST":
+        content = request.get_json()
+
+        for attribute in REQUIRED_SESSION_ATTRIBUTES:
+            if attribute not in content:
+                return Response(json.dumps(MISSING_SESSION_ATTRIBUTES), status=400,
+                        mimetype='application/json')
+
+        query = client.query(kind="users")
+        query.add_filter("email", "=", content["email"])
+        results = list(query.fetch())
+
+        # email not found
+        if len(results) == 0:
+            return Response(json.dumps(INVALID_CREDS), status=400,
+                        mimetype='application/json')
+
+        res = results[0]
+
+        stored_username = res["email"]
+        stored_password = res["password"]
+        stored_salt = res["salt"]
+
+        given_password = content["password"].encode("utf-8")
+        given_hashed = bcrypt.hashpw(given_password, stored_salt)
+
+        if given_hashed == stored_password:
+            if stored_username == "admin@adoptapal.com":
+                token = jwt.encode({"user": stored_username, "id": res.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30), "role": "admin"}, app.config["SECRET_KEY"])
+                return Response(json.dumps({"token": token}), status=200,
+            mimetype='application/json')
+            else:
+                token = jwt.encode({"user": stored_username, "id": res.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30), "role": "user"}, app.config["SECRET_KEY"])
+                return Response(json.dumps({"token": token}), status=200,
+            mimetype='application/json')
+
+        return Response(json.dumps(INVALID_CREDS), status=400,
+            mimetype='application/json')
+
+    else:
+        return Response(json.dumps("ERROR_405"), status=405,
+                mimetype='application/json')
+
+# for testing purposes
+@app.route("/api/adminonly", methods=["GET"])
+@admin_required_on_all
+def adminonly():
+    if request.method == "GET":
+        return Response(json.dumps("Hello Admin"), status=200,
+            mimetype='application/json')
+
+    else:
+        return Response(json.dumps("ERROR_405"), status=405,
+            mimetype='application/json')
+
 
 
 # Function takes user id and pal id, adds/removes pal id from user list of pals
