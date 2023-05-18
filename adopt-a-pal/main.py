@@ -79,15 +79,9 @@ app.config["SECRET_KEY"] = "thisisasecretkey"
 def root():
     return app.send_static_file('index.html')
 
-# @app.route("/api/endpoint", methods=["GET"])
-# def endpoint():
-#     resp = make_response({"cat": 15})
-#     resp.headers["Access-Control-Allow-Origin"] = "*"
-#     return resp
-
 @app.route('/api/hello')
 def hello():
-    print(bucket_metadata("adopt-a-pal-pics"))
+    # print(bucket_metadata("adopt-a-pal-pics"))
     return jsonify(message='Hello World!')
 
 def admin_required_on_post_put_delete(f):
@@ -414,7 +408,8 @@ def user_get_post():
             "phone": content["phone"],
             "email": content["email"],
             "password": bcrypt.hashpw(b, salt),
-            "salt": salt
+            "salt": salt,
+            "pals":[]
         }
 
         # check if email already in datastore
