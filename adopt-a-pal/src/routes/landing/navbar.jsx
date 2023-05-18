@@ -80,6 +80,9 @@ function NavBar(props) {
                 Sign Up
               </button>
             </Link>
+            <button>
+              <Link to="/dashboard">Go to Dashboard</Link>
+            </button>
           </div>
         </div>
       </div>
