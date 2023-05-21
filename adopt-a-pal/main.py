@@ -179,6 +179,36 @@ def admin_required_on_all(f):
 
     return decorated
 
+def admin_required_on_put_delete(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if (request.method == "PUT") or (request.method == "DELETE"):
+            # checks if header contains token
+            if "Authorization" in request.headers:
+                token = request.headers.get('Authorization').split()[1]
+            else:
+                return Response(json.dumps("Missing token"), status=401,
+                            mimetype='application/json')
+
+            # try to decode
+            try:
+                decoded = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+            except:
+                return Response(json.dumps("Invalid token"), status=401,
+                    mimetype='application/json')
+
+            # if decoded jwt contains admin role continue
+            if decoded["role"] == "admin":
+                return f(*args, **kwargs)
+
+            # else 403
+            return Response(json.dumps("403 Forbidden"), status=403,
+                mimetype='application/json')
+        else:
+            return f(*args, **kwargs)
+
+    return decorated
+
 @app.route('/api/animals', methods=["GET", "POST"])
 @admin_required_on_post_put_delete
 def animals():
@@ -443,7 +473,7 @@ def user_get_post():
 
 
 @app.route("/api/users/<eid>", methods=["GET", "PUT", "DELETE"])
-@admin_required_on_all
+@admin_required_on_put_delete
 def user_get_patch_delete(eid):
     try:
         int(eid)
