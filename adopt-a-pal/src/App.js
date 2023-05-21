@@ -1,10 +1,13 @@
 // import HelloWorld from './HelloWorld';
+
 import Landing from './routes/landing/landing';
 // import Login from './routes/login/login';
 // import Signup from './routes/signup';
+import Dashboard from './routes/dashboard/dashboard';
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import get_user_pals from './modules/UseUserPals';
 
 function App() {
   // const [data, setData] = useState(null);
@@ -23,6 +26,10 @@ function App() {
       path: "/",
       element: <Landing />,
       
+    },
+    {
+      path: "/dashboard",
+      element: <Dashboard />,
     }
   ]);
 
@@ -32,6 +39,7 @@ function App() {
         <RouterProvider router={router} />
       </header>
     </div>
+    
   );
 }
 
