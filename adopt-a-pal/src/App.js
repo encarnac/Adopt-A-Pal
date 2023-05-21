@@ -33,8 +33,6 @@ function App() {
     }
   ]);
 
-  const uid = 5677459739508736
-
   return (
     <div className="App">
       <header className="App-header">

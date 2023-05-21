@@ -80,9 +80,9 @@ function NavBar(props) {
                 Sign Up
               </button>
             </Link>
-            <button>
+            {/* <button>
               <Link to="/dashboard">Go to Dashboard</Link>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

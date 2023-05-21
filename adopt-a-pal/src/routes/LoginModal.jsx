@@ -1,14 +1,53 @@
 import { React, useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 
 function LoginModal(props) {
   const loginModal = props.loginModal;
   const handleClose = props.handleLoginModal;
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
-  const [password, setPassoed] = useState('');
+  const [password, setPassword] = useState('');
 
   if (!loginModal) return null;
+
+  const handleSignIn = async (event) => {
+    event.preventDefault();
+    const loginUrl = "/api/sessions";
+    const credentials = {
+      email,
+      password,
+    };
+    
+    try {
+      const response = await fetch(loginUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+  
+      if (response.ok) {
+        // Sign-in successful
+        const data = await response.json();
+        // Perform any necessary actions with the token or user data
+        const token = data.token;
+        // Save the token in localStorage
+        localStorage.setItem('token', token);
+
+        // Redirect to "/dashboard" after successful sign-in
+        navigate("/dashboard");
+      } else {
+        // Sign-in failed
+        // Handle the failed sign-in, display an error message, etc.
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the sign-in process
+      console.error("Sign-in error:", error);
+    }
+  };
 
   return (
     <>
@@ -22,10 +61,10 @@ function LoginModal(props) {
             <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-[#714949]">
               Welcome Back!
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSignIn}>
               <div>
                 <label
-                  for="email"
+                  htmlFor="email"
                   className="block mb-2 text-sm font-medium text-[#714949] text-start"
                 >
                   Email
@@ -37,11 +76,13 @@ function LoginModal(props) {
                   className=" border border-[#9F9F9F] text-[#714949] sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   placeholder-gray-400 text-[#714949] focus:ring-blue-500 focus:border-blue-500"
                   placeholder="name@example.com"
                   required=""
+                  value={email} // Set the value from the state variable
+                  onChange={(e) => setEmail(e.target.value)} // Update the state variable on change
                 />
               </div>
               <div>
                 <label
-                  for="password"
+                  htmlFor="password"
                   className="block mb-2 text-sm font-medium text-[#714949] text-start"
                 >
                   Password
@@ -53,6 +94,8 @@ function LoginModal(props) {
                   placeholder="••••••••"
                   className="bg-gray-50 border border-[#9F9F9F] sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   placeholder-gray-400 text-[#714949] focus:ring-blue-500 focus:border-blue-500"
                   required=""
+                  value={password} // Set the value from the state variable
+                  onChange={(e) => setPassword(e.target.value)} // Update the state variable on change
                 />
               </div>
               <button
@@ -61,18 +104,17 @@ function LoginModal(props) {
               >
                 Sign in
               </button>
-              <p className="text-sm font-light text-gray-500">
-                Don’t have an account yet?
-                <a
-                  href=""
-                  className="font-medium hover:underline text-[#EE765E]"
-                >
-                  {" "}
-                  Sign up
-                </a>
-              </p>
             </form>
-
+            <p className="text-sm font-light text-gray-500">
+              Don’t have an account yet?
+              <a
+                href=""
+                className="font-medium hover:underline text-[#EE765E]"
+              >
+                {" "}
+                Sign up
+              </a>
+            </p>
             <div className="divider">or</div>
             <button
               type="submit"
