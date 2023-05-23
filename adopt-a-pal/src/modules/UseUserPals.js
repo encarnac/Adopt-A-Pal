@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+// import useGetPalById from './UseGetPalById';
 
-function UseUserPals(url) {
+function UseUserPals( url ) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const token = localStorage.getItem('token');
-
-  console.log(url.url);
-  console.log(token);
+  // console.log("userpal url:");
+  // console.log(url);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url.url, {
+        const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -23,7 +23,6 @@ function UseUserPals(url) {
 
         const jsonData = await response.json();
 
-        // Extract only the required properties from the JSON data
         const { firstname, lastname, pals, email } = jsonData;
         const filteredData = {
           firstname,
@@ -33,13 +32,14 @@ function UseUserPals(url) {
         };
 
         setData(filteredData);
+        // callback(pals);
       } catch (error) {
         setError(error.message);
       }
     };
 
     fetchData();
-  }, [url.url, token]);
+  }, [url, token]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -50,10 +50,7 @@ function UseUserPals(url) {
   }
 
   return (
-    <div>
-      {/* Display the filtered JSON data here */}
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
+    data
   );
 }
 

@@ -2,10 +2,7 @@
     npm install
 
 Before Starting, run latest build.
-to create latest build (use win if on windows, unix for unix systems): 
-    yarn create-app-win
-or
-    yarn create-app-unix
+    yarn build
 
 
 ----- Run on Unix -----
@@ -24,6 +21,10 @@ or
         pip install -r requirements.txt
         gunicorn -b :5000 main:app
 
+    to start server without updating requirments dependencies:
+
+        source env/bin/activate
+        gunicorn -b :5000 main:app
 
 
 ----- Run on Windows -----
@@ -41,3 +42,5 @@ or
         .\env\Scripts\activate
         pip install -r requirements.txt
         waitress-serve --listen=*:5000 main:app
+
+
