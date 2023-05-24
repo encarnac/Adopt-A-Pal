@@ -3,6 +3,8 @@ import UseUserPals from '../../modules/UseUserPals';
 import UseGetPalById from "../../modules/UseGetPalById";
 import jwtDecode from 'jwt-decode'
 import NavBar from "../../components/navbar";
+import Footer from "../../components/footer";
+
 
 async function fetchPalData(pals) {
     const palDataList = await Promise.all(
@@ -53,6 +55,7 @@ function Dashboard(props) {
           </div>
         ))}
       </div>
+      <Footer />
     </>
   );
 }
