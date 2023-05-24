@@ -1,11 +1,15 @@
-import { React, useState } from "react";
+import { React, useState, Link } from "react";
 import { IoClose } from "react-icons/io5";
 
 function SignupModal(props) {
   const signupModal = props.signupModal;
-  const handleClose = props.handleSignupModal;
-
-  const goToLogin = () => {}
+  const closeSignupModal = props.handleSignupModal;
+  const openLoginModal = props.handleLoginModal;
+  
+  const goToLogin = () => {
+    closeSignupModal();
+    openLoginModal();
+  }
 
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
@@ -60,8 +64,9 @@ function SignupModal(props) {
         <div className="bg-white rounded-[35px] min-w-[30rem] px-8 pt-6 pb-10 opacity-95">
           {/* CLOSE BUTTON */}
           <div className="flex justify-end">
-            <IoClose onClick={() => handleClose(false)} />
+            <IoClose onClick={() => closeSignupModal()} />
           </div>
+          {/* MODAL FOR SIGNUP FORM */}
           <div className="p-6 space-y-2 md:space-y-4 sm:p-8 flex flex-col justify-center">
             <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-[#714949]">
               Create Account
@@ -165,13 +170,12 @@ function SignupModal(props) {
               </button>
               <p className="text-sm font-light text-gray-500">
                 Already have an account?
-                <a
-                  href=""
+                <button
+                  onClick={() => goToLogin()}
                   className="font-medium hover:underline text-[#EE765E]"
                 >
-                  {" "}
-                  Login{" "}
-                </a>
+                  &nbsp;Login
+                </button>
               </p>
             </form>
           </div>

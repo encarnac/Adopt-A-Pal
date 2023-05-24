@@ -71,11 +71,11 @@ function NavBar(props) {
           <div className="menu flex flex-row gap-3 items-center text-2xl font-medium">
             <Link
               className="text-[#714949] hover:text-[#856a6a] list-none mx-3"
-              onClick={() => handleLoginModal(true)}
+              onClick={() => handleLoginModal()}
             >
               Login
             </Link>
-            <Link onClick={() => handleSignupModal(true)}>
+            <Link onClick={() => handleSignupModal()}>
               <button className="text-white font-medium px-4 py-2 rounded-full bg-primary hover:bg-[#ef8e87] ">
                 Sign Up
               </button>
