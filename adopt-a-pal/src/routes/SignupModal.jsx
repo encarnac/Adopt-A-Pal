@@ -1,11 +1,14 @@
 import { React, useState, Link } from "react";
 import { IoClose } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+
 
 function SignupModal(props) {
   const signupModal = props.signupModal;
   const closeSignupModal = props.handleSignupModal;
   const openLoginModal = props.handleLoginModal;
-  
+  const navigate = useNavigate();
+
   const goToLogin = () => {
     closeSignupModal();
     openLoginModal();
@@ -22,6 +25,7 @@ function SignupModal(props) {
 
   if (!signupModal) return null;
 
+  // Creates new User from form input before sign in
   const handleSignUp = async(event) => {
     event.preventDefault();
     const signupUrl = '/api/users';
@@ -35,9 +39,9 @@ function SignupModal(props) {
       email,
       password
     };
-    // console.log(info);
 
     try {
+      // Sends POST request to create new User
       const response = await fetch(signupUrl, {
         method: "POST",
         headers: {
@@ -46,10 +50,13 @@ function SignupModal(props) {
         body: JSON.stringify(info),
       });
 
+      // Successful user creation calls sign in handler
       if (response.ok) {
         const data = await response.json();
         console.log("API RESPONSE =", data);
         //  IN PROGRESS: HANDLE LOGIN AND REDIRECT
+        handleSignIn();
+        
       }
       
     } catch (error) {
@@ -57,6 +64,43 @@ function SignupModal(props) {
       console.error("Sign Up error:", error);
     }
   }
+
+  // Signs in using email and password entered in Sign Up form
+  const handleSignIn = async () => {
+    const loginUrl = "/api/sessions";
+    const credentials = {
+      email,
+      password,
+    };
+
+    try {
+      const response = await fetch(loginUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (response.ok) {
+        // Sign-in successful
+        const data = await response.json();
+        // Perform any necessary actions with the token or user data
+        const token = data.token;
+        // Save the token in localStorage
+        localStorage.setItem("token", token);
+
+        // Redirect to "/dashboard" after successful sign-in
+        navigate("/dashboard");
+      } else {
+        // Sign-in failed
+        // Handle the failed sign-in, display an error message, etc.
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the sign-in process
+      console.error("Sign-in error:", error);
+    }
+  };
 
   return (
     <>
