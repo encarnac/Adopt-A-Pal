@@ -9,20 +9,24 @@ import SignupModal from "../SignupModal";
 function Landing( props ) {
   // State of the login modal is toggled by NavBar/Modal and displayed over Landing
   const [loginModal, setLoginModal] = useState(false);
-  const handleLoginModal = (e) => {
-    setLoginModal(e);
+  const handleLoginModal = () => {
+    setLoginModal(!loginModal);
   };
 
   // State of the signup modal is toggled by NavBar/Modal and displayed over Landing
   const [signupModal, setSignupModal] = useState(false);
-  const handleSignupModal = (e) => {
-    setSignupModal(e);
+  const handleSignupModal = () => {
+    setSignupModal(!signupModal);
   };
 
   return (
     <>
-      <LoginModal {...{ loginModal, handleLoginModal }} />
-      <SignupModal {...{ signupModal, handleSignupModal }} />
+      <LoginModal
+        {...{ loginModal, handleLoginModal, signupModal, handleSignupModal }}
+      />
+      <SignupModal
+        {...{ signupModal, handleSignupModal, loginModal, handleLoginModal }}
+      />
       <NavBar {...{ handleLoginModal, handleSignupModal }} />
       <Header {...{ signupModal, handleSignupModal }} />
       <Features />

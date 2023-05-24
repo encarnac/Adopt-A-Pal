@@ -4,8 +4,14 @@ import { useNavigate } from 'react-router-dom';
 
 function LoginModal(props) {
   const loginModal = props.loginModal;
-  const handleClose = props.handleLoginModal;
+  const closeLoginModal = props.handleLoginModal;
+  const openSignupModal = props.handleSignupModal;
   const navigate = useNavigate();
+
+  const goToSignup = () => {
+    closeLoginModal();
+    openSignupModal();
+  }
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,8 +61,9 @@ function LoginModal(props) {
         <div className="bg-white rounded-[35px] min-w-[30rem] px-8 pt-6 pb-10 opacity-95">
           {/* CLOSE BUTTON */}
           <div className="flex justify-end">
-            <IoClose onClick={() => handleClose(false)} />
+            <IoClose onClick={() => closeLoginModal()} />
           </div>
+          {/* MODAL FOR LOGIN FORM */}
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8 flex flex-col justify-center mt-2">
             <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-[#714949]">
               Welcome Back!
@@ -102,18 +109,17 @@ function LoginModal(props) {
                 type="submit"
                 className="w-full text-white font-medium px-4 py-2 rounded-full bg-[#F2968F] hover:bg-[#ef8e87] "
               >
-                Sign in
+                Sign In
               </button>
             </form>
             <p className="text-sm font-light text-gray-500">
               Don’t have an account yet?
-              <a
-                href=""
+              <button
+                onClick={() => goToSignup()}
                 className="font-medium hover:underline text-[#EE765E]"
               >
-                {" "}
-                Sign up
-              </a>
+                &nbsp;Sign Up
+              </button>
             </p>
             <div className="divider">or</div>
             <button
@@ -122,7 +128,7 @@ function LoginModal(props) {
             >
               <img
                 src="https://img.icons8.com/color/48/null/google-logo.png"
-                className="w-6"
+                className="w-6" alt=""
               />
               Sign in with Google
             </button>

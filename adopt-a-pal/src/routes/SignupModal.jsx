@@ -1,11 +1,18 @@
-import { React, useState } from "react";
+import { React, useState, Link } from "react";
 import { IoClose } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+
 
 function SignupModal(props) {
   const signupModal = props.signupModal;
-  const handleClose = props.handleSignupModal;
+  const closeSignupModal = props.handleSignupModal;
+  const openLoginModal = props.handleLoginModal;
+  const navigate = useNavigate();
 
-  const goToLogin = () => {}
+  const goToLogin = () => {
+    closeSignupModal();
+    openLoginModal();
+  }
 
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
@@ -18,6 +25,7 @@ function SignupModal(props) {
 
   if (!signupModal) return null;
 
+  // Creates new User from form input before sign in
   const handleSignUp = async(event) => {
     event.preventDefault();
     const signupUrl = '/api/users';
@@ -31,9 +39,9 @@ function SignupModal(props) {
       email,
       password
     };
-    // console.log(info);
 
     try {
+      // Sends POST request to create new User
       const response = await fetch(signupUrl, {
         method: "POST",
         headers: {
@@ -42,10 +50,13 @@ function SignupModal(props) {
         body: JSON.stringify(info),
       });
 
+      // Successful user creation calls sign in handler
       if (response.ok) {
         const data = await response.json();
         console.log("API RESPONSE =", data);
         //  IN PROGRESS: HANDLE LOGIN AND REDIRECT
+        handleSignIn();
+        
       }
       
     } catch (error) {
@@ -54,14 +65,52 @@ function SignupModal(props) {
     }
   }
 
+  // Signs in using email and password entered in Sign Up form
+  const handleSignIn = async () => {
+    const loginUrl = "/api/sessions";
+    const credentials = {
+      email,
+      password,
+    };
+
+    try {
+      const response = await fetch(loginUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (response.ok) {
+        // Sign-in successful
+        const data = await response.json();
+        // Perform any necessary actions with the token or user data
+        const token = data.token;
+        // Save the token in localStorage
+        localStorage.setItem("token", token);
+
+        // Redirect to "/dashboard" after successful sign-in
+        navigate("/dashboard");
+      } else {
+        // Sign-in failed
+        // Handle the failed sign-in, display an error message, etc.
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the sign-in process
+      console.error("Sign-in error:", error);
+    }
+  };
+
   return (
     <>
       <div className="fixed z-50 inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
         <div className="bg-white rounded-[35px] min-w-[30rem] px-8 pt-6 pb-10 opacity-95">
           {/* CLOSE BUTTON */}
           <div className="flex justify-end">
-            <IoClose onClick={() => handleClose(false)} />
+            <IoClose onClick={() => closeSignupModal()} />
           </div>
+          {/* MODAL FOR SIGNUP FORM */}
           <div className="p-6 space-y-2 md:space-y-4 sm:p-8 flex flex-col justify-center">
             <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-[#714949]">
               Create Account
@@ -165,13 +214,12 @@ function SignupModal(props) {
               </button>
               <p className="text-sm font-light text-gray-500">
                 Already have an account?
-                <a
-                  href=""
+                <button
+                  onClick={() => goToLogin()}
                   className="font-medium hover:underline text-[#EE765E]"
                 >
-                  {" "}
-                  Login{" "}
-                </a>
+                  &nbsp;Login
+                </button>
               </p>
             </form>
           </div>
