@@ -3,8 +3,8 @@ import NavBar from './navbar';
 import Header from './header';
 import Features from './features';
 import Footer from './footer';
-import LoginModal from '../LoginModal';
-import SignupModal from "../SignupModal";
+import LoginModal from '../login-signup/LoginModal';
+import SignupModal from "../login-signup/SignupModal";
 
 function Landing( props ) {
   // State of the login modal is toggled by NavBar/Modal and displayed over Landing
