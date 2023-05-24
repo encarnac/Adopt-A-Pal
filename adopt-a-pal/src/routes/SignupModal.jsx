@@ -7,10 +7,50 @@ function SignupModal(props) {
 
   const goToLogin = () => {}
 
-  const [email, setEmail] = useState("");
-  const [password, setPassoed] = useState("");
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassoed] = useState('');
 
   if (!signupModal) return null;
+
+  const handleSignUp = async(event) => {
+    event.preventDefault();
+    const signupUrl = '/api/user';
+    const info = {
+      firstname,
+      lastname,
+      address,
+      city,
+      state,
+      phone,
+      email,
+      password
+    };
+
+    try {
+      const response = await fetch(signupUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(info),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      }
+      
+    } catch (error) {
+      // Handle any errors during signup process
+      console.error("Sign Up error:", error);
+    }
+  }
 
   return (
     <>
@@ -39,6 +79,7 @@ function SignupModal(props) {
                   className=" border border-[#9F9F9F] text-[#714949] sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   placeholder-gray-400 text-[#714949] focus:ring-blue-500 focus:border-blue-500"
                   placeholder="name@example.com"
                   required=""
+                  
                 />
               </div>
               <div>
@@ -46,7 +87,7 @@ function SignupModal(props) {
                   for="password"
                   className="block mb-2 text-sm font-medium text-[#714949] text-start"
                 >
-                  Password
+                  
                 </label>
                 <input
                   type="password"
