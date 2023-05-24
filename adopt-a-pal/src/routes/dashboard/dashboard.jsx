@@ -2,7 +2,9 @@ import { React, useState, useEffect, useCallback } from "react";
 import UseUserPals from '../../modules/UseUserPals';
 import UseGetPalById from "../../modules/UseGetPalById";
 import jwtDecode from 'jwt-decode'
-import NavBar from "./navbar";
+import NavBar from "../../components/navbar";
+import Footer from "../../components/footer";
+
 
 async function fetchPalData(pals) {
     const palDataList = await Promise.all(
@@ -15,15 +17,6 @@ async function fetchPalData(pals) {
   }
 
 function Dashboard(props) {
-  const [loginModal, setLoginModal] = useState(false);
-  const handleLoginModal = (e) => {
-    setLoginModal(e);
-  };
-
-  const [signupModal, setSignupModal] = useState(false);
-  const handleSignupModal = (e) => {
-    setSignupModal(e);
-  };
 
   const token = localStorage.getItem('token');
   const decoded = jwtDecode(token);
@@ -50,7 +43,7 @@ function Dashboard(props) {
   
   return (
     <>
-      <NavBar {...{ handleLoginModal, handleSignupModal }} />
+      <NavBar currentPage={"dashboard"} />
       <div>
         <h1>User Pals</h1>
         <div> ---- </div>
@@ -62,6 +55,7 @@ function Dashboard(props) {
           </div>
         ))}
       </div>
+      <Footer />
     </>
   );
 }

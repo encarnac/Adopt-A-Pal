@@ -1,9 +1,7 @@
 import { React } from "react";
 import { Link } from "react-router-dom";
 
-function NavBar(props) {
-  const handleLoginModal = props.handleLoginModal;
-  const handleSignupModal = props.handleSignupModal;
+function NavBar({ currentPage }) {
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-[#FFDDD2]">
@@ -49,23 +47,34 @@ function NavBar(props) {
               </span>
             </div>
 
-            {/* NAVIGATION LINKS */}
+            {/* NAVIGATION LINKS -- Changes highlighted navigation link depending on current page*/}
             <div className="right menu flex text-2xl font-medium">
-              <ul className="hidden lg:flex">
-                <li className="text-[#FA8C01] list-none mx-3">
-                  <Link to="/dashboard">Home</Link>
-                  {/* <a href="#">Home</a> */}
-                </li>
-                <li className="text-[#714949]  hover:text-[#856a6a] list-none mx-3">
-                  <Link to="/browse">Browse</Link>
-                  {/* <a href="#contact-us">browse</a> */}
-                </li>
-              </ul>
+              {/* CURRENT PAGE = DASHBOARD */}
+              {currentPage === "dashboard" && (
+                <ul className="hidden lg:flex">
+                  <li className="text-[#FA8C01] list-none mx-3">
+                    <Link to="/dashboard">Home</Link>
+                  </li>
+                  <li className="text-[#714949] hover:text-[#FA8C01] list-none mx-3">
+                    <Link to="/browse">Browse</Link>
+                  </li>
+                </ul>
+              )}
+
+              {/* CURRENT PAGE = BROWSE */}
+              {currentPage === "browse" && (
+                <ul className="hidden lg:flex">
+                  <li className="text-[#714949] hover:text-[#FA8C01] list-none mx-3">
+                    <Link to="/dashboard">Home</Link>
+                  </li>
+                  <li className="text-[#FA8C01] list-none mx-3">
+                    <Link to="/browse">Browse</Link>
+                  </li>
+                </ul>
+              )}
             </div>
           </div>
         </div>
-
-
       </div>
     </div>
   );
