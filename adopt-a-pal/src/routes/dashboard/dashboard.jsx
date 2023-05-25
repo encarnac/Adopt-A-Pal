@@ -2,8 +2,9 @@ import { React, useState, useEffect, useCallback } from "react";
 import UseUserPals from '../../modules/UseUserPals';
 import UseGetPalById from "../../modules/UseGetPalById";
 import jwtDecode from 'jwt-decode'
-import NavBar from "../../components/navbar";
-import Footer from "../../components/footer";
+import NavBar from "../../components/NavBar";
+import Matches from './matches';
+import Footer from "../../components/Footer";
 
 
 async function fetchPalData(pals) {
@@ -45,8 +46,8 @@ function Dashboard(props) {
     <>
       <NavBar currentPage={"dashboard"} />
       <div>
-        <h1>User Pals</h1>
-        <div> ---- </div>
+        {/* <h1>User Pals</h1>
+        <div> ---- </div> */}
         {palData.map((pal, index) => (
           <div key={index}>
             {pal.loading && <div>Loading...</div>}
@@ -55,6 +56,7 @@ function Dashboard(props) {
           </div>
         ))}
       </div>
+      <Matches />
       <Footer />
     </>
   );
