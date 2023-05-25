@@ -23,7 +23,7 @@
   "scripts": {
     "start": "gunicorn -b :5000 main:app",
     "start-api": "flask run --no-debugger",
-    "start-react":"react-scripts start",
+    "start-react": "react-scripts start",
     "build": "react-scripts build",
     "create-app-win": "yarn build && del /S /Q api\\build && xcopy /E /I build api\\build",
     "create-app-unix": "yarn build && rm -r api/build && cp -r build api/build",

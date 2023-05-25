@@ -1,7 +1,7 @@
 // STRETCH GOAL: Need to make adaptive to smaller screens
 function Footer(props) {
   return (
-    <div className=" w-full rounded-t-[55px] bg-white shadow-xl absolute inset-x-0 bottom-0">
+    <div className=" w-full rounded-t-[55px] bg-white shadow-xl mt-auto">
       {/* FOOTER CONTAINER */}
       <div className="xl:px-40 pb-12 px-20  ">
         {/* TOP HALF oF FOOTER */}
@@ -90,7 +90,7 @@ function Footer(props) {
         </div>
 
         {/* BOTTOM HALF OF FOOTER*/}
-        <div className="opacity-60 pt-2 mt-5 text-[20px]">
+        <div className="opacity-60 pt-2 mt-5 text-[16px]">
           <p>© All Rights Reserved</p>
         </div>
       </div>

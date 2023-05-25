@@ -19,6 +19,7 @@ module.exports = {
       "light-pink": "#FFDDD2",
       "hot-pink": "#FF7578",
       "light-grey": "#9F9F9F",
+      grey: "#2B2B2E",
     },
   },
   plugins: [require("daisyui")],
@@ -48,12 +49,13 @@ module.exports = {
           "base-content": "#714949",
 
           info: "#FFBE48",
+          "info-content": "#fff",
 
           success: "#D7C83F",
-          "success-content": "#F1F1F1",
+          "success-content": "#fff",
 
           warning: "#FA8C01",
-          "warning-content": "#5C1700",
+          "warning-content": "#fff",
 
           error: "#FF4651",
 

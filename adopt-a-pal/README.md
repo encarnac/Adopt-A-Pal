@@ -7,8 +7,8 @@ Before Starting, run latest build.
 
 ----- Run on Unix -----
 
-    to start just front-end:
-        yarn start
+    to start just front-end for development:
+        npm run start-react
 
     to start just back-end:
         activate virtual environment 
