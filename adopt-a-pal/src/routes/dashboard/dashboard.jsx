@@ -2,9 +2,10 @@ import { React, useState, useEffect, useCallback } from "react";
 import UseUserPals from '../../modules/UseUserPals';
 import UseGetPalById from "../../modules/UseGetPalById";
 import jwtDecode from 'jwt-decode'
-import NavBar from "../../components/NavBar";
+import NavBar from "../../components/navbar";
+// import NavBar from "../../components/navBar";
 import Matches from './matches';
-import Footer from "../../components/Footer";
+import Footer from "../../components/footer";
 
 
 async function fetchPalData(pals) {

@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
-import NavBar from "../../components/NavBar";
-import Footer from "../../components/Footer";
+import NavBar from "../../components/navbar";
+// import NavBar from "../../components/NavBar";
+import Footer from "../../components/footer";
 import CarouselCard from '../../components/CarouselCard';
 
 function Browse(props) {
