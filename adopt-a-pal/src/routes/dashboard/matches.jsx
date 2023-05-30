@@ -2,44 +2,45 @@ import SmallCard from '../../components/SmallCard';
 
 function Matches(props) {
   // TO DO: GET DATA FROM API
-  const savedAnimals = [
-    {
-      added: "2023-05-08 17:30:22.420313+00:00",
-      avatars: [
-        "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-721",
-        "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-4382",
-        "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-3876",
-      ],
-      availability: "Available",
-      species: "Cat",
-      breed: "Medium Hair",
-      dispositions: [
-        "Good with other animals",
-        "Good with children",
-        "Animal must be leashed at all times",
-      ],
-      name: "Buttterscotch",
-      id: 5143677177430016,
-    },
-    {
-      added: "2023-04-29 17:30:35.750316+00:00",
-      avatars: [
-        "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-5528",
-        "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-2300",
-        "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-8854",
-      ],
-      availability: "Available",
-      species: "Dog",
-      breed: "Cattle Dog",
-      dispositions: [
-        "Good with other animals",
-        "Good with children",
-        "Animal must be leashed at all times",
-      ],
-      name: "Clair",
-      id: 5168126949851136,
-    },
-  ];
+  const { palDataList } = props;
+  // const savedAnimals = [
+  //   {
+  //     added: "2023-05-08 17:30:22.420313+00:00",
+  //     avatars: [
+  //       "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-721",
+  //       "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-4382",
+  //       "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-3876",
+  //     ],
+  //     availability: "Available",
+  //     species: "Cat",
+  //     breed: "Medium Hair",
+  //     dispositions: [
+  //       "Good with other animals",
+  //       "Good with children",
+  //       "Animal must be leashed at all times",
+  //     ],
+  //     name: "Buttterscotch",
+  //     id: 5143677177430016,
+  //   },
+  //   {
+  //     added: "2023-04-29 17:30:35.750316+00:00",
+  //     avatars: [
+  //       "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-5528",
+  //       "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-2300",
+  //       "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-8854",
+  //     ],
+  //     availability: "Available",
+  //     species: "Dog",
+  //     breed: "Cattle Dog",
+  //     dispositions: [
+  //       "Good with other animals",
+  //       "Good with children",
+  //       "Animal must be leashed at all times",
+  //     ],
+  //     name: "Clair",
+  //     id: 5168126949851136,
+  //   },
+  // ];
 
   return (
     <>
@@ -51,7 +52,7 @@ function Matches(props) {
         
         
         <div className="grid grid-cols-4">
-          {savedAnimals?.map((animal, i) => (
+          {palDataList?.map((animal, i) => (
             <SmallCard animal={animal} />
           ))}
         </div>

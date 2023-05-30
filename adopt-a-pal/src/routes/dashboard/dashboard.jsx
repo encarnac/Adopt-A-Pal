@@ -1,66 +1,118 @@
-import { React, useState, useEffect, useCallback } from "react";
+import { React, useState, useEffect } from "react";
 import UseUserPals from '../../modules/UseUserPals';
 import UseGetPalById from "../../modules/UseGetPalById";
+import UseFetchPalData from "../../modules/UseFetchPalData";
 import jwtDecode from 'jwt-decode'
 import NavBar from "../../components/navbar";
-// import NavBar from "../../components/navBar";
 import Matches from './matches';
 import Footer from "../../components/footer";
 
 
-async function fetchPalData(pals) {
-    const palDataList = await Promise.all(
-      pals.map(async (palId) => {
-        const palData = await UseGetPalById(palId);
-        return palData;
-      })
-    );
-    return palDataList;
-  }
-
 function Dashboard(props) {
-
   const token = localStorage.getItem('token');
   const decoded = jwtDecode(token);
   const uid = decoded.id;
   const userUrl = `/api/users/${uid}`;
-  const userData = UseUserPals( userUrl );
-//   const palDatatest = UseGetPalById("5700433016258560");
-//   console.log(palDatatest);
-  const [palData, setPalData] = useState([]);
-  console.log("userData:", userData);
+  const userData = UseUserPals(userUrl);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [palDataList, setPalDataList] = useState([]);
+  console.log("user data:", userData);
 
   useEffect(() => {
     if (userData && userData.pals) {
-    // if (userData) {
-        console.log("here2");
-      const fetchData = async () => {
-        const palDataList = await fetchPalData(userData.pals);
-        setPalData(palDataList);
+      const fetchPalData = async () => {
+        try {
+          const pallist = ["5700433016258560", "5731076903272448"];
+          const promises = pallist.map((palId) =>
+            UseGetPalById(palId)
+          );
+          const palDataList = await Promise.all(promises);
+          setPalDataList(palDataList);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching pal data:', error);
+          setError(error.message);
+          setLoading(false);
+        }
       };
 
-    //   fetchData();
+      fetchPalData();
     }
   }, [userData]);
-  
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <>
-      <NavBar currentPage={"dashboard"} />
-      <div>
-        {/* <h1>User Pals</h1>
-        <div> ---- </div> */}
-        {palData.map((pal, index) => (
-          <div key={index}>
-            {pal.loading && <div>Loading...</div>}
-            {pal.error && <div>Error: {pal.error}</div>}
-            {pal.data && <pre>{JSON.stringify(pal.data, null, 2)}</pre>}
-          </div>
-        ))}
-      </div>
-      <Matches />
-      <Footer />
+      {/* <NavBar currentPage="dashboard" /> */}
+      {/* <Matches palDataList={palDataList} /> */}
+      {/* <Footer /> */}
     </>
   );
 }
 
 export default Dashboard;
+
+
+
+// function Dashboard(props) {
+//   const token = localStorage.getItem('token');
+//   const decoded = jwtDecode(token);
+//   const uid = decoded.id;
+//   const userUrl = `/api/users/${uid}`;
+//   const userData = UseUserPals(userUrl);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [palDataList, setPalDataList] = useState([]);
+//   console.log("user data:", userData);
+
+
+
+//   // const { loading, palDataList, error } = UseFetchPalData(userData?.pals || []);
+//   useEffect(() => {
+//     if (userData && userData.pals) {
+//       const fetchPalData = async () => {
+//         try 
+//         {
+//           const promises = userData.pals.map((palId) =>
+//             UseGetPalById(palId)
+//           );
+//           const palDataList = await Promise.all(promises);
+//           setPalDataList(palDataList);
+//           setLoading(false);
+//         } 
+//         catch (error) 
+//         {
+//           console.error('Error fetching pal data:', error);
+//           setError(error.message);
+//           setLoading(false);
+//         }
+//       };
+//       fetchPalData();
+//     }
+//   }, [userData]);
+
+//   if (loading) {
+//     return <div>Loading...</div>;
+//   }
+//   if (error) {
+//     return <div>Error: {error}</div>;
+//   }
+
+
+//   return (
+//     <>
+//       {/* <NavBar currentPage="dashboard" /> */}
+//       {/* <Matches palDataList={palDataList} /> */}
+//       {/* <Footer /> */}
+//     </>
+//   );
+// }
+
+// export default Dashboard;

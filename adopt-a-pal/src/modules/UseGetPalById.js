@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function UseGetPalById(palId) {
   const [loading, setLoading] = useState(true);
@@ -21,9 +21,6 @@ function UseGetPalById(palId) {
         }
 
         const jsonData = await response.json();
-
-        console.log("GetpalbyId:");
-        console.log(jsonData);
 
         const {
           name,
@@ -54,10 +51,19 @@ function UseGetPalById(palId) {
     fetchData();
   }, [palUrl, token]);
 
-  console.log("GetpalbyId:");
-  console.log(data);
+  if (loading) {
+    return <div>Loading pal data...</div>;
+  }
 
-  return { loading, data, error };
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  return data;
 }
 
 export default UseGetPalById;
