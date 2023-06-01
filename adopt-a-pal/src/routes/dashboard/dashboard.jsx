@@ -18,7 +18,13 @@ function Dashboard(props) {
   const [palDataList, loading, error] = UseFetchPalData(userData, token);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <NavBar currentPage="dashboard" />
+        <div>Loading...</div>
+        <Footer />
+      </>
+    );
   }
 
   if (error) {
