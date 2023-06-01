@@ -28,6 +28,7 @@ const useFetchPalData = (userData, token) => {
               availability,
               avatars,
               breed,
+              species,
               dispositions,
             } = jsonData;
 
@@ -37,6 +38,7 @@ const useFetchPalData = (userData, token) => {
               availability,
               avatars,
               breed,
+              species,
               dispositions,
             };
 
