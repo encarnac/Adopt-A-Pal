@@ -56,6 +56,8 @@ function Browse(props) {
           (animal) => !userPals.includes(animal.id)
         );
         setFilteredAnimals(filteredAnimalData);
+      } else {
+        setFilteredAnimals(animals)
       }
     };
     filterData();
