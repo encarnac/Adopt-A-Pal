@@ -13,8 +13,9 @@ function Browse(props) {
   const decoded = jwtDecode(token);
   const userID = decoded.id;
   const userUrl = `/api/users/${userID}`;
-  // TO DO: Only display fetched data if NOT in userData.pals
-  // const userData = UseUserPals(userUrl).pals;
+  const userData = UseUserPals(userUrl);
+  const userPals = userData.pals?.map((strID) => parseInt(strID));
+  console.log("USER PALS = ", userPals)
 
   // Filter search to update displayed cards
   const [animalUrl, setAnimalUrl] = useState("/api/animals");
@@ -34,13 +35,20 @@ function Browse(props) {
 
         const animalData = await response.json();
 
-        setAnimals(animalData);
+        if (userData && userPals && userPals.length > 0) {
+          const filteredAnimalData = animalData.filter(
+            (animal) => !userPals.includes(animal.id)
+          );
+
+          setAnimals(filteredAnimalData);
+        }
+        console.log("DISPLAYING ANIMALS = ", animals);
       } catch (error) {
         throw new Error(error.message);
       }
     };
     fetchData();
-  }, [animalUrl]);
+  }, [animalUrl, userPals]);
 
   //  const animals = [
   //    {
