@@ -1,7 +1,10 @@
-import SmallCard from '../../components/SmallCard';
+import { React, useState } from "react";
+import SmallCard from "../../components/SmallCard";
+import FadeAnimation from "../../modules/FadeAnimation";
+import "../../styles.css";
 
 function Matches({ palDataList, loading }) {
-  
+  const [show, setShow] = useState(true);
 
   return (
     <>
@@ -19,13 +22,14 @@ function Matches({ palDataList, loading }) {
             <div className="loading loading-spinner loading-lg"></div>
           )}
           {palDataList?.map((animal, i) => (
-            <SmallCard animal={animal} />
+            <FadeAnimation show={show}>
+              <SmallCard animal={animal} />
+            </FadeAnimation>
           ))}
         </div>
       </div>
     </>
   );
-
 }
 
 export default Matches;
