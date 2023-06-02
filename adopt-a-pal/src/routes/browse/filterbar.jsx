@@ -5,7 +5,7 @@ function FilterBar( {handleAnimalUrl} ) {
   // const handleAnimalUrl = handleAnimalUrlprops.handleAnimalUrl;
 
   // Search Query Paramaters
-  const [dateRange, setDateRange] = useState("");
+  const [date, setDate] = useState('');
   const [species, setSpecies] = useState('');
   const [breed, setBreed] = useState('');
 
@@ -30,7 +30,7 @@ function FilterBar( {handleAnimalUrl} ) {
 
   const handleSearch = (event) => {
     event.preventDefault();
-    handleAnimalUrl(`/api/animals?species=${species}&breed=${breed}&disposition_animals=${dispositionAnimals}&disposition_children=${dispositionChildren}`);
+    handleAnimalUrl(`/api/animals?date=${date}&species=${species}&breed=${breed}&disposition_animals=${dispositionAnimals}&disposition_children=${dispositionChildren}`);
   }
 
   return (
@@ -38,14 +38,16 @@ function FilterBar( {handleAnimalUrl} ) {
       <form onSubmit={handleSearch}>
         <div className="join justify-start flex flex-row space-x-2 mb-8">
           {/* DATE POSTED - DROP DOWN SELECT */}
-          <select className="select bg-white border-primary opacity-50 text-brown join-item">
+          <select value={date} 
+            onChange={(e) => setDate(e.target.value)} 
+            className="select bg-white border-primary opacity-50 text-brown join-item">
             <option disabled selected>
               Date Posted
             </option>
-            <option>Any Date</option>
-            <option>&lt; 1 week</option>
-            <option>&lt; 1 month</option>
-            <option>&lt; 6 months</option>
+            <option value="">All</option>
+            <option value="week">&lt; 1 week</option>
+            <option value="month">&lt; 1 month</option>
+            <option value="6months">&lt; 6 months</option>
           </select>
 
           {/* SPECIES - DROP DOWN SELECTES */}
