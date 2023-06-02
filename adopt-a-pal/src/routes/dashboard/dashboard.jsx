@@ -20,25 +20,15 @@ function Dashboard(props) {
 
   const [palDataList, loading, error] = UseFetchPalData(userData, token);
 
-  if (loading) {
-    return (
-      <>
-        <NavBar currentPage="dashboard" />
-        <div className="loading loading-spinner loading-lg"></div>
-        <Footer />
-      </>
-    );
-  }
-
   if (error) {
     return <div>Error: {error}</div>;
   }
 
   return (
-    <>
+    <> 
       <NavBar currentPage="dashboard" />
       <FadeAnimation show={show}>
-        <Matches palDataList={palDataList} />
+        <Matches palDataList={palDataList} loading={loading} />
       </FadeAnimation>
       <Footer />
     </>
