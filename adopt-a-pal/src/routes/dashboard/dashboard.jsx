@@ -25,7 +25,7 @@ function Dashboard(props) {
   return (
     <> 
       <NavBar currentPage="dashboard" />
-      <Matches palDataList={palDataList} loading={loading} />
+      <Matches palDataList={palDataList} loading={loading} uid={uid} />
       <Footer />
     </>
   );
