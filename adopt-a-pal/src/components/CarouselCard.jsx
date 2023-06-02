@@ -1,39 +1,27 @@
 import { React, useState } from "react";
-import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 
 function CarouselCard({ animal, userID }) {
   const [visible, setVisible] = useState(true);
-  const [addState, setAddState] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   if (!visible) return null;
 
   // Add animal or delete from user's account depending on button state
   const handleSelect = async (e) => {
+    setLoading(true);
     try {
-      if (!addState) {
-        const addResponse = await fetch(`/api/users/${userID}/${animal.id}`, {
-          method: "POST",
-        });
+      const response = await fetch(`/api/users/${userID}/${animal.id}`, {
+        method: "POST",
+      });
 
-        if (!addResponse.ok) {
-          throw new Error("Failed to add animal");
-        }
-
-        setAddState(true);
-        setVisible(false);
-
-      } else {
-         const deleteResponse = await fetch(`/api/users/${userID}/${animal.id}`, {
-           method: "DELETE",
-         });
-
-        if (!deleteResponse.ok) {
-          throw new Error("Failed to add animal");
-        }
-
-        setAddState(false);
-        setVisible(true);
+      if (!response.ok) {
+        throw new Error("Failed to add animal");
       }
+
+      const confirmation = await response.json();
+      console.log(confirmation);
+      setVisible(false);
+
     } catch (error) {
       throw new Error(error.message);
     }
@@ -88,22 +76,29 @@ function CarouselCard({ animal, userID }) {
             {/* <!-- 5th ROW - CALL TO ACTION BUTTON --> */}
             <div className="absolute bottom-4 right-4">
               {/* Opt 1: Like Button for "browse" cardType */}
-              {addState ? (
-                <button
-                  onClick={() => handleSelect()}
-                  className="btn btn-success btn-circle shadow-md hover:shadow-lg"
-                >
-                  <HiHeart style={{ color: "white", fontSize: "1.5em" }} />
+              {loading ? (
+                <button className="btn btn-success btn-circle shadow-md hover:shadow-lg">
+                  <span className="loading loading-spinner loading-sm"></span>
                 </button>
               ) : (
                 <button
                   onClick={() => handleSelect()}
-                  className="btn btn-primary btn-circle shadow-md hover:shadow-lg"
+                  className="btn btn-primary hover:btn-success btn-circle shadow-md hover:shadow-lg"
                 >
-                  {" "}
-                  <HiOutlineHeart
-                    style={{ color: "white", fontSize: "1.5em" }}
-                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="#none"
+                    viewBox="0 0 24 24"
+                    stroke="#FFF1EE"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    />
+                  </svg>
                 </button>
               )}
             </div>
