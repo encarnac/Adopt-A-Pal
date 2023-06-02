@@ -2,7 +2,10 @@ import { React, useState } from "react";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 
 function CarouselCard({ animal, userID }) {
+  const [visible, setVisible] = useState(true);
   const [addState, setAddState] = useState(false);
+
+  if (!visible) return null;
 
   // Add animal or delete from user's account depending on button state
   const handleSelect = async (e) => {
@@ -17,6 +20,7 @@ function CarouselCard({ animal, userID }) {
         }
 
         setAddState(true);
+        setVisible(false);
 
       } else {
          const deleteResponse = await fetch(`/api/users/${userID}/${animal.id}`, {
@@ -28,6 +32,7 @@ function CarouselCard({ animal, userID }) {
         }
 
         setAddState(false);
+        setVisible(true);
       }
     } catch (error) {
       throw new Error(error.message);
