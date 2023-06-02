@@ -23,6 +23,7 @@ const useFetchPalData = (userData, token) => {
             const jsonData = await response.json();
 
             const {
+              id,
               name,
               added,
               availability,
@@ -33,6 +34,7 @@ const useFetchPalData = (userData, token) => {
             } = jsonData;
 
             const filteredData = {
+              id,
               name,
               added,
               availability,

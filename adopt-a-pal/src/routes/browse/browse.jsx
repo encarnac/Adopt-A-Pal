@@ -1,74 +1,84 @@
 import { React, useEffect, useState } from "react";
+import jwtDecode from "jwt-decode";
 import NavBar from "../../components/navbar";
 import Footer from "../../components/footer";
 import FilterBar from "./filterbar";
 import CarouselCard from '../../components/CarouselCard';
+import UseUserPals from "../../modules/UseUserPals";
+
 
 function Browse(props) {
+  // Get list of user's pals to compare fetched data to 
+  const token = localStorage.getItem("token");
+  const decoded = jwtDecode(token);
+  const userID = decoded.id;
+  const userUrl = `/api/users/${userID}`;
+  // TO DO: Only display fetched data if NOT in userData.pals
+  // const userData = UseUserPals(userUrl).pals;
+
+  // Filter search to update displayed cards
   const [animalUrl, setAnimalUrl] = useState("/api/animals");
   const handleAnimalUrl = (e) => {
     setAnimalUrl(e);
-  }
-
-  const [ animals, setAnimals ] = useState(null);
-  const [error, setError] = useState(null);
+  };
+  const [animals, setAnimals] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch( animalUrl ); 
+        const response = await fetch(animalUrl);
 
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error("Failed to fetch data");
         }
 
         const animalData = await response.json();
 
         setAnimals(animalData);
       } catch (error) {
-        setError(error.message);
+        throw new Error(error.message);
       }
     };
     fetchData();
   }, [animalUrl]);
 
-//  const animals = [
-//    {
-//      added: "2023-05-08 17:30:22.420313+00:00",
-//      avatars: [
-//        "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-721",
-//        "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-4382",
-//        "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-3876",
-//      ],
-//      availability: "Available",
-//      species: "Cat",
-//      breed: "Medium Hair",
-//      dispositions: [
-//        "Good with other animals",
-//        "Good with children",
-//        "Animal must be leashed at all times",
-//      ],
-//      name: "Buttterscotch",
-//      id: 5143677177430016,
-//    },
-//    {
-//      added: "2023-04-29 17:30:35.750316+00:00",
-//      avatars: [
-//        "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-5528",
-//        "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-2300",
-//        "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-8854",
-//      ],
-//      availability: "Available",
-//      species: "Dog",
-//      breed: "Cattle Dog",
-//      dispositions: [
-//        "Good with other animals",
-//        "Animal must be leashed at all times",
-//      ],
-//      name: "Clair",
-//      id: 5168126949851136,
-//    },
-//  ];
+  //  const animals = [
+  //    {
+  //      added: "2023-05-08 17:30:22.420313+00:00",
+  //      avatars: [
+  //        "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-721",
+  //        "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-4382",
+  //        "https://storage.googleapis.com/adopt-a-pal-pics/Buttterscotch2673-3876",
+  //      ],
+  //      availability: "Available",
+  //      species: "Cat",
+  //      breed: "Medium Hair",
+  //      dispositions: [
+  //        "Good with other animals",
+  //        "Good with children",
+  //        "Animal must be leashed at all times",
+  //      ],
+  //      name: "Buttterscotch",
+  //      id: 5143677177430016,
+  //    },
+  //    {
+  //      added: "2023-04-29 17:30:35.750316+00:00",
+  //      avatars: [
+  //        "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-5528",
+  //        "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-2300",
+  //        "https://storage.googleapis.com/adopt-a-pal-pics/Clair8747-8854",
+  //      ],
+  //      availability: "Available",
+  //      species: "Dog",
+  //      breed: "Cattle Dog",
+  //      dispositions: [
+  //        "Good with other animals",
+  //        "Animal must be leashed at all times",
+  //      ],
+  //      name: "Clair",
+  //      id: 5168126949851136,
+  //    },
+  //  ];
 
   return (
     <>
@@ -87,7 +97,7 @@ function Browse(props) {
           {/* Creates CarouselCard for each item in list of animal instances */}
           {animals?.map((animal, i) => (
             <div className="carousel-item">
-              <CarouselCard animal={animal} />
+              <CarouselCard animal={animal} userID={userID} />
             </div>
           ))}
         </div>

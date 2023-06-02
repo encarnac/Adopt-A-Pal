@@ -1,11 +1,31 @@
 import { React, useState } from "react";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 
-function CarouselCard({ animal }) {
+function CarouselCard({ animal, userID }) {
   const [activeButton, setActiveButton] = useState(true);
-  const handleClick = () => {
-    setActiveButton(!activeButton);
-  }
+
+  // Add animal to user's account
+  const handleSelect = async (e) => {
+    setActiveButton(false);
+    try {
+      const response = await fetch(`/api/users/${userID}/${animal.id}`, {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add animal");
+      }
+
+      const confirmation = await response.json();
+
+      console.log(confirmation);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+
+
   return (
     <>
       {/* TO DO: Use the class "z-50 bg-black bg-opacity-30 backdrop-blur-sm" to toggle background for activate state */}
@@ -57,7 +77,7 @@ function CarouselCard({ animal }) {
               {/* Opt 1: Like Button for "browse" cardType */}
               {activeButton ? (
                 <button
-                  onClick={() => handleClick()}
+                  onClick={() => handleSelect()}
                   className="btn btn-primary btn-circle shadow-md hover:shadow-lg"
                 >
                   {" "}
@@ -67,7 +87,7 @@ function CarouselCard({ animal }) {
                 </button>
               ) : (
                 <button
-                  onClick={() => handleClick()}
+                  onClick={() => handleSelect()}
                   className="btn btn-success btn-circle shadow-md hover:shadow-lg"
                 >
                   <HiHeart style={{ color: "white", fontSize: "1.5em" }} />
