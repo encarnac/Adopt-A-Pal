@@ -36,7 +36,7 @@ function FilterBar( {handleAnimalUrl} ) {
   return (
     <>
       <form onSubmit={handleSearch}>
-        <div className="join justify-start flex flex-row space-x-2 mb-4">
+        <div className="join justify-start flex flex-row space-x-2 mx-4 mb-4">
           {/* DATE POSTED - DROP DOWN SELECT */}
           <select value={date} 
             onChange={(e) => setDate(e.target.value)} 
@@ -45,9 +45,9 @@ function FilterBar( {handleAnimalUrl} ) {
               Date Posted
             </option>
             <option value="">All</option>
-            <option value="week">&lt; 1 week</option>
-            <option value="month">&lt; 1 month</option>
-            <option value="6months">&lt; 6 months</option>
+            <option value="week">&lt; 1 week ago</option>
+            <option value="month">&lt; 1 month ago</option>
+            <option value="6months">&lt; 6 months ago</option>
           </select>
 
           {/* SPECIES - DROP DOWN SELECTES */}

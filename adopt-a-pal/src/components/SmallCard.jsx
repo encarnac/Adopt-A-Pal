@@ -12,7 +12,7 @@ function SmallCard({ animal }) {
     <>
       <div
         onClick={() => handleDisplayInfo()}
-        class="w-64 p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl"
+        class="w-60 p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl"
       >
         <div className="flex flex-col basis-1/2">
           <img
@@ -21,8 +21,8 @@ function SmallCard({ animal }) {
             alt=""
           />
         </div>
-        <div className="flex flex-col basis-1/2">
-          <div class="p-2 flex flex-row items-center justify-between">
+        <div className="flex flex-col flex-wrap basis-1/2">
+          <div class="p-2 flex flex-row flex-wrap items-center justify-between">
             <h2 class="font-bold text-[18px]">{animal.name}</h2>
             <p class="badge badge-success">{animal.availability}</p>
           </div>

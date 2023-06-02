@@ -69,7 +69,7 @@ function Browse(props) {
   return (
     <>
       <NavBar currentPage={"browse"} />
-      <div className="w-[70vw] flex flex-col mt-36 mb-10 mx-auto justify-center ">
+      <div className="w-[70vw] flex flex-col mt-32 mb-10 mx-auto justify-center ">
         {/* PAGE TITLE */}
         <div className="mb-8 text-start text-2xl font-bold text-brown">
           Browse Pets
@@ -78,12 +78,12 @@ function Browse(props) {
         {/* FILTER AND SEARCH BAR*/}
         <FilterBar handleAnimalUrl={handleAnimalUrl} />
 
-        <div className="mb-8 p-2 text-start text-sm text-taupe">
+        <div className="mx-4 mb-4 p-2 text-start text-sm text-taupe">
           Returned {filteredAnimals?.length} results
         </div>
 
         {/* PAGE CONTENT */}
-        <div className="carousel carousel-center w-[50em] mx-auto mt-12 mb-28 space-x-8 rounded-box">
+        <div className="carousel carousel-center w-[65vw] mx-auto mt-12 mb-28 space-x-8 rounded-box">
           {/* Creates CarouselCard for each item in list of animal instances */}
           {filteredAnimals?.map((animal, i) => (
             <div className="carousel-item">
