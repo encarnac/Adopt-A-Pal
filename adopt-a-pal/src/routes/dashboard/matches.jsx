@@ -1,7 +1,8 @@
-import SmallCard from '../../components/SmallCard';
+import { React, useState } from "react";
+import SmallCard from "../../components/SmallCard";
 
-function Matches({ palDataList, loading }) {
-  
+function Matches({ palDataList, loading, uid }) {
+  const [show, setShow] = useState(true);
 
   return (
     <>
@@ -19,13 +20,12 @@ function Matches({ palDataList, loading }) {
             <div className="loading loading-spinner loading-lg"></div>
           )}
           {palDataList?.map((animal, i) => (
-            <SmallCard animal={animal} />
+              <SmallCard animal={animal} uid={uid} />
           ))}
         </div>
       </div>
     </>
   );
-
 }
 
 export default Matches;
