@@ -21,7 +21,7 @@ function Dashboard(props) {
     return (
       <>
         <NavBar currentPage="dashboard" />
-        <div>Loading...</div>
+        <div className="loading loading-spinner loading-lg"></div>
         <Footer />
       </>
     );
