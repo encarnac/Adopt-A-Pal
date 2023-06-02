@@ -36,7 +36,7 @@ function FilterBar( {handleAnimalUrl} ) {
   return (
     <>
       <form onSubmit={handleSearch}>
-        <div className="join justify-start flex flex-row space-x-2 mb-8">
+        <div className="join justify-start flex flex-row space-x-2 mb-4">
           {/* DATE POSTED - DROP DOWN SELECT */}
           <select value={date} 
             onChange={(e) => setDate(e.target.value)} 
