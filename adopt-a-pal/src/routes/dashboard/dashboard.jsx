@@ -6,9 +6,12 @@ import jwtDecode from 'jwt-decode'
 import NavBar from "../../components/navbar";
 import Matches from './matches';
 import Footer from "../../components/footer";
+import FadeAnimation from "../../modules/FadeAnimation";
+import "../../styles.css";
 
 
 function Dashboard(props) {
+  const [show, setShow] = useState(true);
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
   const uid = decoded.id;
@@ -34,7 +37,9 @@ function Dashboard(props) {
   return (
     <>
       <NavBar currentPage="dashboard" />
-      <Matches palDataList={palDataList} />
+      <FadeAnimation show={show}>
+        <Matches palDataList={palDataList} />
+      </FadeAnimation>
       <Footer />
     </>
   );
