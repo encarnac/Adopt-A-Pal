@@ -5,19 +5,37 @@ function FilterBar( {handleAnimalUrl} ) {
   // const handleAnimalUrl = handleAnimalUrlprops.handleAnimalUrl;
 
   // Search Query Paramaters
-  const [species, setSpecies] = useState(null);
-  const [breed, setBreed] = useState(null);
-  const [dispositionAnimals, setDispositionAnimals] = useState(null);
-  const [dispositionChildren, setDispositionChildren] = useState(null);
-  const [dateRange, setDateRange] = useState(null);
+  const [dateRange, setDateRange] = useState("");
+  const [species, setSpecies] = useState('');
+  const [breed, setBreed] = useState('');
 
-  const searchAnimals = () => {
-    const urlQuery = "";
+  const [dispositionAnimals, setDispositionAnimals] = useState('');
+  const [activeAnimalBtn, setActiveAnimalBtn] = useState(false);
+  const handleDispAnimals = () => {
+    setActiveAnimalBtn(!activeAnimalBtn);
+    dispositionAnimals === true
+      ? setDispositionAnimals("")
+      : setDispositionAnimals(true);
+  };
+
+  const [dispositionChildren, setDispositionChildren] = useState('');
+  const [activeChildBtn, setActiveChildBtn] = useState(false);
+  const handleDispChildren = () => {
+    setActiveChildBtn(!activeChildBtn);
+    dispositionChildren === true
+      ? setDispositionChildren("")
+      : setDispositionChildren(true);
+  };
+
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+    handleAnimalUrl(`/api/animals?species=${species}&breed=${breed}&disposition_animals=${dispositionAnimals}&disposition_children=${dispositionChildren}`);
   }
 
   return (
     <>
-      <form>
+      <form onSubmit={handleSearch}>
         <div className="join justify-start flex flex-row space-x-2 mb-8">
           {/* DATE POSTED - DROP DOWN SELECT */}
           <select className="select bg-white border-primary opacity-50 text-brown join-item">
@@ -31,21 +49,39 @@ function FilterBar( {handleAnimalUrl} ) {
           </select>
 
           {/* SPECIES - DROP DOWN SELECTES */}
-          <select className="select bg-white border-primary opacity-50 text-brown join-item">
+          <select
+            value={species}
+            onChange={(e) => setSpecies(e.target.value)}
+            className="select bg-white border-primary opacity-50 text-brown join-item"
+          >
             <option disabled selected>
               Species
             </option>
-            <option>All Species</option>
-            <option>Cat</option>
-            <option>Dog</option>
-            <option>Other</option>
+            <option value="">All</option>
+            <option value="cat">Cat</option>
+            <option value="dog">Dog</option>
+            <option value="other">Other</option>
           </select>
 
           {/* DISPOSITIONS - BUTTONS  */}
-          <button className="btn bg-white border-primary opacity-50 text-brown normal-case join-item">
+          <button
+            onClick={handleDispChildren}
+            className={
+              activeChildBtn
+                ? "btn bg-success opacity-70 text-white normal-case hover:bg-success hover:text-white hover:opacity-50 join-item"
+                : "btn bg-white border-primary opacity-50 text-brown normal-case hover:bg-success hover:text-white join-item"
+            }
+          >
             Kid Friendly
           </button>
-          <button className="btn bg-white border-primary opacity-50 text-brown normal-case join-item">
+          <button
+            onClick={handleDispAnimals}
+            className={
+              activeAnimalBtn
+                ? "btn bg-success opacity-70 text-white normal-case hover:bg-success hover:text-white hover:opacity-50 join-item"
+                : "btn bg-white border-primary opacity-50 text-brown normal-case hover:bg-success hover:text-white join-item"
+            }
+          >
             Animal Friendly
           </button>
 
