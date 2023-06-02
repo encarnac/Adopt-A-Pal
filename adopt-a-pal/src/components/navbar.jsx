@@ -5,7 +5,7 @@ function NavBar({ currentPage }) {
 
   return (
     <div className="fixed z-50 top-0 left-0 right-0 bg-[#FFDDD2]">
-      <div className="max-w-[80vw] mx-auto my-2 flex justify-between items-center">
+      <div className="max-w-[80vw] mx-auto my-2 flex flex-row justify-between items-center">
         <div className="left flex items-center font-bold text-taupe text-2xl">
           <div className="flex items-center gap-10">
             <div className="flex items-center gap-2">
@@ -51,7 +51,7 @@ function NavBar({ currentPage }) {
             <div className="right menu flex text-2xl font-medium">
               {/* CURRENT PAGE = DASHBOARD */}
               {currentPage === "dashboard" && (
-                <ul className="hidden lg:flex">
+                <ul className="hidden md:flex">
                   <li className="text-[#FA8C01] list-none mx-3">
                     <Link to="/dashboard">Home</Link>
                   </li>
@@ -63,7 +63,7 @@ function NavBar({ currentPage }) {
 
               {/* CURRENT PAGE = BROWSE */}
               {currentPage === "browse" && (
-                <ul className="hidden lg:flex">
+                <ul className="hidden md:flex">
                   <li className="text-[#714949] hover:text-[#FA8C01] list-none mx-3">
                     <Link to="/dashboard">Home</Link>
                   </li>
@@ -74,6 +74,48 @@ function NavBar({ currentPage }) {
               )}
             </div>
           </div>
+        </div>
+
+        {/* LOGOUT BUTTON */}
+        <div className="right menu text-2xl font-medium md:flex hidden">
+          <li className="text-[#714949] hover:text-[#FA8C01] list-none mx-3">
+            <Link to="/">Logout</Link>
+          </li>
+        </div>
+
+        {/* NAVBAR TRANSFORMS TO DROP DOWN LINKS  */}
+        <div className="right menu md:hidden flex justify-end dropdown dropdown-bottom dropdown-end">
+          <label
+            tabIndex={0}
+            className="text-[#714949] hover:text-[#FA8C01] text-2xl font-medium list-none m-1"
+          >
+            <svg
+              height="30"
+              viewBox="0 0 24 24"
+              width="30"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill="#714949"
+                class="heroicon-ui"
+                d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
+              />
+            </svg>
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu p-2 shadow-lg rounded-[20px] bg-off-white text-brown w-52"
+          >
+            <li className="">
+              <Link to="/dashboard">Home</Link>
+            </li>
+            <li className="">
+              <Link to="/browse">Browse</Link>
+            </li>
+            <li className="">
+              <Link to="/">Logout</Link>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
