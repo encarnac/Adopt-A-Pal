@@ -8,22 +8,25 @@ import UseUserPals from "../../modules/UseUserPals";
 
 
 function Browse(props) {
-  // Get list of user's pals to compare fetched data to 
+  // Get list of user's pals to be used as filter
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
   const userID = decoded.id;
   const userUrl = `/api/users/${userID}`;
   const userData = UseUserPals(userUrl);
   const userPals = userData.pals?.map((strID) => parseInt(strID));
-  console.log("USER PALS = ", userPals)
+  console.log("USER PALS = ", userPals);
 
-  // Filter search to update displayed cards
+  const [animals, setAnimals] = useState(null); // Contains raw animal data returned
+  const [filteredAnimals, setFilteredAnimals] = useState(null); // Contains animal data filtered by userPals
+
+  // API call to handle query params
   const [animalUrl, setAnimalUrl] = useState("/api/animals");
   const handleAnimalUrl = (e) => {
     setAnimalUrl(e);
   };
-  const [animals, setAnimals] = useState(null);
 
+  // Handles API GET fetch request to get raw animal data from db
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,20 +38,29 @@ function Browse(props) {
 
         const animalData = await response.json();
 
-        if (userData && userPals && userPals.length > 0) {
-          const filteredAnimalData = animalData.filter(
-            (animal) => !userPals.includes(animal.id)
-          );
+        setAnimals(animalData);
 
-          setAnimals(filteredAnimalData);
-        }
-        console.log("DISPLAYING ANIMALS = ", animals);
+        console.log("ANIMALS = ", animals);
       } catch (error) {
         throw new Error(error.message);
       }
     };
     fetchData();
-  }, [animalUrl, userPals]);
+  }, [animalUrl]);
+
+  // Removes animals returned from db if already in userPals  
+  useEffect(() => {
+    const filterData = () => {
+      if (userData && userPals && userPals.length > 0) {
+        const filteredAnimalData = animals.filter(
+          (animal) => !userPals.includes(animal.id)
+        );
+        setFilteredAnimals(filteredAnimalData);
+      }
+    };
+    filterData();
+    console.log("FILTERED ANIMALS = ", filteredAnimals);
+  }, [animals]);
 
   //  const animals = [
   //    {
@@ -103,7 +115,7 @@ function Browse(props) {
         {/* PAGE CONTENT */}
         <div className="carousel carousel-center w-[50em] mx-auto mt-12 mb-28 space-x-8 rounded-box">
           {/* Creates CarouselCard for each item in list of animal instances */}
-          {animals?.map((animal, i) => (
+          {filteredAnimals?.map((animal, i) => (
             <div className="carousel-item">
               <CarouselCard animal={animal} userID={userID} />
             </div>
