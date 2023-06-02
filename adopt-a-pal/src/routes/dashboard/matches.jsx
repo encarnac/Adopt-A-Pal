@@ -14,7 +14,7 @@ function Matches(props) {
         </div>
         
         
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-4 gap-8 mb-32">
           {palDataList?.map((animal, i) => (
             <SmallCard animal={animal} />
           ))}

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function NavBar({ currentPage }) {
 
   return (
-    <div className="fixed top-0 left-0 right-0 bg-[#FFDDD2]">
+    <div className="fixed z-50 top-0 left-0 right-0 bg-[#FFDDD2]">
       <div className="max-w-[80vw] mx-auto my-2 flex justify-between items-center">
         <div className="left flex items-center font-bold text-taupe text-2xl">
           <div className="flex items-center gap-10">
