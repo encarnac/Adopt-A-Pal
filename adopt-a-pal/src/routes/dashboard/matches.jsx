@@ -1,20 +1,23 @@
 import SmallCard from '../../components/SmallCard';
 
-function Matches(props) {
-  // TO DO: GET DATA FROM API
-  const { palDataList } = props;
+function Matches({ palDataList, loading }) {
   
 
   return (
     <>
       <div className="w-[1280px] flex flex-col mt-36 mb-10 mx-auto justify-center ">
         {/* PAGE TITLE */}
-        <div className="mb-8 text-start text-2xl font-bold text-brown">
+        <div className="mb-8 text-start text-2xl font-bold text-brown indicator">
+          <span className="indicator-item badge badge-secondary">
+            {palDataList.length}
+          </span>
           Your Matches
         </div>
-        
-        
+
         <div className="grid grid-cols-4 gap-8 mb-32">
+          {loading && (
+            <div className="loading loading-spinner loading-lg"></div>
+          )}
           {palDataList?.map((animal, i) => (
             <SmallCard animal={animal} />
           ))}
