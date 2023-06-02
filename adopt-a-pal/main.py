@@ -235,6 +235,38 @@ def animals():
 
         results = list(query.fetch())
 
+        date = request.args.get("date")
+        today = datetime.date.today()
+        
+        search_date = None
+
+        # if date (week, month, 6months) in parameters create a search date prior to current date
+
+        if date == "week":
+            # print("attempted to search by 1 week")
+            search_date = today - datetime.timedelta(days=8)
+            # print (search_date)
+        elif date == "month":
+            # print("attempted to search by 1 month")
+            search_date = today - datetime.timedelta(days=32)
+            # print (search_date)
+        elif date == "6months":
+            # print("attempted to search by 6 months")
+            search_date = today - datetime.timedelta(days=183)
+            # print (search_date)
+
+        # if date was week, month, or 6months, return list of animals between then and now
+
+        if search_date:
+            temp = []
+            for r in results:
+                if search_date < datetime.date.fromtimestamp(r["added"].timestamp()) < today:
+                    temp.append(r)
+
+            results = temp
+
+
+
         for e in results:
             e["id"] = e.key.id
         return Response(json.dumps(results, default=str), status=200,
