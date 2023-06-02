@@ -2,29 +2,37 @@ import { React, useState } from "react";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 
 function CarouselCard({ animal, userID }) {
-  const [activeButton, setActiveButton] = useState(true);
+  const [addState, setAddState] = useState(false);
 
-  // Add animal to user's account
+  // Add animal or delete from user's account depending on button state
   const handleSelect = async (e) => {
-    setActiveButton(false);
     try {
-      const response = await fetch(`/api/users/${userID}/${animal.id}`, {
-        method: "POST",
-      });
+      if (!addState) {
+        const addResponse = await fetch(`/api/users/${userID}/${animal.id}`, {
+          method: "POST",
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to add animal");
+        if (!addResponse.ok) {
+          throw new Error("Failed to add animal");
+        }
+
+        setAddState(true);
+
+      } else {
+         const deleteResponse = await fetch(`/api/users/${userID}/${animal.id}`, {
+           method: "DELETE",
+         });
+
+        if (!deleteResponse.ok) {
+          throw new Error("Failed to add animal");
+        }
+
+        setAddState(false);
       }
-
-      const confirmation = await response.json();
-
-      console.log(confirmation);
     } catch (error) {
       throw new Error(error.message);
     }
   };
-
-
 
   return (
     <>
@@ -75,7 +83,14 @@ function CarouselCard({ animal, userID }) {
             {/* <!-- 5th ROW - CALL TO ACTION BUTTON --> */}
             <div className="absolute bottom-4 right-4">
               {/* Opt 1: Like Button for "browse" cardType */}
-              {activeButton ? (
+              {addState ? (
+                <button
+                  onClick={() => handleSelect()}
+                  className="btn btn-success btn-circle shadow-md hover:shadow-lg"
+                >
+                  <HiHeart style={{ color: "white", fontSize: "1.5em" }} />
+                </button>
+              ) : (
                 <button
                   onClick={() => handleSelect()}
                   className="btn btn-primary btn-circle shadow-md hover:shadow-lg"
@@ -84,13 +99,6 @@ function CarouselCard({ animal, userID }) {
                   <HiOutlineHeart
                     style={{ color: "white", fontSize: "1.5em" }}
                   />
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleSelect()}
-                  className="btn btn-success btn-circle shadow-md hover:shadow-lg"
-                >
-                  <HiHeart style={{ color: "white", fontSize: "1.5em" }} />
                 </button>
               )}
             </div>
