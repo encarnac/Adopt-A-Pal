@@ -36,7 +36,6 @@ function SmallCard({ animal }) {
         <AnimalCard
           animal={animal}
           handleDisplayInfo={handleDisplayInfo}
-          cardType="dashboard"
         />
       )}
     </>

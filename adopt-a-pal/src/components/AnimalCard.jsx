@@ -1,4 +1,4 @@
-function AnimalCard({ animal, handleDisplayInfo, cardType }) {
+function AnimalCard({ animal, handleDisplayInfo }) {
   return (
     <>
       {/* TO DO: Use the class "z-50 bg-black bg-opacity-30 backdrop-blur-sm" to toggle background for activate state */}
@@ -6,7 +6,6 @@ function AnimalCard({ animal, handleDisplayInfo, cardType }) {
         {/* <!-- CARD --> */}
         <div className="flex w-[50rem] h-[400px] p-0 bg-white rounded-[35px] shadow-lg hover:shadow-2xl">
           {/*  Close Button for "dashboard" cardType--> */}
-          {cardType == "dashboard" && (
             <div className="relative">
               <button
                 onClick={() => handleDisplayInfo()}
@@ -28,7 +27,6 @@ function AnimalCard({ animal, handleDisplayInfo, cardType }) {
                 </svg>
               </button>
             </div>
-          )}
 
           {/* !------ LEFT COLUMN FOR PET IMAGE -----> */}
           <div className="flex flex-col basis-1/2 justify-center p-0 m-0">
@@ -73,37 +71,12 @@ function AnimalCard({ animal, handleDisplayInfo, cardType }) {
             {/* <!-- 5th ROW - CALL TO ACTION BUTTON --> */}
             <div className="absolute bottom-4 right-4">
               {/*  Opt 1: Inquire Button for "details" cardType */}
-              {cardType === "dashboard" && (
                 <a
                   href="mailto:adopt@adopt-a-pal.com"
                   className="btn btn-primary shadow-md hover:shadow-lg"
                 >
                   INQUIRE
                 </a>
-              )}
-
-              {/* Opt 2: Like Button for "browse" cardType */}
-              {cardType === "browse" && (
-                <a
-                  href="mailto:adopt@adopt-a-pal.com"
-                  className="btn btn-primary btn-circle shadow-md hover:shadow-lg"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="#fff"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                </a>
-              )}
             </div>
           </div>
         </div>
