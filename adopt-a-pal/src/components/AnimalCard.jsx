@@ -6,27 +6,25 @@ function AnimalCard({ animal, handleDisplayInfo }) {
         {/* <!-- CARD --> */}
         <div className="flex w-[50rem] h-[400px] p-0 bg-white rounded-[35px] shadow-lg hover:shadow-2xl">
           {/*  Close Button for "dashboard" cardType--> */}
-            <div className="relative">
-              <button
-                onClick={() => handleDisplayInfo()}
-                className="absolute inset-4 btn btn-circle btn-sm bg-white opacity-50"
+          <div className="relative">
+            <button
+              onClick={() => handleDisplayInfo()}
+              className="absolute inset-4 btn btn-circle btn-sm bg-white opacity-50"
+            >
+              <svg
+                className="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 26 24"
+                fill="none"
+                stroke="#000000"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+          </div>
 
           {/* !------ LEFT COLUMN FOR PET IMAGE -----> */}
           <div className="flex flex-col basis-1/2 justify-center p-0 m-0">
@@ -71,12 +69,12 @@ function AnimalCard({ animal, handleDisplayInfo }) {
             {/* <!-- 5th ROW - CALL TO ACTION BUTTON --> */}
             <div className="absolute bottom-4 right-4">
               {/*  Opt 1: Inquire Button for "details" cardType */}
-                <a
-                  href="mailto:adopt@adopt-a-pal.com"
-                  className="btn btn-primary shadow-md hover:shadow-lg"
-                >
-                  INQUIRE
-                </a>
+              <a
+                href="mailto:adopt@adopt-a-pal.com"
+                className="btn btn-primary shadow-md hover:shadow-lg"
+              >
+                INQUIRE
+              </a>
             </div>
           </div>
         </div>
