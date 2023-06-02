@@ -5,7 +5,7 @@ function Matches({ palDataList, loading }) {
 
   return (
     <>
-      <div className="w-[1280px] flex flex-col mt-36 mb-10 mx-auto justify-center ">
+      <div className="w-[70vw] flex flex-col mt-36 mb-10 mx-auto justify-center ">
         {/* PAGE TITLE */}
         <div className="mb-8 text-start text-2xl font-bold text-brown indicator">
           <span className="indicator-item badge badge-secondary">
