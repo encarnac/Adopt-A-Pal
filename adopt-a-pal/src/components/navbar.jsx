@@ -2,7 +2,6 @@ import { React } from "react";
 import { Link } from "react-router-dom";
 
 function NavBar({ currentPage }) {
-
   return (
     <div className="fixed z-50 top-0 left-0 right-0 bg-[#FFDDD2]">
       <div className="max-w-[80vw] mx-auto my-2 flex flex-row justify-between items-center">
@@ -72,6 +71,18 @@ function NavBar({ currentPage }) {
                   </li>
                 </ul>
               )}
+
+              {/* CURRENT PAGE = ADMIN DASHBOARD */}
+              {currentPage === "admin" && (
+                <ul className="hidden md:flex">
+                  <li className="text-[#FA8C01] list-none mx-3">
+                    <Link to="/dashboard">All Posts</Link>
+                  </li>
+                  <li className="text-[#714949] hover:text-[#FA8C01] list-none mx-3">
+                    <Link onClick={() => {}}>New Post</Link>
+                  </li>
+                </ul>
+              )}
             </div>
           </div>
         </div>
@@ -106,12 +117,25 @@ function NavBar({ currentPage }) {
             tabIndex={0}
             className="dropdown-content menu p-2 shadow-lg rounded-[20px] bg-off-white text-brown w-52"
           >
-            <li className="">
-              <Link to="/dashboard">Home</Link>
-            </li>
-            <li className="">
-              <Link to="/browse">Browse</Link>
-            </li>
+            {currentPage === "admin" ? (
+              <> 
+                <li className="">
+                  <Link to="/dashboard">All Posts</Link>
+                </li>
+                <li className="">
+                  <Link onClick={() => {}}>New Post</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="">
+                  <Link to="/dashboard">Home</Link>
+                </li>
+                <li className="">
+                  <Link to="/browse">Browse</Link>
+                </li>
+              </>
+            )}
             <li className="">
               <Link to="/">Logout</Link>
             </li>

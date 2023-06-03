@@ -26,7 +26,7 @@ function Dashboard(props) {
     <>
       {admin ? (
         <>
-          <NavBar currentPage="dashboard" />
+          <NavBar currentPage="admin" />
           <Listings uid={uid} />
         </>
       ) : (
