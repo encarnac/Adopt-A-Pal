@@ -42,7 +42,7 @@ function CarouselCard({ animal, userID }) {
           {/* <!-- CARD --> */}
           <div
             className={`flex w-[50rem] h-[400px] p-0 m-8 rounded-[35px] bg-white ${
-              inactive ? "blur-[3px] opacity-95" : "shadow-lg hover:shadow-xl"
+              inactive ? "blur-[2px] opacity-95" : "shadow-md hover:shadow-lg"
             }`}
           >
             {/* !------ LEFT COLUMN FOR PET IMAGE -----> */}
