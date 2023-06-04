@@ -3,7 +3,7 @@ import AnimalCard from "./AnimalCard";
 import FadeAnimation from "../modules/FadeAnimation";
 import "../styles.css";
 
-function SmallCard({ animal, uid, token }) {
+function SmallCard({ animal, uid, admin }) {
   const [show, setShow] = useState(true);
   const [displayInfo, setDisplayInfo] = useState(false);
 
@@ -13,11 +13,11 @@ function SmallCard({ animal, uid, token }) {
 
   const deleteAnimal = async () => {
     try {
-      if (token) {
+      if (admin) {
         const token = localStorage.getItem("token");
         await fetch(`/api/animal/${animal.id}`, {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           method: "DELETE",
         });
