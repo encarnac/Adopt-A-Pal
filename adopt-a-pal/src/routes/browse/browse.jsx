@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import jwtDecode from "jwt-decode";
 import NavBar from "../../components/navbar";
 import Footer from "../../components/footer";
-import FilterBar from "./filterbar";
+import FilterBar from "../../components/filterbar";
 import CarouselCard from '../../components/CarouselCard';
 import UseUserPals from "../../modules/UseUserPals";
 

@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import FilterBar from "../browse/filterbar";
+import FilterBar from "../../components/filterbar";
 import SmallCard from "../../components/SmallCard";
 
 function Listings({ uid }) {
