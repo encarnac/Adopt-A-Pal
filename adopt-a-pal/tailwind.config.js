@@ -60,7 +60,7 @@ module.exports = {
           error: "#FF4651",
           "error-content": "#fff",
 
-          "--rounded-btn": "25px",
+          "--rounded-btn": "18px",
           "--rounded-box": "35px",
         },
       },

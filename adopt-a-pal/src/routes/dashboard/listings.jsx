@@ -1,14 +1,20 @@
 import { React, useEffect, useState } from "react";
-import FilterBar from "../browse/filterbar";
+import FilterBar from "../../components/filterbar";
 import SmallCard from "../../components/SmallCard";
+import NewPost from "./newpost";
 
-function Listings({ uid }) {
-  const token = localStorage.getItem("token");
+function Listings({ uid, show, showNewPost }) {
   const [animals, setAnimals] = useState([]); // Contains raw animal data returned
   const [animalUrl, setAnimalUrl] = useState("/api/animals");
   const handleAnimalUrl = (e) => {
     setAnimalUrl(e);
   };
+
+  const [updateRender, setUpdateRender] = useState(null);
+  const handleUpdate = (e) => {
+    setUpdateRender(e);
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,10 +35,11 @@ function Listings({ uid }) {
       }
     };
     fetchData();
-  }, [animalUrl]);
+  }, [animalUrl, updateRender]);
 
   return (
     <>
+      <NewPost show={show} showNewPost={showNewPost} handleUpdate={handleUpdate} />
       <div className="w-[70vw] flex flex-col mt-28 mb-10 mx-auto justify-center ">
         {/* PAGE TITLE */}
         <div className="mb-8 text-start text-2xl font-bold text-brown indicator">
