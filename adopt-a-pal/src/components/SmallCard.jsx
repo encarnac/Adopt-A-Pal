@@ -3,7 +3,7 @@ import AnimalCard from "./AnimalCard";
 import FadeAnimation from "../modules/FadeAnimation";
 import "../styles.css";
 
-function SmallCard({ animal, uid, admin }) {
+function SmallCard({ animal, uid, admin, updateCount }) {
   const [show, setShow] = useState(true);
   const [displayInfo, setDisplayInfo] = useState(false);
 
@@ -33,7 +33,7 @@ function SmallCard({ animal, uid, admin }) {
           method: "DELETE",
         });
       }
-      
+      updateCount();
       setShow(false);
     } catch (error) {
       throw new Error(error.message);

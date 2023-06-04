@@ -1,15 +1,22 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import SmallCard from "../../components/SmallCard";
 
 function Matches({ palDataList, loading, uid }) {
+  const [count, setCount] = useState(0);
+  const updateCount = () => {
+    setCount(count => count - 1);
+  }
+
+  useEffect(() => {
+    setCount(palDataList?.length)
+  }, [palDataList])
+
   return (
     <>
       <div className="w-[70vw] flex flex-col flex-wrap mt-28 mb-10 mx-auto justify-center ">
         {/* PAGE TITLE */}
         <div className="mb-8 text-start text-2xl font-bold text-brown indicator">
-          <span className="indicator-item badge badge-secondary">
-            {palDataList.length}
-          </span>
+          <span className="indicator-item badge badge-secondary">{count}</span>
           Your Matches
         </div>
 
@@ -23,7 +30,12 @@ function Matches({ palDataList, loading, uid }) {
             </div>
           )}
           {palDataList?.map((animal, i) => (
-            <SmallCard animal={animal} uid={uid} admin={false} />
+            <SmallCard
+              animal={animal}
+              uid={uid}
+              admin={false}
+              updateCount={updateCount}
+            />
           ))}
         </div>
       </div>
