@@ -47,7 +47,7 @@ function Listings({ uid }) {
         {/* PAGE CONTENT */}
         <div className="grid grid-cols-4 gap-8 mb-32">
           {animals?.map((animal, i) => (
-            <SmallCard animal={animal} uid={uid} token={token} />
+            <SmallCard animal={animal} uid={uid} admin={true} />
           ))}
         </div>
       </div>
