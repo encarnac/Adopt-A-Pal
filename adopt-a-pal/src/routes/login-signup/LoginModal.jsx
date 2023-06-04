@@ -15,11 +15,14 @@ function LoginModal(props) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [wrongPassword, setWrongPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   if (!loginModal) return null;
 
   const handleSignIn = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const loginUrl = "/api/sessions";
     const credentials = {
       email,
@@ -46,9 +49,9 @@ function LoginModal(props) {
         // Redirect to "/dashboard" after successful sign-in
         navigate("/dashboard");
       } else {
-        // Sign-in failed
-        // Handle the failed sign-in, display an error message, etc.
+        setWrongPassword(true);
       }
+      setLoading(false);
     } catch (error) {
       // Handle any errors that occurred during the sign-in process
       console.error("Sign-in error:", error);
@@ -64,10 +67,11 @@ function LoginModal(props) {
             <IoClose onClick={() => closeLoginModal()} />
           </div>
           {/* MODAL FOR LOGIN FORM */}
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8 flex flex-col justify-center mt-2">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8 flex flex-col justify-center">
             <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-[#714949]">
               Welcome Back!
             </h1>
+
             <form className="space-y-4 md:space-y-6" onSubmit={handleSignIn}>
               <div>
                 <label
@@ -82,7 +86,7 @@ function LoginModal(props) {
                   id="email"
                   className=" border border-[#9F9F9F] text-[#714949] sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   placeholder-gray-400 text-[#714949] focus:ring-blue-500 focus:border-blue-500"
                   placeholder="name@example.com"
-                  required=""
+                  required
                   value={email} // Set the value from the state variable
                   onChange={(e) => setEmail(e.target.value)} // Update the state variable on change
                 />
@@ -100,18 +104,39 @@ function LoginModal(props) {
                   id="password"
                   placeholder="••••••••"
                   className="bg-gray-50 border border-[#9F9F9F] sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   placeholder-gray-400 text-[#714949] focus:ring-blue-500 focus:border-blue-500"
-                  required=""
+                  required
                   value={password} // Set the value from the state variable
                   onChange={(e) => setPassword(e.target.value)} // Update the state variable on change
                 />
               </div>
+
+              {/* SUBMIT BUTTON OR SPINNER IF LOADING */}
               <button
                 type="submit"
-                className="w-full text-white font-medium px-4 py-2 rounded-full bg-[#F2968F] hover:bg-[#ef8e87] "
+                className="btn w-full px-4 py-2 rounded-full bg-[#F2968F] hover:bg-[#ef8e87] "
               >
-                Sign In
+                {loading ? (
+                  <div
+                    class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status"
+                  >
+                    <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                      Loading...
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-white font-medium ">Sign In</span>
+                )}
               </button>
             </form>
+
+            {/* DISPLAYS ERROR MESSAGE FOR INCORRECT PASSWORDS */}
+            {wrongPassword && (
+              <p className="text-xs text-light-grey italic">
+                Incorrect password! Try again
+              </p>
+            )}
+
             <p className="text-sm font-light text-gray-500">
               Don’t have an account yet?
               <button
@@ -121,17 +146,6 @@ function LoginModal(props) {
                 &nbsp;Sign Up
               </button>
             </p>
-            <div className="divider">or</div>
-            <button
-              type="submit"
-              className="w-full text-white font-medium gap-2 px-4 py-2 rounded-full btn btn-info btn-outline no-animation "
-            >
-              <img
-                src="https://img.icons8.com/color/48/null/google-logo.png"
-                className="w-6" alt=""
-              />
-              Sign in with Google
-            </button>
           </div>
         </div>
       </div>
