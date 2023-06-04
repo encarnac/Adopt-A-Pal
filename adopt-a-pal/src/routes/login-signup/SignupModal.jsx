@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function SignupModal(props) {
+  const [loading, setLoading] = useState(false);
   const signupModal = props.signupModal;
   const closeSignupModal = props.handleSignupModal;
   const openLoginModal = props.handleLoginModal;
@@ -27,6 +28,7 @@ function SignupModal(props) {
 
   // Creates new User from form input before sign in
   const handleSignUp = async(event) => {
+    setLoading(true);
     event.preventDefault();
     const signupUrl = '/api/users';
     const info = {
@@ -58,6 +60,7 @@ function SignupModal(props) {
         handleSignIn();
         
       }
+      setLoading(false);
       
     } catch (error) {
       // Handle any errors during signup process
@@ -208,10 +211,22 @@ function SignupModal(props) {
 
               <button
                 type="submit"
-                className="w-full mt-2 text-white font-medium px-4 py-2 rounded-full bg-[#F2968F] hover:bg-[#ef8e87] "
+                className="btn w-full px-4 py-2 rounded-full bg-[#F2968F] hover:bg-[#ef8e87] "
               >
-                Sign Up
+                {loading ? (
+                  <div
+                    class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status"
+                  >
+                    <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                      Loading...
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-white font-medium ">Sign Up</span>
+                )}
               </button>
+
               <p className="text-sm font-light text-gray-500">
                 Already have an account?
                 <button
