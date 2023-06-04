@@ -92,7 +92,7 @@ function SmallCard({ animal, uid, admin }) {
         </div>
 
         {displayInfo && (
-          <AnimalCard animal={animal} handleDisplayInfo={handleDisplayInfo} />
+          <AnimalCard animal={animal} admin={admin} handleDisplayInfo={handleDisplayInfo} deleteAnimal={deleteAnimal}/>
         )}
       </FadeAnimation>
     </>
