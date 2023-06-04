@@ -29,9 +29,9 @@ function Dashboard(props) {
 
   return (
     <>
-      <NavBar currentPage="admin" showNewPost={showNewPost} />
-      <Listings uid={uid} show={show} showNewPost={showNewPost} />
-      {/* {admin ? (
+      {/* <NavBar currentPage="admin" showNewPost={showNewPost} />
+      <Listings uid={uid} show={show} showNewPost={showNewPost} /> */}
+      {admin ? (
         <>
           <NavBar currentPage="admin" showNewPost={showNewPost} />
           <Listings uid={uid} show={show} showNewPost={showNewPost} />
@@ -41,7 +41,7 @@ function Dashboard(props) {
           <NavBar currentPage="dashboard" />
           <Matches palDataList={palDataList} loading={loading} uid={uid} />
         </>
-      )} */}
+      )}
       <Footer />
     </>
   );
