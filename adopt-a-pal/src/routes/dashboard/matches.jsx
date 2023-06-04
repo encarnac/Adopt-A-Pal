@@ -2,8 +2,6 @@ import { React, useState } from "react";
 import SmallCard from "../../components/SmallCard";
 
 function Matches({ palDataList, loading, uid }) {
-  const [show, setShow] = useState(true);
-
   return (
     <>
       <div className="w-[70vw] flex flex-col flex-wrap mt-28 mb-10 mx-auto justify-center ">

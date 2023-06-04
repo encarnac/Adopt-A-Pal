@@ -15,6 +15,7 @@ function Dashboard(props) {
   const userUrl = `/api/users/${uid}`;
   const userData = UseUserPals(userUrl);
   const admin = userData.email === "admin@adoptapal.com" ? true : false;
+  const [show, setShow] = useState(null); // State of "Listings/New Post" visibility for admin
 
   const [palDataList, loading, error] = UseFetchPalData(userData, token);
 
@@ -22,19 +23,25 @@ function Dashboard(props) {
     return <div>Error: {error}</div>;
   }
 
+  const showNewPost = () => {
+    setShow(!show);
+  };
+
   return (
     <>
-      {admin ? (
+      <NavBar currentPage="admin" showNewPost={showNewPost} />
+      <Listings uid={uid} show={show} showNewPost={showNewPost} />
+      {/* {admin ? (
         <>
-          <NavBar currentPage="admin" />
-          <Listings uid={uid} />
+          <NavBar currentPage="admin" showNewPost={showNewPost} />
+          <Listings uid={uid} show={show} showNewPost={showNewPost} />
         </>
       ) : (
         <>
           <NavBar currentPage="dashboard" />
           <Matches palDataList={palDataList} loading={loading} uid={uid} />
         </>
-      )}
+      )} */}
       <Footer />
     </>
   );
