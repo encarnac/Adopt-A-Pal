@@ -3,6 +3,13 @@ import FadeAnimation from "../modules/FadeAnimation";
 import "../styles.css";
 
 function CarouselCard({ animal, userID }) {
+  const availabilityBadge =
+    animal.availability === "Available"
+      ? "badge-success"
+      : animal.availability === "Pending"
+      ? "badge-warning"
+      : "badge-error";
+
   const [show, setShow] = useState(true);
   const [inactive, setInactive] = useState(false);
 
@@ -57,7 +64,7 @@ function CarouselCard({ animal, userID }) {
               </div>
 
               {/* LEFT COLUMN - CAROUSEL BUTTONS */}
-              <div className="absolute bottom-0 justify-center w-full py-2 space-x-2">
+              <div className="absolute bottom-0 justify-center w-full py-2 space-x-4">
                 {animal.avatars?.map((image, i) => (
                   <a
                     href={`#${animal.name}/${i}`}
@@ -83,17 +90,13 @@ function CarouselCard({ animal, userID }) {
 
               {/* <!-- 3rd ROW - AVAILABILITY, SPECIES, BREED --> */}
               <div className="flex flex-row flex-wrap gap-2 justify-start content-start">
-                <p
-                  className={`badge badge-lg ${
-                    animal.availability === "Available"
-                      ? "badge-success"
-                      : "badge-error"
-                  }`}
-                >
+                <p className={`badge badge-lg ${availabilityBadge}`}>
                   {animal.availability}
                 </p>
-                <p className="badge badge-info badge-lg ">{animal.species}</p>
-                <p className="badge badge-warning badge-lg ">{animal.breed}</p>
+                <p className="badge badge-info badge-lg capitalize">
+                  {animal.species}
+                </p>
+                <p className="badge badge-primary badge-lg ">{animal.breed}</p>
               </div>
 
               {/* <!-- 4th ROW - DISPOSITIONS LIST --> */}
@@ -129,7 +132,7 @@ function CarouselCard({ animal, userID }) {
                 ) : (
                   <button
                     onClick={() => handleSelect()}
-                    className="btn btn-primary hover:btn-success btn-circle shadow-md hover:shadow-lg"
+                    className="btn bg-hot-pink hover:btn-success btn-circle shadow-md hover:shadow-lg"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
