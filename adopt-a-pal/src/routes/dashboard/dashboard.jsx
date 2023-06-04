@@ -17,7 +17,7 @@ function Dashboard(props) {
   const admin = userData.email === "admin@adoptapal.com" ? true : false;
   const [show, setShow] = useState(null); // State of "Listings/New Post" visibility for admin
 
-  const [palDataList, loading, error] = UseFetchPalData(userData, token);
+  const [palDataList, loading, error] = UseFetchPalData(userData, uid, token);
 
   if (error) {
     return <div>Error: {error}</div>;

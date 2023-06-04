@@ -1,4 +1,11 @@
 function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
+  const availabilityBadge =
+    animal.availability === "Available"
+      ? "badge-success"
+      : animal.availability === "Pending"
+      ? "badge-warning"
+      : "badge-error";
+
   return (
     <>
       {/* TO DO: Use the class "z-50 bg-black bg-opacity-30 backdrop-blur-sm" to toggle background for activate state */}
@@ -40,12 +47,14 @@ function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
             </div>
 
             {/* LEFT COLUMN - CAROUSEL BUTTONS */}
-            <div className="absolute bottom-0 justify-center w-full py-2 space-x-2">
+            <div className="absolute bottom-0 justify-center w-full py-2 space-x-4">
               {animal.avatars?.map((image, i) => (
                 <a
                   href={`#${i}`}
                   className="btn btn-xs btn-circle bg-white p-0 shadow-md hover:shadow-lg opacity-70"
-                > </a>
+                >
+                  {" "}
+                </a>
               ))}
             </div>
           </div>
@@ -64,17 +73,13 @@ function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
 
             {/* <!-- 3rd ROW - AVAILABILITY, SPECIES, BREED --> */}
             <div className="flex flex-row flex-wrap gap-2 justify-start content-start">
-              <p
-                className={`badge badge-lg ${
-                  animal.availability === "Available"
-                    ? "badge-success"
-                    : "badge-error"
-                }`}
-              >
+              <p className={`badge badge-lg ${availabilityBadge}`}>
                 {animal.availability}
               </p>
-              <p className="badge badge-info badge-lg ">{animal.species}</p>
-              <p className="badge badge-warning badge-lg ">{animal.breed}</p>
+              <p className="badge badge-info badge-lg capitalize">
+                {animal.species}
+              </p>
+              <p className="badge badge-primary badge-lg ">{animal.breed}</p>
             </div>
 
             {/* <!-- 4th ROW - DISPOSITIONS LIST --> */}
@@ -93,14 +98,14 @@ function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
               {admin ? (
                 <span
                   onClick={() => deleteAnimal()}
-                  className="btn btn-primary shadow-md hover:shadow-lg"
+                  className="btn btn-primary bg-hot-pink shadow-md hover:shadow-lg"
                 >
                   Delete
                 </span>
               ) : (
                 <a
                   href="mailto:adopt@adopt-a-pal.com"
-                  className="btn btn-primary shadow-md hover:shadow-lg"
+                  className="btn btn-primary bg-hot-pink shadow-md hover:shadow-lg"
                 >
                   Inquire
                 </a>

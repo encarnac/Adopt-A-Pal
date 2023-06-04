@@ -7,6 +7,13 @@ function SmallCard({ animal, uid, admin }) {
   const [show, setShow] = useState(true);
   const [displayInfo, setDisplayInfo] = useState(false);
 
+  const availabilityBadge =
+    animal.availability === "Available"
+      ? "badge-success"
+      : animal.availability === "Pending"
+      ? "badge-warning"
+      : "badge-error";
+
   const handleDisplayInfo = () => {
     setDisplayInfo(!displayInfo);
   };
@@ -75,13 +82,7 @@ function SmallCard({ animal, uid, admin }) {
           >
             <div class="p-2 flex flex-row flex-wrap items-center justify-between">
               <h2 class="font-bold text-[18px]">{animal.name}</h2>
-              <p
-                className={`badge badge-lg ${
-                  animal.availability === "Available"
-                    ? "badge-success"
-                    : "badge-error"
-                }`}
-              >
+              <p className={`badge badge-lg ${availabilityBadge}`}>
                 {animal.availability}
               </p>
             </div>
@@ -92,7 +93,12 @@ function SmallCard({ animal, uid, admin }) {
         </div>
 
         {displayInfo && (
-          <AnimalCard animal={animal} admin={admin} handleDisplayInfo={handleDisplayInfo} deleteAnimal={deleteAnimal}/>
+          <AnimalCard
+            animal={animal}
+            admin={admin}
+            handleDisplayInfo={handleDisplayInfo}
+            deleteAnimal={deleteAnimal}
+          />
         )}
       </FadeAnimation>
     </>
