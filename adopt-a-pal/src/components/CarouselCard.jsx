@@ -36,7 +36,7 @@ function CarouselCard({ animal, userID }) {
         {/* TO DO: Use the class "z-50 bg-black bg-opacity-30 backdrop-blur-sm" to toggle background for activate state */}
         <div className="w-full gap-4 flex-wrap flex justify-center items-center">
           {/* <!-- CARD --> */}
-          <div className="flex w-[50rem] h-[400px] p-0 bg-white rounded-[35px] shadow-lg hover:shadow-2xl">
+          <div className="flex w-[50rem] h-[400px] p-0 bg-white rounded-[35px] shadow-md m-8">
             {/* !------ LEFT COLUMN FOR PET IMAGE -----> */}
             <div className="flex flex-col basis-1/2 justify-center p-0 m-0">
               <img
