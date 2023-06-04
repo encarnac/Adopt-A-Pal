@@ -18,3 +18,41 @@ body {
   background: #FFDDD2;
 }
 
+.swiper_container {
+  position: relative;
+}
+
+.swiper-slide {
+  position: relative;
+}
+
+.swiper-slide-shadow-left,
+.swiper-slide-shadow-right {
+  display: none;
+}
+
+.slider-controler {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+} 
+
+
+
+
+
+.slider-controler .slider-arrow {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 100%;
+  background: rgba(255, 255, 255, 0.807);
+}
+
+.slider-controler .slider-arrow ion-icon {
+  font-size: 2.5rem;
+  color: #313131;
+}
+
+.slider-controler .slider-arrow::after {
+  content: '';
+}

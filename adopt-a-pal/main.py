@@ -209,11 +209,15 @@ def animals():
     if request.method == "GET":
         query = client.query(kind=ANIMALS)
 
+        availability = request.args.get("availability")
         species = request.args.get("species")
         breed = request.args.get("breed")
         disposition_animals = request.args.get("disposition_animals")
         disposition_children = request.args.get("disposition_children")
         disposition_leash = request.args.get("disposition_leash")
+
+        if availability:
+            query.add_filter("availability", "=", availability)
 
         if species:
             query.add_filter("species", "=", species)

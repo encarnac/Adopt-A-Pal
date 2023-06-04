@@ -1,15 +1,16 @@
 import { React, useEffect, useState } from "react";
 
-function FilterBar( {handleAnimalUrl} ) {
+function FilterBar({ handleAnimalUrl, admin }) {
   // Changes the search paramters
   // const handleAnimalUrl = handleAnimalUrlprops.handleAnimalUrl;
 
   // Search Query Paramaters
-  const [date, setDate] = useState('');
-  const [species, setSpecies] = useState('');
-  const [breed, setBreed] = useState('');
+  const [availability, setAvailability] = useState("");
+  const [date, setDate] = useState("");
+  const [species, setSpecies] = useState("");
+  const [breed, setBreed] = useState("");
 
-  const [dispositionAnimals, setDispositionAnimals] = useState('');
+  const [dispositionAnimals, setDispositionAnimals] = useState("");
   const [activeAnimalBtn, setActiveAnimalBtn] = useState(false);
   const handleDispAnimals = () => {
     setActiveAnimalBtn(!activeAnimalBtn);
@@ -18,7 +19,7 @@ function FilterBar( {handleAnimalUrl} ) {
       : setDispositionAnimals(true);
   };
 
-  const [dispositionChildren, setDispositionChildren] = useState('');
+  const [dispositionChildren, setDispositionChildren] = useState("");
   const [activeChildBtn, setActiveChildBtn] = useState(false);
   const handleDispChildren = () => {
     setActiveChildBtn(!activeChildBtn);
@@ -27,20 +28,50 @@ function FilterBar( {handleAnimalUrl} ) {
       : setDispositionChildren(true);
   };
 
+  const [dispositionLeash, setDispositionLeash] = useState("");
+  const [activeLeashBtn, setActiveLeashBtn] = useState(false);
+  const handleDispLeash = () => {
+    setActiveLeashBtn(!activeLeashBtn);
+    dispositionLeash === true
+      ? setDispositionLeash("")
+      : setDispositionLeash(true);
+  };
 
   const handleSearch = (event) => {
     event.preventDefault();
-    handleAnimalUrl(`/api/animals?date=${date}&species=${species}&breed=${breed}&disposition_animals=${dispositionAnimals}&disposition_children=${dispositionChildren}`);
-  }
+    handleAnimalUrl(
+      `/api/animals?availability=${availability}&date=${date}&species=${species}&breed=${breed}&disposition_animals=${dispositionAnimals}&disposition_children=${dispositionChildren}&disposition_leash=${dispositionLeash}`
+    );
+  };
 
   return (
     <>
-      <form onSubmit={handleSearch}>
-        <div className="join justify-start flex flex-row space-x-2 mx-4 mb-4">
+      <form onSubmit={handleSearch} className="mr-4">
+        <div className="join justify-center flex flex-row flex-wrap lg:no-wrap space-x-2 mb-8 space-y-1">
+          {/* AVAILABILITY - DROP DOWN SELECT (FOR ADMIN ONLY) */}
+          {admin === true && (
+            <select
+              value={availability}
+              onChange={(e) => setAvailability(e.target.value)}
+              className="select bg-white border-primary opacity-50 text-brown join-item"
+            >
+              <option disabled selected>
+                Availability
+              </option>
+              <option value="">All</option>
+              <option value="Available">Available</option>
+              <option value="Pending">Pending</option>
+              <option value="Adopted">Adopted</option>
+              <option value="Not Available">Not Available</option>
+            </select>
+          )}
+
           {/* DATE POSTED - DROP DOWN SELECT */}
-          <select value={date} 
-            onChange={(e) => setDate(e.target.value)} 
-            className="select bg-white border-primary opacity-50 text-brown join-item">
+          <select
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="select bg-white border-primary opacity-50 text-brown join-item"
+          >
             <option disabled selected>
               Date Posted
             </option>
@@ -65,7 +96,7 @@ function FilterBar( {handleAnimalUrl} ) {
             <option value="other">Other</option>
           </select>
 
-          {/* DISPOSITIONS - BUTTONS  */}
+          {/* DISPOSITIONS FOR CHILDREN - BUTTON  */}
           <button
             onClick={handleDispChildren}
             className={
@@ -76,6 +107,8 @@ function FilterBar( {handleAnimalUrl} ) {
           >
             Kid Friendly
           </button>
+
+          {/* DISPOSITIONS FOR OTHER ANIMALS - BUTTON  */}
           <button
             onClick={handleDispAnimals}
             className={
@@ -87,16 +120,24 @@ function FilterBar( {handleAnimalUrl} ) {
             Animal Friendly
           </button>
 
+          {/* DISPOSITIONS FOR LEASH - BUTTON (ADMIN ONLY) */}
+          <button
+            onClick={handleDispLeash}
+            className={
+              activeLeashBtn
+                ? "btn bg-success opacity-70 text-white normal-case hover:bg-success hover:text-white hover:opacity-50 join-item"
+                : "btn bg-white border-primary opacity-50 text-brown normal-case hover:bg-success hover:text-white join-item"
+            }
+          >
+            Leash Required
+          </button>
+
           {/* BREED - TEXT INPUT */}
-          <div>
-            <div>
-              <input
-                className="input input-bordered border-primary bg-white opacity-50 text-brown text-sm join-item "
-                placeholder="Breed"
-                onChange={(e) => setBreed(e.target.value)}
-              />
-            </div>
-          </div>
+          <input
+            className="input input-bordered border-primary bg-white opacity-50 text-brown text-sm join-item "
+            placeholder="Breed"
+            onChange={(e) => setBreed(e.target.value)}
+          />
 
           {/* SUBMIT BUTTON */}
           <button
