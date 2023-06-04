@@ -48,7 +48,7 @@ function FilterBar( {handleAnimalUrl, admin} ) {
   return (
     <>
       <form onSubmit={handleSearch}>
-        <div className="join justify-start flex flex-row space-x-2 mb-8">
+        <div className="join justify-start flex flex-row space-x-2 mb-8 ">
           {/* AVAILABILITY - DROP DOWN SELECT (FOR ADMIN ONLY) */}
           {admin === true && (
             <select
