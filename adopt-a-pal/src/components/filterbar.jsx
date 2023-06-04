@@ -1,10 +1,11 @@
 import { React, useEffect, useState } from "react";
 
-function FilterBar( {handleAnimalUrl} ) {
+function FilterBar( {handleAnimalUrl, admin} ) {
   // Changes the search paramters
   // const handleAnimalUrl = handleAnimalUrlprops.handleAnimalUrl;
 
   // Search Query Paramaters
+  const [availability, setAvailability] = useState('');
   const [date, setDate] = useState('');
   const [species, setSpecies] = useState('');
   const [breed, setBreed] = useState('');
@@ -27,20 +28,51 @@ function FilterBar( {handleAnimalUrl} ) {
       : setDispositionChildren(true);
   };
 
+  const [dispositionLeash, setDispositionLeash] = useState('');
+  const [activeLeashBtn, setActiveLeashBtn] = useState(false);
+  const handleDispLeash = () => {
+    setActiveLeashBtn(!activeLeashBtn);
+    dispositionLeash === true
+      ? setDispositionLeash("")
+      : setDispositionLeash(true);
+  };
+
 
   const handleSearch = (event) => {
     event.preventDefault();
-    handleAnimalUrl(`/api/animals?date=${date}&species=${species}&breed=${breed}&disposition_animals=${dispositionAnimals}&disposition_children=${dispositionChildren}`);
+    handleAnimalUrl(
+      `/api/animals?availability=${availability}&date=${date}&species=${species}&breed=${breed}&disposition_animals=${dispositionAnimals}&disposition_children=${dispositionChildren}&disposition_leash=${dispositionLeash}`
+    );
   }
 
   return (
     <>
       <form onSubmit={handleSearch}>
-        <div className="join justify-start flex flex-row space-x-2 mx-4 mb-4">
+        <div className="join justify-center flex flex-row space-x-2 mb-8 mr-4">
+          {/* AVAILABILITY - DROP DOWN SELECT (FOR ADMIN ONLY) */}
+          {admin === true && (
+            <select
+              value={availability}
+              onChange={(e) => setAvailability(e.target.value)}
+              className="select bg-white border-primary opacity-50 text-brown join-item"
+            >
+              <option disabled selected>
+                Availability
+              </option>
+              <option value="">All</option>
+              <option value="Available">Available</option>
+              <option value="Pending">Pending</option>
+              <option value="Adopted">Adopted</option>
+              <option value="Not Available">Not Available</option>
+            </select>
+          )}
+
           {/* DATE POSTED - DROP DOWN SELECT */}
-          <select value={date} 
-            onChange={(e) => setDate(e.target.value)} 
-            className="select bg-white border-primary opacity-50 text-brown join-item">
+          <select
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="select bg-white border-primary opacity-50 text-brown join-item"
+          >
             <option disabled selected>
               Date Posted
             </option>
@@ -65,7 +97,7 @@ function FilterBar( {handleAnimalUrl} ) {
             <option value="other">Other</option>
           </select>
 
-          {/* DISPOSITIONS - BUTTONS  */}
+          {/* DISPOSITIONS FOR CHILDREN - BUTTON  */}
           <button
             onClick={handleDispChildren}
             className={
@@ -76,6 +108,8 @@ function FilterBar( {handleAnimalUrl} ) {
           >
             Kid Friendly
           </button>
+
+          {/* DISPOSITIONS FOR OTHER ANIMALS - BUTTON  */}
           <button
             onClick={handleDispAnimals}
             className={
@@ -85,6 +119,18 @@ function FilterBar( {handleAnimalUrl} ) {
             }
           >
             Animal Friendly
+          </button>
+
+          {/* DISPOSITIONS FOR LEASH - BUTTON (ADMIN ONLY) */}
+          <button
+            onClick={handleDispLeash}
+            className={
+              activeLeashBtn
+                ? "btn bg-success opacity-70 text-white normal-case hover:bg-success hover:text-white hover:opacity-50 join-item"
+                : "btn bg-white border-primary opacity-50 text-brown normal-case hover:bg-success hover:text-white join-item"
+            }
+          >
+            Leash Required
           </button>
 
           {/* BREED - TEXT INPUT */}

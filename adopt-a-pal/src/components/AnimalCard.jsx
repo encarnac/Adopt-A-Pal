@@ -1,4 +1,4 @@
-function AnimalCard({ animal, handleDisplayInfo }) {
+function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
   return (
     <>
       {/* TO DO: Use the class "z-50 bg-black bg-opacity-30 backdrop-blur-sm" to toggle background for activate state */}
@@ -48,8 +48,14 @@ function AnimalCard({ animal, handleDisplayInfo }) {
             </p>
 
             {/* <!-- 3rd ROW - AVAILABILITY, SPECIES, BREED --> */}
-            <div className="flex flex-row flex-wrap space-x-2">
-              <p className="badge badge-success badge-lg ">
+            <div className="flex flex-row flex-wrap gap-2 justify-start content-start">
+              <p
+                className={`badge badge-lg ${
+                  animal.availability === "Available"
+                    ? "badge-success"
+                    : "badge-error"
+                }`}
+              >
                 {animal.availability}
               </p>
               <p className="badge badge-info badge-lg ">{animal.species}</p>
@@ -69,12 +75,21 @@ function AnimalCard({ animal, handleDisplayInfo }) {
             {/* <!-- 5th ROW - CALL TO ACTION BUTTON --> */}
             <div className="absolute bottom-4 right-4">
               {/*  Opt 1: Inquire Button for "details" cardType */}
-              <a
-                href="mailto:adopt@adopt-a-pal.com"
-                className="btn btn-primary shadow-md hover:shadow-lg"
-              >
-                INQUIRE
-              </a>
+              {admin ? (
+                <span
+                  onClick={()=>deleteAnimal()}
+                  className="btn btn-primary shadow-md hover:shadow-lg"
+                >
+                  Delete
+                </span>
+              ) : (
+                <a
+                  href="mailto:adopt@adopt-a-pal.com"
+                  className="btn btn-primary shadow-md hover:shadow-lg"
+                >
+                  Inquire
+                </a>
+              )}
             </div>
           </div>
         </div>
