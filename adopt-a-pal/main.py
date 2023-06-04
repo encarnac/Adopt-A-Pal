@@ -280,7 +280,6 @@ def animals():
         
     elif request.method == "POST":
         content = request.form
-        print(content)
         entity = datastore.Entity(key=client.key(ANIMALS))
 
         for key in REQUIRED_ANIMAL_ATTRIBUTES:
@@ -320,8 +319,6 @@ def animals():
             "dispositions": dispositions
         })
 
-        print(animal)
-
         files = list(request.files.values())
 
         if len(files) == 0:
@@ -333,7 +330,6 @@ def animals():
                 else:
                     filename = secure_filename(file.filename)
                     pic_url = upload_pic(file.read(), filename)
-                    print(pic_url)
                     animal['avatars'].append(pic_url)
 
         entity.update(animal)
@@ -731,57 +727,6 @@ def upload_pic(file_data, filename):
 
     return blob.public_url
 
-def upload_pic_old(source_file_name, destination_blob_name):
-    """Uploads a file to the bucket."""
-    # The ID of your GCS bucket
-    # bucket_name = "your-bucket-name"
-    # The path to your file to upload
-    # source_file_name = "local/path/to/file"
-    # The ID of your GCS object
-    # destination_blob_name = "storage-object-name"
-    storage_client = storage.Client()
-    bucket_name  = "adopt-a-pal-pics"
-    
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.upload_from_string(destination_blob_name)
-    # blob = bucket.blob(destination_blob_name)
-
-    # Optional: set a generation-match precondition to avoid potential race conditions
-    # and data corruptions. The request to upload is aborted if the object's
-    # generation number does not match your precondition. For a destination
-    # object that does not yet exist, set the if_generation_match precondition to 0.
-    # If the destination object already exists in your bucket, set instead a
-    # generation-match precondition using its generation number.
-    generation_match_precondition = 0
-
-    blob.upload_from_filename(source_file_name, if_generation_match=generation_match_precondition)
-    blob.make_public()
-    return blob.public_url
-    # print(
-    #     f"File {source_file_name} uploaded to {destination_blob_name}."
-    # )
-
-# def create_new_pet(content):
-#     # ...
-
-#     # Check if the Base64-encoded image string is provided
-#     if "pic1" in content:
-#         image_data = content["pic1"]
-#         filename = f"{content['name']}.jpg"  # Adjust the filename as needed
-#         upload_pic(image_data, filename)
-#         animal["pic1"] = f"https://storage.googleapis.com/your-bucket-name/{filename}"
-#         # Replace "your-bucket-name" with your actual bucket name and adjust the URL structure
-
-#     # ...
-
-#     entity.update(animal)
-#     client.put(entity)
-#     eid = entity.key.id
-#     new_animal_key = client.key(ANIMALS, int(eid))
-#     res = client.get(key=new_animal_key)
-#     res["id"] = int(eid)
-
-#     return Response(json.dumps(res, default=str), status=201, mimetype='application/json')
     
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
