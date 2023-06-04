@@ -39,7 +39,11 @@ function Listings({ uid, show, showNewPost }) {
 
   return (
     <>
-      <NewPost show={show} showNewPost={showNewPost} handleUpdate={handleUpdate} />
+      <NewPost
+        show={show}
+        showNewPost={showNewPost}
+        handleUpdate={handleUpdate}
+      />
       <div className="w-[70vw] flex flex-col mt-28 mb-10 mx-auto justify-center ">
         {/* PAGE TITLE */}
         <div className="mb-8 text-start text-2xl font-bold text-brown indicator">
@@ -52,7 +56,7 @@ function Listings({ uid, show, showNewPost }) {
         <FilterBar handleAnimalUrl={handleAnimalUrl} admin={true} />
 
         {/* PAGE CONTENT */}
-        <div className="grid grid-cols-4 gap-8 mb-32">
+        <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 justify-items-center mb-32 md:mx-0 mx-8">
           {animals?.map((animal, i) => (
             <SmallCard animal={animal} uid={uid} admin={true} />
           ))}
