@@ -39,12 +39,34 @@ function CarouselCard({ animal, userID }) {
             }`}
           >
             {/* !------ LEFT COLUMN FOR PET IMAGE -----> */}
-            <div className="flex flex-col basis-1/2 justify-center p-0 m-0">
-              <img
-                className="object-cover h-full rounded-[35px]"
-                src={animal.avatars[0]}
-                alt=""
-              />
+            <div className="relative flex flex-col basis-1/2 justify-center p-0 m-0">
+              {/* LEFT COLUMN - IMAGE CAROUSEL */}
+              <div className="carousel w-full h-full">
+                {animal.avatars?.map((image, i) => (
+                  <div
+                    id={`${animal.name}/${i}`}
+                    className="carousel-item w-full"
+                  >
+                    <img
+                      className="object-cover w-full rounded-[35px]"
+                      src={image}
+                      alt=""
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* LEFT COLUMN - CAROUSEL BUTTONS */}
+              <div className="absolute bottom-0 justify-center w-full py-2 space-x-2">
+                {animal.avatars?.map((image, i) => (
+                  <a
+                    href={`#${animal.name}/${i}`}
+                    className="btn btn-xs btn-circle bg-white p-0 shadow-md hover:shadow-lg opacity-70"
+                  >
+                    {" "}
+                  </a>
+                ))}
+              </div>
             </div>
 
             {/* <!------RIGHT COLUMN FOR PET INFO ------> */}
