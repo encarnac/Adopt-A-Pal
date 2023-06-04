@@ -20,7 +20,7 @@ function Matches({ palDataList, loading, uid }) {
             <div className="loading loading-spinner loading-lg"></div>
           )}
           {palDataList?.map((animal, i) => (
-              <SmallCard animal={animal} uid={uid} />
+              <SmallCard animal={animal} uid={uid} admin={false} />
           ))}
         </div>
       </div>

@@ -69,16 +69,16 @@ function Browse(props) {
   return (
     <>
       <NavBar currentPage={"browse"} />
-      <div className="w-[70vw] flex flex-col mt-32 mb-10 mx-auto justify-center ">
+      <div className="w-[70vw] flex flex-col mt-28 mb-10 mx-auto justify-center ">
         {/* PAGE TITLE */}
         <div className="mb-8 text-start text-2xl font-bold text-brown">
           Browse Pets
         </div>
 
         {/* FILTER AND SEARCH BAR*/}
-        <FilterBar handleAnimalUrl={handleAnimalUrl} />
+        <FilterBar handleAnimalUrl={handleAnimalUrl} admin={false} />
 
-        <div className="mx-4 mb-4 p-2 text-start text-sm text-taupe">
+        <div className="mx-4 mb-2 p-2 text-start text-sm text-taupe">
           Returned {filteredAnimals?.length} results
         </div>
 
