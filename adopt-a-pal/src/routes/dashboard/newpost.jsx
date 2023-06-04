@@ -10,32 +10,42 @@ function NewPost({ show, showNewPost, handleUpdate }) {
   const [dispositionAnimals, setDispositionAnimals] = useState(false);
   const [dispositionChildren, setDispositionChildren] = useState(false);
   const [dispositionLeash, setDispositionLeash] = useState(false);
-  const [pic, setPic] = useState('');
+  const [pic, setPic] = useState(''); 
   // const [picName, setPicName] = useState(null);
   const [availability, setAvailability] = useState(null);
-  const newPet = {
-    name: name,
-    species: species,
-    breed: breed,
-    disposition_animals: dispositionAnimals,
-    disposition_children: dispositionChildren,
-    disposition_leash: dispositionLeash,
-    pic1: pic,
-    pic_name: name, 
-    availability: availability
-  };
+  // const newPet = {
+  //   name: name,
+  //   species: species,
+  //   breed: breed,
+  //   disposition_animals: dispositionAnimals,
+  //   disposition_children: dispositionChildren,
+  //   disposition_leash: dispositionLeash,
+  //   pic: pic.name,
+  //   availability: availability
+  // };
 
   const createNewPet = async (event) => {
     event.preventDefault();
-    console.log(newPet);
+    // console.log(newPet);
     try {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('species', species);
+      formData.append('breed', breed);
+      formData.append('disposition_animals', dispositionAnimals);
+      formData.append('disposition_children', dispositionChildren);
+      formData.append('disposition_leash', dispositionLeash);
+      formData.append('availability', availability);
+      formData.append('pic', pic);
+      console.log("formdata:", formData);
+
       const response = await fetch("/api/animals", {
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         method: "POST",
-        body: JSON.stringify(newPet),
+        body: formData
+        // body: JSON.stringify(newPet),
       });
 
       if (response.ok) {
@@ -133,11 +143,17 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                   <label className="label">
                     <span className="label-text">Upload Photo</span>
                   </label>
+
                   <input
                     type="file"
                     className="file-input file-input-bordered w-full max-w-lg bg-white text-sm"
-                    onChange={(e) => setPic(e.target.files[0])}
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setPic(e.target.files[0]);
+                      }
+                    }}
                   />
+
                 </div>
 
                 {/* DISPOSITIONS - TOGGLE */}

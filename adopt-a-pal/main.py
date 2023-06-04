@@ -1,12 +1,14 @@
 import datetime
 import os, sys
 import json
+import uuid
 from google.cloud import datastore, storage
 from flask import Flask, jsonify, make_response, request, Response
 import random
 import bcrypt
 import jwt
 from functools import wraps
+from werkzeug.utils import secure_filename
 
 sys.path.insert(0, os.getcwd()+"/GCP_func")
 sys.path.append(os.path.abspath("/adopt-a-pal/api"))
@@ -48,7 +50,7 @@ INVALID_INPUT = {
 
 PIC_ATTRIBUTES = ["pic1", "pic2", "pic3"]
 
-PLACEHOLDER_IMAGE = "https://storage.cloud.google.com/adopt-a-pal-pics/placeholder.jpg"
+PLACEHOLDER_IMAGE = "https://storage.googleapis.com/adopt-a-pal-pics/placeholder.jpg"
 
 REQUIRED_DISPOSITIONS = ["disposition_animals", "disposition_children", "disposition_leash"]
 
@@ -277,8 +279,8 @@ def animals():
                         mimetype='application/json')
         
     elif request.method == "POST":
-        content = request.get_json()
-
+        content = request.form
+        print(content)
         entity = datastore.Entity(key=client.key(ANIMALS))
 
         for key in REQUIRED_ANIMAL_ATTRIBUTES:
@@ -318,15 +320,21 @@ def animals():
             "dispositions": dispositions
         })
 
-        #check for pic 1-3, if missing use placeholder.jpg, else upload photo
-        random.seed()
-        for pic in PIC_ATTRIBUTES:
-            if pic not in content:
-                animal['avatars'].append(PLACEHOLDER_IMAGE)
-            else:
-                prefix = random.randrange(9999999)
-                pic_url = upload_pic(content[pic], content["name"] + str(prefix))
-                animal['avatars'].append(pic_url)
+        print(animal)
+
+        files = list(request.files.values())
+
+        if len(files) == 0:
+            animal['avatars'].append(PLACEHOLDER_IMAGE)
+        else:
+            for file in files:
+                if file.filename == '':
+                    animal['avatars'].append(PLACEHOLDER_IMAGE)
+                else:
+                    filename = secure_filename(file.filename)
+                    pic_url = upload_pic(file.read(), filename)
+                    print(pic_url)
+                    animal['avatars'].append(pic_url)
 
         entity.update(animal)
         client.put(entity)
@@ -335,8 +343,7 @@ def animals():
         res = client.get(key=new_animal_key)
         res["id"] = int(eid)
 
-        return Response(json.dumps(res, default=str), status=201,
-                        mimetype='application/json')
+        return Response(json.dumps(res, default=str), status=201, mimetype='application/json')
     else:
         return jsonify(message='405')
 
@@ -708,7 +715,23 @@ def bucket_metadata(bucket_name):
     print(f"Versioning Enabled: {bucket.versioning_enabled}")
     print(f"Labels: {bucket.labels}")
 
-def upload_pic(source_file_name, destination_blob_name):
+def upload_pic(file_data, filename):
+    client = storage.Client()
+    bucket_name = "adopt-a-pal-pics"
+    bucket = client.bucket(bucket_name)
+
+    # Generate a unique filename to avoid overwriting existing files
+    unique_filename = secure_filename(os.path.splitext(filename)[0])  # Remove extension and sanitize filename
+    file_extension = os.path.splitext(filename)[1]  # Get file extension
+    unique_filename += str(uuid.uuid4().hex) + file_extension
+
+    blob = bucket.blob(unique_filename)
+    blob.upload_from_string(file_data, content_type="image/jpeg")
+    blob.make_public()
+
+    return blob.public_url
+
+def upload_pic_old(source_file_name, destination_blob_name):
     """Uploads a file to the bucket."""
     # The ID of your GCS bucket
     # bucket_name = "your-bucket-name"
@@ -716,10 +739,12 @@ def upload_pic(source_file_name, destination_blob_name):
     # source_file_name = "local/path/to/file"
     # The ID of your GCS object
     # destination_blob_name = "storage-object-name"
-    bucket_name = "adopt-a-pal-pics"
     storage_client = storage.Client()
+    bucket_name  = "adopt-a-pal-pics"
+    
     bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
+    blob = bucket.upload_from_string(destination_blob_name)
+    # blob = bucket.blob(destination_blob_name)
 
     # Optional: set a generation-match precondition to avoid potential race conditions
     # and data corruptions. The request to upload is aborted if the object's
@@ -735,7 +760,28 @@ def upload_pic(source_file_name, destination_blob_name):
     # print(
     #     f"File {source_file_name} uploaded to {destination_blob_name}."
     # )
-    
+
+# def create_new_pet(content):
+#     # ...
+
+#     # Check if the Base64-encoded image string is provided
+#     if "pic1" in content:
+#         image_data = content["pic1"]
+#         filename = f"{content['name']}.jpg"  # Adjust the filename as needed
+#         upload_pic(image_data, filename)
+#         animal["pic1"] = f"https://storage.googleapis.com/your-bucket-name/{filename}"
+#         # Replace "your-bucket-name" with your actual bucket name and adjust the URL structure
+
+#     # ...
+
+#     entity.update(animal)
+#     client.put(entity)
+#     eid = entity.key.id
+#     new_animal_key = client.key(ANIMALS, int(eid))
+#     res = client.get(key=new_animal_key)
+#     res["id"] = int(eid)
+
+#     return Response(json.dumps(res, default=str), status=201, mimetype='application/json')
     
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
