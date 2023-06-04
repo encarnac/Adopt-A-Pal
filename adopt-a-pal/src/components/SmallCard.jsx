@@ -36,7 +36,7 @@ function SmallCard({ animal, uid, admin }) {
   return (
     <>
       <FadeAnimation show={show}>
-        <div class="w-60 p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl">
+        <div class="w-72 h-72 p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl">
           <div className="relative">
             <button
               onClick={() => deleteAnimal()}
