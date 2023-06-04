@@ -15,7 +15,7 @@ function SmallCard({ animal, uid, admin }) {
     try {
       if (admin) {
         const token = localStorage.getItem("token");
-        await fetch(`/api/animal/${animal.id}`, {
+        await fetch(`/api/animals/${animal.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
