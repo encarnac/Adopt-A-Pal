@@ -8,9 +8,7 @@ import UseUserPals from "../../modules/UseUserPals";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
   EffectCoverflow,
-  Pagination,
   Navigation,
-  Scrollbar,
   A11y,
 } from "swiper";
 

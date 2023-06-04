@@ -15,10 +15,15 @@ function Matches({ palDataList, loading, uid }) {
 
         <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 justify-items-center mb-32 md:mx-0 mx-8">
           {loading && (
-            <div className="loading loading-spinner loading-lg"></div>
+            <div
+              class="ml-[50vw] mt-[10vh] h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+              role="status"
+            >
+              <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"></span>
+            </div>
           )}
           {palDataList?.map((animal, i) => (
-              <SmallCard animal={animal} uid={uid} admin={false} />
+            <SmallCard animal={animal} uid={uid} admin={false} />
           ))}
         </div>
       </div>
