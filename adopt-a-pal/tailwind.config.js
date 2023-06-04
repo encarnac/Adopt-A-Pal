@@ -58,6 +58,7 @@ module.exports = {
           "warning-content": "#fff",
 
           error: "#FF4651",
+          "error-content": "#fff",
 
           "--rounded-btn": "25px",
           "--rounded-box": "35px",
