@@ -48,8 +48,14 @@ function AnimalCard({ animal, handleDisplayInfo }) {
             </p>
 
             {/* <!-- 3rd ROW - AVAILABILITY, SPECIES, BREED --> */}
-            <div className="flex flex-row flex-wrap space-x-2">
-              <p className="badge badge-success badge-lg ">
+            <div className="flex flex-row flex-wrap gap-2 justify-start content-start">
+              <p
+                className={`badge badge-lg ${
+                  animal.availability === "Available"
+                    ? "badge-success"
+                    : "badge-error"
+                }`}
+              >
                 {animal.availability}
               </p>
               <p className="badge badge-info badge-lg ">{animal.species}</p>
