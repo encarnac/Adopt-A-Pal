@@ -15,6 +15,15 @@ function Listings({ uid, show, showNewPost }) {
     setUpdateRender(e);
   }
 
+  const [count, setCount] = useState(0);
+  const updateCount = () => {
+    setCount((count) => count - 1);
+  };
+
+  useEffect(() => {
+    setCount(animals?.length);
+  }, [animals]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +57,7 @@ function Listings({ uid, show, showNewPost }) {
         {/* PAGE TITLE */}
         <div className="mb-8 text-start text-2xl font-bold text-brown indicator">
           <span className="indicator-item badge badge-secondary">
-            {animals.length}
+            {count}
           </span>
           Posted Pets
         </div>
@@ -58,7 +67,7 @@ function Listings({ uid, show, showNewPost }) {
         {/* PAGE CONTENT */}
         <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 justify-items-center mb-32 md:mx-0 mx-8">
           {animals?.map((animal, i) => (
-            <SmallCard animal={animal} uid={uid} admin={true} />
+            <SmallCard animal={animal} uid={uid} admin={true} updateCount={updateCount} />
           ))}
         </div>
       </div>
