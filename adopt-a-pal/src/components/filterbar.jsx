@@ -1,16 +1,16 @@
 import { React, useEffect, useState } from "react";
 
-function FilterBar( {handleAnimalUrl, admin} ) {
+function FilterBar({ handleAnimalUrl, admin }) {
   // Changes the search paramters
   // const handleAnimalUrl = handleAnimalUrlprops.handleAnimalUrl;
 
   // Search Query Paramaters
-  const [availability, setAvailability] = useState('');
-  const [date, setDate] = useState('');
-  const [species, setSpecies] = useState('');
-  const [breed, setBreed] = useState('');
+  const [availability, setAvailability] = useState("");
+  const [date, setDate] = useState("");
+  const [species, setSpecies] = useState("");
+  const [breed, setBreed] = useState("");
 
-  const [dispositionAnimals, setDispositionAnimals] = useState('');
+  const [dispositionAnimals, setDispositionAnimals] = useState("");
   const [activeAnimalBtn, setActiveAnimalBtn] = useState(false);
   const handleDispAnimals = () => {
     setActiveAnimalBtn(!activeAnimalBtn);
@@ -19,7 +19,7 @@ function FilterBar( {handleAnimalUrl, admin} ) {
       : setDispositionAnimals(true);
   };
 
-  const [dispositionChildren, setDispositionChildren] = useState('');
+  const [dispositionChildren, setDispositionChildren] = useState("");
   const [activeChildBtn, setActiveChildBtn] = useState(false);
   const handleDispChildren = () => {
     setActiveChildBtn(!activeChildBtn);
@@ -28,7 +28,7 @@ function FilterBar( {handleAnimalUrl, admin} ) {
       : setDispositionChildren(true);
   };
 
-  const [dispositionLeash, setDispositionLeash] = useState('');
+  const [dispositionLeash, setDispositionLeash] = useState("");
   const [activeLeashBtn, setActiveLeashBtn] = useState(false);
   const handleDispLeash = () => {
     setActiveLeashBtn(!activeLeashBtn);
@@ -37,18 +37,17 @@ function FilterBar( {handleAnimalUrl, admin} ) {
       : setDispositionLeash(true);
   };
 
-
   const handleSearch = (event) => {
     event.preventDefault();
     handleAnimalUrl(
       `/api/animals?availability=${availability}&date=${date}&species=${species}&breed=${breed}&disposition_animals=${dispositionAnimals}&disposition_children=${dispositionChildren}&disposition_leash=${dispositionLeash}`
     );
-  }
+  };
 
   return (
     <>
-      <form onSubmit={handleSearch}>
-        <div className="join justify-center flex flex-row space-x-2 mb-8 mr-4">
+      <form onSubmit={handleSearch} className="mr-4">
+        <div className="join justify-center flex flex-row flex-wrap lg:no-wrap space-x-2 mb-8 space-y-1">
           {/* AVAILABILITY - DROP DOWN SELECT (FOR ADMIN ONLY) */}
           {admin === true && (
             <select
@@ -134,15 +133,11 @@ function FilterBar( {handleAnimalUrl, admin} ) {
           </button>
 
           {/* BREED - TEXT INPUT */}
-          <div>
-            <div>
-              <input
-                className="input input-bordered border-primary bg-white opacity-50 text-brown text-sm join-item "
-                placeholder="Breed"
-                onChange={(e) => setBreed(e.target.value)}
-              />
-            </div>
-          </div>
+          <input
+            className="input input-bordered border-primary bg-white opacity-50 text-brown text-sm join-item "
+            placeholder="Breed"
+            onChange={(e) => setBreed(e.target.value)}
+          />
 
           {/* SUBMIT BUTTON */}
           <button
