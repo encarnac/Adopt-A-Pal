@@ -3,9 +3,16 @@ import AnimalCard from "./AnimalCard";
 import FadeAnimation from "../modules/FadeAnimation";
 import "../styles.css";
 
-function SmallCard({ animal, uid, admin }) {
+function SmallCard({ animal, uid, admin, updateCount }) {
   const [show, setShow] = useState(true);
   const [displayInfo, setDisplayInfo] = useState(false);
+
+  const availabilityBadge =
+    animal.availability === "Available"
+      ? "badge-success"
+      : animal.availability === "Pending"
+      ? "badge-warning"
+      : "badge-error";
 
   const handleDisplayInfo = () => {
     setDisplayInfo(!displayInfo);
@@ -26,7 +33,7 @@ function SmallCard({ animal, uid, admin }) {
           method: "DELETE",
         });
       }
-      
+      updateCount();
       setShow(false);
     } catch (error) {
       throw new Error(error.message);
@@ -36,7 +43,7 @@ function SmallCard({ animal, uid, admin }) {
   return (
     <>
       <FadeAnimation show={show}>
-        <div class="w-60 p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl">
+        <div class="w-72 h-72 p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl">
           <div className="relative">
             <button
               onClick={() => deleteAnimal()}
@@ -75,13 +82,7 @@ function SmallCard({ animal, uid, admin }) {
           >
             <div class="p-2 flex flex-row flex-wrap items-center justify-between">
               <h2 class="font-bold text-[18px]">{animal.name}</h2>
-              <p
-                className={`badge badge-lg ${
-                  animal.availability === "Available"
-                    ? "badge-success"
-                    : "badge-error"
-                }`}
-              >
+              <p className={`badge badge-lg ${availabilityBadge}`}>
                 {animal.availability}
               </p>
             </div>
@@ -92,7 +93,12 @@ function SmallCard({ animal, uid, admin }) {
         </div>
 
         {displayInfo && (
-          <AnimalCard animal={animal} admin={admin} handleDisplayInfo={handleDisplayInfo} deleteAnimal={deleteAnimal}/>
+          <AnimalCard
+            animal={animal}
+            admin={admin}
+            handleDisplayInfo={handleDisplayInfo}
+            deleteAnimal={deleteAnimal}
+          />
         )}
       </FadeAnimation>
     </>

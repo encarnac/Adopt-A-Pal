@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const useFetchPalData = (userData, token) => {
+const useFetchPalData = (userData, uid, token) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [palDataList, setPalDataList] = useState([]);
@@ -17,38 +17,46 @@ const useFetchPalData = (userData, token) => {
             });
 
             if (!response.ok) {
-              throw new Error("Failed to fetch data");
+              const deletePal = await fetch(
+                `/api/users/${uid}/${palId}`,
+                {
+                  method: "DELETE",
+                }
+              );
+
+              return null;
+            } else {
+              const jsonData = await response.json();
+
+              const {
+                id,
+                name,
+                added,
+                availability,
+                avatars,
+                breed,
+                species,
+                dispositions,
+              } = jsonData;
+
+              const filteredData = {
+                id,
+                name,
+                added,
+                availability,
+                avatars,
+                breed,
+                species,
+                dispositions,
+              };
+
+              return filteredData;
             }
-
-            const jsonData = await response.json();
-
-            const {
-              id,
-              name,
-              added,
-              availability,
-              avatars,
-              breed,
-              species,
-              dispositions,
-            } = jsonData;
-
-            const filteredData = {
-              id,
-              name,
-              added,
-              availability,
-              avatars,
-              breed,
-              species,
-              dispositions,
-            };
-
-            return filteredData;
           });
 
           const palData = await Promise.all(palDataPromises);
-          setPalDataList(palData);
+
+          setPalDataList(palData.filter(Boolean));
           setLoading(false);
         } catch (error) {
           setError(error.message);
