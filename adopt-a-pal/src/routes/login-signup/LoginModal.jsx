@@ -64,7 +64,7 @@ function LoginModal(props) {
         <div className="bg-white rounded-[35px] min-w-[30rem] px-8 pt-6 pb-10 opacity-95">
           {/* CLOSE BUTTON */}
           <div className="flex justify-end">
-            <IoClose onClick={() => closeLoginModal()} />
+            <a href="#"><IoClose onClick={() => closeLoginModal()} /></a>
           </div>
           {/* MODAL FOR LOGIN FORM */}
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8 flex flex-col justify-center">

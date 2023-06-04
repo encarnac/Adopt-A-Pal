@@ -111,7 +111,9 @@ function SignupModal(props) {
         <div className="bg-white rounded-[35px] min-w-[30rem] px-8 pt-6 pb-10 opacity-95">
           {/* CLOSE BUTTON */}
           <div className="flex justify-end">
-            <IoClose onClick={() => closeSignupModal()} />
+            <a href="#">
+              <IoClose onClick={() => closeSignupModal()} />
+            </a>
           </div>
           {/* MODAL FOR SIGNUP FORM */}
           <div className="p-6 space-y-2 md:space-y-4 sm:p-8 flex flex-col justify-center">
