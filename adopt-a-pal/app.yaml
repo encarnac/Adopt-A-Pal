@@ -7,13 +7,13 @@ env_variables:
   FLASK_ENV: "production"
 
 handlers:
-  # - url: /static
-  #   static_dir: build/static
+  - url: /static
+    static_dir: build/static
 
-  - url: /static/css
-    static_dir: build/static/css
-  - url: /static/js
-    static_dir: build/static/js
+  # - url: /static/css
+  #   static_dir: build/static/css
+  # - url: /static/js
+  #   static_dir: build/static/js
 
   - url: /api/.*
     script: auto

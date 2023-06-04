@@ -24,10 +24,10 @@ MISSING_DISPOSITIONS = {
     "ERROR": "ANIMAL REQUIRES ATLEAST ONE DISPOSITION."
 }
 
-REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability", "pic_name"]
+REQUIRED_ANIMAL_ATTRIBUTES = ["name", "species", "breed", "availability"]
 
 MISSING_ATTRIBUTES = {
-    "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY, pic_name)."
+    "ERROR": "ANIMAL MISSING REQUIRED ATTRIBUTES (NAME, SPECIES, BREED, AVAILABILITY)."
 }
 
 ANIMAL_NOT_FOUND = {
@@ -321,7 +321,7 @@ def animals():
                 animal['avatars'].append(PLACEHOLDER_IMAGE)
             else:
                 prefix = random.randrange(9999999)
-                pic_url = upload_pic(content[pic], content["pic_name"] + str(prefix))
+                pic_url = upload_pic(content[pic], content["name"] + str(prefix))
                 animal['avatars'].append(pic_url)
 
         entity.update(animal)
@@ -408,7 +408,7 @@ def animal_get_patch_delete(eid):
                 new_pics.append(res["avatars"][index])
             else:
                 prefix = random.randrange(9999999)
-                pic_url = upload_pic(content[pic], content["pic_name"] + str(prefix))
+                pic_url = upload_pic(content[pic], content["name"] + str(prefix))
                 new_pics.append(pic_url)
 
         res["avatars"] = new_pics
