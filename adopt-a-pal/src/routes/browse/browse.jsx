@@ -13,8 +13,7 @@ import {
   Scrollbar,
   A11y,
 } from "swiper";
-import FadeAnimation from "../../modules/FadeAnimation";
-import "../../styles.css";
+
 
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -24,7 +23,6 @@ import "swiper/css/scrollbar";
 
 
 function Browse(props) {
-  const [show, setShow] = useState(true);
   const [loading, setLoading] = useState(true);
   // Get list of user's pals to be used as filter
   const token = localStorage.getItem("token");
@@ -128,11 +126,9 @@ function Browse(props) {
             initialSlide={1}
           >
             {filteredAnimals?.map((animal, i) => (
-              <FadeAnimation show={show}>
                 <SwiperSlide>
                   <CarouselCard animal={animal} userID={userID} />
                 </SwiperSlide>
-              </FadeAnimation>
             ))}
 
             {/* BUTTON SLIDER CONTROLLERS*/}
