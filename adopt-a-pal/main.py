@@ -321,7 +321,6 @@ def animals():
         animal.update({
             "dispositions": dispositions
         })
-        print(animal)
         files = list(request.files.values())
 
         if len(files) == 0:
