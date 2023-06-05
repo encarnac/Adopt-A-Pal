@@ -306,9 +306,6 @@ def animals():
 
         dispositions = []
 
-        # print(content["disposition_animals"])
-        # print(content["disposition_children"])
-        # print(content["disposition_leash"])
         if content.get("disposition_animals", "").lower() == "true":
             dispositions.append("Good with other animals")
 
@@ -323,6 +320,8 @@ def animals():
         })
         files = list(request.files.values())
 
+        print(files)
+        
         if len(files) == 0:
             animal['avatars'].append(PLACEHOLDER_IMAGE)
         else:
