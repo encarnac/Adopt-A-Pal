@@ -3,6 +3,7 @@ import FadeAnimation from "../../modules/FadeAnimation";
 import "../../styles.css";
 
 function NewPost({ show, showNewPost, handleUpdate }) {
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
   const [name, setName] = useState(null);
   const [species, setSpecies] = useState(null);
@@ -10,8 +11,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
   const [dispositionAnimals, setDispositionAnimals] = useState(false);
   const [dispositionChildren, setDispositionChildren] = useState(false);
   const [dispositionLeash, setDispositionLeash] = useState(false);
-  const [pic, setPic] = useState(''); 
-  // const [picName, setPicName] = useState(null);
+  const [pic, setPic] = useState("");
   const [availability, setAvailability] = useState(null);
   // const newPet = {
   //   name: name,
@@ -26,25 +26,26 @@ function NewPost({ show, showNewPost, handleUpdate }) {
 
   const createNewPet = async (event) => {
     event.preventDefault();
+    setLoading(true);
     // console.log(newPet);
     try {
       const formData = new FormData();
-      formData.append('name', name);
-      formData.append('species', species);
-      formData.append('breed', breed);
-      formData.append('disposition_animals', dispositionAnimals);
-      formData.append('disposition_children', dispositionChildren);
-      formData.append('disposition_leash', dispositionLeash);
-      formData.append('availability', availability);
-      formData.append('pic', pic);
+      formData.append("name", name);
+      formData.append("species", species);
+      formData.append("breed", breed);
+      formData.append("disposition_animals", dispositionAnimals);
+      formData.append("disposition_children", dispositionChildren);
+      formData.append("disposition_leash", dispositionLeash);
+      formData.append("availability", availability);
+      formData.append("pic", pic);
       console.log("formdata:", formData);
 
       const response = await fetch("/api/animals", {
         headers: {
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         method: "POST",
-        body: formData
+        body: formData,
         // body: JSON.stringify(newPet),
       });
 
@@ -53,13 +54,12 @@ function NewPost({ show, showNewPost, handleUpdate }) {
         console.log("SUCCESS = ", confirmation);
         showNewPost();
         handleUpdate(confirmation);
+        setLoading(false);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       throw new Error(error.message);
     }
-
-
   };
 
   if (!show) return null;
@@ -153,7 +153,6 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                       }
                     }}
                   />
-
                 </div>
 
                 {/* DISPOSITIONS - TOGGLE */}
@@ -208,7 +207,16 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                   Cancel
                 </button>
                 <button className="btn btn-primary" onClick={createNewPet}>
-                  Create
+                  {loading ? (
+                    <div
+                      class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                      role="status"
+                    >
+                      <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"></span>
+                    </div>
+                  ) : (
+                    <span>Create</span>
+                  )}
                 </button>
               </div>
             </div>

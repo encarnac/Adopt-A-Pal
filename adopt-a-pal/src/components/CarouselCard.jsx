@@ -41,34 +41,30 @@ function CarouselCard({ animal, userID }) {
         <div className="w-full gap-4 flex-wrap flex justify-center items-center">
           {/* <!-- CARD --> */}
           <div
-            className={`flex w-[50rem] h-[400px] p-0 m-8 rounded-[35px] bg-white ${
-              inactive ? "blur-[2px] opacity-95" : "shadow-md hover:shadow-lg"
+            className={`flex w-[50rem] h-[400px] p-0 m-8 rounded-[30px] bg-white ${
+              inactive ? "blur-[2px] opacity-95" : "shadow-lg hover:shadow-xl"
             }`}
           >
             {/* !------ LEFT COLUMN FOR PET IMAGE -----> */}
-            <div className="relative flex flex-col basis-1/2 justify-center p-0 m-0">
+            <div className="relative flex flex-col basis-1/2 justify-center p-2">
               {/* LEFT COLUMN - IMAGE CAROUSEL */}
-              <div className="carousel w-full h-full">
+              <div className="carousel w-full h-full rounded-[28px]">
                 {animal.avatars?.map((image, i) => (
                   <div
                     id={`${animal.name}/${i}`}
                     className="carousel-item w-full"
                   >
-                    <img
-                      className="object-cover w-full rounded-[35px]"
-                      src={image}
-                      alt=""
-                    />
+                    <img className="object-cover w-full" src={image} alt="" />
                   </div>
                 ))}
               </div>
 
               {/* LEFT COLUMN - CAROUSEL BUTTONS */}
-              <div className="absolute bottom-0 justify-center w-full py-2 space-x-4">
+              <div className="absolute bottom-2 justify-center w-full py-2 space-x-4">
                 {animal.avatars?.map((image, i) => (
                   <a
                     href={`#${animal.name}/${i}`}
-                    className="btn btn-xs btn-circle bg-white p-0 shadow-md hover:shadow-lg opacity-70"
+                    className="rounded-full text-[12px] px-2 bg-white shadow-md hover:shadow-lg opacity-70"
                   >
                     {" "}
                   </a>
@@ -79,7 +75,7 @@ function CarouselCard({ animal, userID }) {
             {/* <!------RIGHT COLUMN FOR PET INFO ------> */}
             <div className="flex flex-col relative basis-1/2 p-8 space-y-2 justify-start justify-items-start text-start">
               {/* <!-- 1st ROW - NAME --> */}
-              <h2 className="font-bold text-xl text-black" t>
+              <h2 className="font-bold text-xl text-black capitalize">
                 {animal.name}
               </h2>
 
@@ -89,14 +85,16 @@ function CarouselCard({ animal, userID }) {
               </p>
 
               {/* <!-- 3rd ROW - AVAILABILITY, SPECIES, BREED --> */}
-              <div className="flex flex-row flex-wrap gap-2 justify-start content-start">
+              <div className="flex flex-row flex-wrap gap-2 justify-start content-start capitalize">
                 <p className={`badge badge-lg ${availabilityBadge}`}>
                   {animal.availability}
                 </p>
                 <p className="badge badge-info badge-lg capitalize">
                   {animal.species}
                 </p>
-                <p className="badge badge-primary badge-lg ">{animal.breed}</p>
+                <p className="badge badge-primary badge-lg capitalize">
+                  {animal.breed}
+                </p>
               </div>
 
               {/* <!-- 4th ROW - DISPOSITIONS LIST --> */}
@@ -104,9 +102,6 @@ function CarouselCard({ animal, userID }) {
                 {animal.dispositions?.map((description, i) => (
                   <li>{description}</li>
                 ))}
-                {/* <li>Good with other animals</li>
-                    <li>Good with children</li>
-                    <li>Animal must be leashed at all times</li> */}
               </ul>
 
               {/* <!-- 5th ROW - CALL TO ACTION BUTTON --> */}
