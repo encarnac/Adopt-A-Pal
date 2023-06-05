@@ -75,7 +75,7 @@ function CarouselCard({ animal, userID }) {
             {/* <!------RIGHT COLUMN FOR PET INFO ------> */}
             <div className="flex flex-col relative basis-1/2 p-8 space-y-2 justify-start justify-items-start text-start">
               {/* <!-- 1st ROW - NAME --> */}
-              <h2 className="font-bold text-xl text-black" t>
+              <h2 className="font-bold text-xl text-black capitalize">
                 {animal.name}
               </h2>
 
@@ -85,14 +85,16 @@ function CarouselCard({ animal, userID }) {
               </p>
 
               {/* <!-- 3rd ROW - AVAILABILITY, SPECIES, BREED --> */}
-              <div className="flex flex-row flex-wrap gap-2 justify-start content-start">
+              <div className="flex flex-row flex-wrap gap-2 justify-start content-start capitalize">
                 <p className={`badge badge-lg ${availabilityBadge}`}>
                   {animal.availability}
                 </p>
                 <p className="badge badge-info badge-lg capitalize">
                   {animal.species}
                 </p>
-                <p className="badge badge-primary badge-lg ">{animal.breed}</p>
+                <p className="badge badge-primary badge-lg capitalize">
+                  {animal.breed}
+                </p>
               </div>
 
               {/* <!-- 4th ROW - DISPOSITIONS LIST --> */}
@@ -100,9 +102,6 @@ function CarouselCard({ animal, userID }) {
                 {animal.dispositions?.map((description, i) => (
                   <li>{description}</li>
                 ))}
-                {/* <li>Good with other animals</li>
-                    <li>Good with children</li>
-                    <li>Animal must be leashed at all times</li> */}
               </ul>
 
               {/* <!-- 5th ROW - CALL TO ACTION BUTTON --> */}

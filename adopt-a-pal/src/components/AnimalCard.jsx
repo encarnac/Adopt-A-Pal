@@ -58,7 +58,7 @@ function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
           {/* <!------RIGHT COLUMN FOR PET INFO ------> */}
           <div className="flex flex-col relative basis-1/2 p-8 space-y-2 text-start">
             {/* <!-- 1st ROW - NAME --> */}
-            <h2 className="font-bold text-xl text-black" t>
+            <h2 className="font-bold text-xl text-black capitalize" t>
               {animal.name}
             </h2>
 
@@ -68,14 +68,16 @@ function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
             </p>
 
             {/* <!-- 3rd ROW - AVAILABILITY, SPECIES, BREED --> */}
-            <div className="flex flex-row flex-wrap gap-2 justify-start content-start">
+            <div className="flex flex-row flex-wrap gap-2 justify-start content-start capitalize">
               <p className={`badge badge-lg ${availabilityBadge}`}>
                 {animal.availability}
               </p>
               <p className="badge badge-info badge-lg capitalize">
                 {animal.species}
               </p>
-              <p className="badge badge-primary badge-lg ">{animal.breed}</p>
+              <p className="badge badge-primary badge-lg capitalize">
+                {animal.breed}
+              </p>
             </div>
 
             {/* <!-- 4th ROW - DISPOSITIONS LIST --> */}
