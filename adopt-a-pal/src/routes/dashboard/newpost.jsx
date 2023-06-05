@@ -156,20 +156,20 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                   <input
                     type="file"
                     className="file-input file-input-bordered file-input-sm w-full max-w-lg bg-white text-sm"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        setPic(e.target.files[0]);
-                      }
-                    }}
+                    // onChange={(e) => {
+                    //   if (e.target.files && e.target.files[0]) {
+                    //     setPic(e.target.files[0]);
+                    //   }
+                    // }}
                   />
                   <input
                     type="file"
                     className="file-input file-input-bordered file-input-sm w-full max-w-lg bg-white text-sm"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        setPic(e.target.files[0]);
-                      }
-                    }}
+                    // onChange={(e) => {
+                    //   if (e.target.files && e.target.files[0]) {
+                    //     setPic(e.target.files[0]);
+                    //   }
+                    // }}
                   />
                 </div>
 
