@@ -81,7 +81,9 @@ function Browse(props) {
   return (
     <>
       <NavBar currentPage={"browse"} />
-      <div className="w-[70vw] flex flex-col mt-28 mb-10 mx-auto justify-center ">
+
+      {/* ---- STATIC TOP HALF OF PAGE */}
+      <div className="w-[80vw] flex flex-col mt-28 mb-10 mx-auto px-12 justify-center ">
         {/* PAGE TITLE */}
         <div className="mb-8 text-start text-2xl font-bold text-brown">
           Browse Pets
@@ -90,9 +92,13 @@ function Browse(props) {
         {/* FILTER AND SEARCH BAR*/}
         <FilterBar handleAnimalUrl={handleAnimalUrl} admin={false} />
 
-        <div className="p-2 mx-auto text-center text-sm text-taupe">
+        <div className="p-2 mx-auto text-[16px] font-medium text-taupe">
           Returned {filteredAnimals?.length} results
         </div>
+      </div>
+
+      {/* ---- SWIPER SPANS WHOLE SCREEN */}
+      <div className="w-screen flex flex-row justify-center">
         {loading ? (
           <div
             class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
@@ -102,7 +108,7 @@ function Browse(props) {
           </div>
         ) : (
           <Swiper
-            className="swiper_container h-full w-full mb-28"
+            className="swiper_container flex flex-row h-full w-full z-50 mb-28 justify-start content-center"
             grabCursor={true}
             centeredSlides={true}
             effect={"coverflow"}
@@ -113,28 +119,28 @@ function Browse(props) {
               modifier: 3,
             }}
             modules={[Navigation, EffectCoverflow, A11y]}
-            spaceBetween={1}
-            slidesPerView={1.4}
+            spaceBetween={.1}
+            slidesPerView={2.3}
             pagination={{ el: ".swiper-pagination", clickable: true }}
             navigation={{
               nextEl: ".swiper-button-next",
               prevEl: ".swiper-button-prev",
               clickable: true,
             }}
-            initialSlide={1}
+            initialSlide={0}
           >
             {filteredAnimals?.map((animal, i) => (
-                <SwiperSlide>
-                  <CarouselCard animal={animal} userID={userID} />
-                </SwiperSlide>
+              <SwiperSlide>
+                <CarouselCard animal={animal} userID={userID} />
+              </SwiperSlide>
             ))}
 
             {/* BUTTON SLIDER CONTROLLERS*/}
             <div className="slider-controler">
-              <div className="swiper-button-prev slider-arrow shadow-sm hover:shadow-lg">
+              <div className="swiper-button-prev slider-arrow ml-12 shadow-md hover:shadow-xl">
                 <ion-icon name="arrow-back-outline"></ion-icon>
               </div>
-              <div className="swiper-button-next slider-arrow shadow-sm hover:shadow-lg">
+              <div className="swiper-button-next slider-arrow mr-12 shadow-md hover:shadow-xl">
                 <ion-icon name="arrow-forward-outline"></ion-icon>
               </div>
             </div>
