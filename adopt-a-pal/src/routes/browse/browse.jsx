@@ -127,7 +127,7 @@ function Browse(props) {
               prevEl: ".swiper-button-prev",
               clickable: true,
             }}
-            initialSlide={1}
+            initialSlide={0}
           >
             {filteredAnimals?.map((animal, i) => (
               <SwiperSlide>

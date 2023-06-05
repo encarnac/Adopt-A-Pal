@@ -7,9 +7,9 @@ function NavBar(props) {
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-[#FFDDD2]">
-      <div className="max-w-[80vw] mx-auto my-2 flex justify-between items-center">
+      <div className="max-w-[80vw] mx-auto my-2 flex flex-row justify-between items-center">
         <div className="left flex items-center font-bold text-taupe text-2xl">
-          <div className="flex items-center gap-10">
+          <div className="flex items-center space-x-8">
             <div className="flex items-center gap-2">
               {/* LOGO & TITLE */}
               <svg
@@ -52,13 +52,13 @@ function NavBar(props) {
             {/* NAVIGATION LINKS */}
             <div className="right menu flex text-2xl font-medium">
               <ul className="hidden lg:flex">
-                <li className="text-[#FA8C01] list-none mx-3">
+                <li className="text-[#FA8C01] list-none">
                   <a href="#">Home</a>
                 </li>
-                <li className="text-[#714949] hover:text-[#856a6a] list-none mx-3">
+                <li className="text-[#714949] hover:text-orange list-none">
                   <a href="#features">Features</a>
                 </li>
-                <li className="text-[#714949]  hover:text-[#856a6a] list-none mx-3">
+                <li className="text-[#714949]  hover:text-orange list-none">
                   <a href="#contact-us">Contact Us</a>
                 </li>
               </ul>
@@ -68,9 +68,9 @@ function NavBar(props) {
 
         {/* ACCOUNT LINKS */}
         <div className="right">
-          <div className="menu flex flex-row gap-3 items-center text-2xl font-medium">
+          <div className="menu space-x-2 flex flex-row items-end md:items-center text-2xl font-medium ">
             <Link
-              className="text-[#714949] hover:text-[#856a6a] list-none mx-3"
+              className="text-[#714949] hover:text-orange list-none px-4 py-2 hover:bg-[#F1CDC3]"
               onClick={() => handleLoginModal()}
             >
               Login

@@ -21,7 +21,7 @@ function Header(props) {
             </h1>
             <div className="flex flex-row md:justify-start ml-8 md:ml-0">
               <Link onClick={() => handleSignupModal(true)}>
-                <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[8em] rounded-full font-medium font-small my-6 mx-auto md:mx-0 py-2">
+                <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[8em] rounded-full font-medium font-small my-6 mx-auto md:mx-0 py-4">
                   Get Started
                 </button>
               </Link>
