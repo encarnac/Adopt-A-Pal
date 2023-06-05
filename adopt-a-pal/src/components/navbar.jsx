@@ -5,7 +5,6 @@ import NewPost from "../routes/dashboard/newpost";
 function NavBar({ currentPage, showNewPost }) {
   return (
     <>
-
       <div className="fixed z-50 top-0 left-0 right-0 bg-[#FFDDD2]">
         <div className="max-w-[80vw] mx-auto my-2 flex flex-row justify-between items-center">
           <div className="left flex items-center font-bold text-taupe text-2xl">
@@ -82,7 +81,11 @@ function NavBar({ currentPage, showNewPost }) {
                       <Link to="/dashboard">All Posts</Link>
                     </li>
                     <li className="text-[#714949] hover:text-[#FA8C01] list-none mx-3">
-                      <Link onClick={()=>{showNewPost()}}>
+                      <Link
+                        onClick={() => {
+                          showNewPost();
+                        }}
+                      >
                         New Post
                       </Link>
                     </li>
@@ -125,30 +128,51 @@ function NavBar({ currentPage, showNewPost }) {
               {currentPage === "admin" ? (
                 <>
                   <li className="">
-                    <Link to="/dashboard">All Posts</Link>
+                    <Link
+                      to="/dashboard"
+                      className="font-medium text-xl text-brown"
+                    >
+                      All Posts
+                    </Link>
                   </li>
                   <li className="">
-                    <Link onClick={() => {}}>New Post</Link>
+                    <Link
+                      onClick={() => {}}
+                      className="font-medium text-xl text-brown"
+                    >
+                      New Post
+                    </Link>
                   </li>
                 </>
               ) : (
                 <>
                   <li className="">
-                    <Link to="/dashboard">Home</Link>
+                    <Link
+                      to="/dashboard"
+                      className="font-medium text-xl text-brown"
+                    >
+                      Home
+                    </Link>
                   </li>
                   <li className="">
-                    <Link to="/browse">Browse</Link>
+                    <Link
+                      to="/browse"
+                      className="font-medium text-xl text-brown"
+                    >
+                      Browse
+                    </Link>
                   </li>
                 </>
               )}
               <li className="">
-                <Link to="/">Logout</Link>
+                <Link to="/" className="font-medium text-xl text-brown">
+                  Logout
+                </Link>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      
     </>
   );
 }
