@@ -8,7 +8,9 @@ function CarouselCard({ animal, userID }) {
       ? "badge-success"
       : animal.availability === "Pending"
       ? "badge-warning"
-      : "badge-error";
+      : animal.availability === "Not Available"
+      ? "badge-error"
+      : "bg-[#D6D6D6] text-[#fff]";
 
   const [show, setShow] = useState(true);
   const [inactive, setInactive] = useState(false);

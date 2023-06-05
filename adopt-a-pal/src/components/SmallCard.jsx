@@ -12,7 +12,9 @@ function SmallCard({ animal, uid, admin, updateCount }) {
       ? "badge-success"
       : animal.availability === "Pending"
       ? "badge-warning"
-      : "badge-error";
+      : animal.availability === "Not Available"
+      ? "badge-error"
+      : "bg-[#D6D6D6] text-[#fff]";
 
   const handleDisplayInfo = () => {
     setDisplayInfo(!displayInfo);
