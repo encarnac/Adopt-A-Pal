@@ -44,11 +44,13 @@ function NewPost({ show, showNewPost, handleUpdate }) {
       if (response.ok) {
         const confirmation = await response.json();
         console.log("SUCCESS = ", confirmation);
-        showNewPost();
+        handleUpdate(confirmation);
         setLoading(false);
         setWarning(false);
         setPics([]);
-        handleUpdate(confirmation);
+        setSpecies(null);
+        setAvailability(null);
+        showNewPost();
         
       }
       
@@ -60,7 +62,10 @@ function NewPost({ show, showNewPost, handleUpdate }) {
     }
   };
 
-  if (!show) return null;
+  if (!show) {
+    return null;
+  }
+
 
   return (
     <>
@@ -81,6 +86,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                     placeholder="ex. Dobby"
                     className="input input-bordered w-full max-w-xl bg-white capitalize"
                     onChange={(e) => setName(e.target.value)}
+                    required
                   />
                 </div>
 
@@ -93,6 +99,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                     value={species}
                     onChange={(e) => setSpecies(e.target.value)}
                     className="select select-bordered bg-white"
+                    required
                   >
                     <option disabled selected>
                       Select...
@@ -113,6 +120,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                     placeholder="ex. Mini Pinscher"
                     className="input input-bordered w-full max-w-xl bg-white capitalize"
                     onChange={(e) => setBreed(e.target.value)}
+                    required
                   />
                 </div>
 
@@ -125,6 +133,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                     value={availability}
                     onChange={(e) => setAvailability(e.target.value)}
                     className="select select-bordered bg-white"
+                    required
                   >
                     <option disabled selected>
                       Select...
@@ -169,7 +178,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                 </div>
 
                 {/* DISPOSITIONS - TOGGLE */}
-                <div className="flex flex-col">
+                <div className="flex flex-col py-2">
                   <div className="form-control w-full">
                     <label className="cursor-pointer label">
                       <span className="label-text">Good with Children</span>
@@ -207,36 +216,38 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                     </label>
                   </div>
                 </div>
-              </form>
 
-              {/* CALL TO ACTION BUTTON */}
-              <div className="modal-action">
-                <button
-                  onClick={() => {
-                    showNewPost();
-                  }}
-                  className="btn text-brown"
-                >
-                  Cancel
-                </button>
-                <div className="indicator">
-                  { warning && <span className="indicator-item bg-[#D9C6C7]/90 badge badge-info shadow">
-                    Try Again
-                  </span>}
-                  <button className="btn btn-primary" onClick={createNewPet}>
-                    {loading ? (
-                      <div
-                        class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                        role="status"
-                      >
-                        <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"></span>
-                      </div>
-                    ) : (
-                      <span className="text-white">Create</span>
-                    )}
+                {/* CALL TO ACTION BUTTON */}
+                <div className="modal-action">
+                  <button
+                    onClick={() => {
+                      showNewPost();
+                    }}
+                    className="btn text-brown"
+                  >
+                    Cancel
                   </button>
+                  <div className="indicator">
+                    {warning && (
+                      <span className="indicator-item bg-[#D9C6C7]/90 badge badge-info shadow">
+                        Try Again
+                      </span>
+                    )}
+                    <button className="btn btn-primary" type="submit">
+                      {loading ? (
+                        <div
+                          class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                          role="status"
+                        >
+                          <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"></span>
+                        </div>
+                      ) : (
+                        <span className="text-white">Create</span>
+                      )}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </FadeAnimation>
