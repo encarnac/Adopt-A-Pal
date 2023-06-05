@@ -11,13 +11,13 @@ function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
       {/* TO DO: Use the class "z-50 bg-black bg-opacity-30 backdrop-blur-sm" to toggle background for activate state */}
       <div className="fixed z-50 inset-0 bg-black bg-opacity-30 backdrop-blur-sm w-full min-h-screen gap-4 flex-wrap flex justify-center items-center">
         {/* <!-- CARD --> */}
-        <div className="flex w-[50rem] h-[400px] p-0 bg-white rounded-[35px] shadow-lg hover:shadow-2xl">
+        <div className="flex w-[50rem] h-[400px] p-0 bg-white rounded-[30px] shadow-lg hover:shadow-2xl">
           {/* !------ LEFT COLUMN FOR PET IMAGE -----> */}
-          <div className="relative flex flex-col basis-1/2 justify-center p-0 m-0">
+          <div className="relative flex flex-col basis-1/2 justify-center p-2">
             {/* LEFT COLUMN - Close Button */}
             <button
               onClick={() => handleDisplayInfo()}
-              className="absolute z-51 inset-4 btn btn-circle btn-sm bg-white opacity-50"
+              className="absolute z-50 inset-6 btn btn-circle btn-sm bg-white opacity-50"
             >
               <svg
                 className="h-6 w-6"
@@ -34,24 +34,20 @@ function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
             </button>
 
             {/* LEFT COLUMN - IMAGE CAROUSEL */}
-            <div className="carousel w-full h-full">
+            <div className="carousel w-full h-full rounded-[28px]">
               {animal.avatars?.map((image, i) => (
                 <div id={`${i}`} className="carousel-item w-full">
-                  <img
-                    className="object-cover w-full rounded-[35px]"
-                    src={image}
-                    alt=""
-                  />
+                  <img className="object-cover w-full " src={image} alt="" />
                 </div>
               ))}
             </div>
 
             {/* LEFT COLUMN - CAROUSEL BUTTONS */}
-            <div className="absolute bottom-0 justify-center w-full py-2 space-x-4">
+            <div className="absolute bottom-2 justify-center w-full py-2 space-x-4">
               {animal.avatars?.map((image, i) => (
                 <a
                   href={`#${i}`}
-                  className="btn btn-xs btn-circle bg-white p-0 shadow-md hover:shadow-lg opacity-70"
+                  className="rounded-full text-[12px] px-2 bg-white shadow-md hover:shadow-lg opacity-70"
                 >
                   {" "}
                 </a>
@@ -87,9 +83,6 @@ function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
               {animal.dispositions?.map((description, i) => (
                 <li>{description}</li>
               ))}
-              {/* <li>Good with other animals</li>
-              <li>Good with children</li>
-              <li>Animal must be leashed at all times</li> */}
             </ul>
 
             {/* <!-- 5th ROW - CALL TO ACTION BUTTON --> */}

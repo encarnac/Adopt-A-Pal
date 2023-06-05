@@ -22,6 +22,7 @@ import "swiper/css/scrollbar";
 
 function Browse(props) {
   const [loading, setLoading] = useState(true);
+
   // Get list of user's pals to be used as filter
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
@@ -33,11 +34,12 @@ function Browse(props) {
   const [animals, setAnimals] = useState(null); // Contains raw animal data returned
   const [filteredAnimals, setFilteredAnimals] = useState(null); // Contains animal data filtered by userPals
 
-  // API call to handle query params
+  // // API call to handle query params
   const [animalUrl, setAnimalUrl] = useState("/api/animals");
   const handleAnimalUrl = (e) => {
     setAnimalUrl(e);
   };
+
 
   // Handles API GET fetch request to get raw animal data from db
   useEffect(() => {
@@ -78,6 +80,8 @@ function Browse(props) {
     console.log("FILTERED ANIMALS = ", filteredAnimals);
   }, [animals]);
 
+
+
   return (
     <>
       <NavBar currentPage={"browse"} />
@@ -98,10 +102,10 @@ function Browse(props) {
       </div>
 
       {/* ---- SWIPER SPANS WHOLE SCREEN */}
-      <div className="w-screen flex flex-row justify-center">
+      <div className="w-[75vw] flex flex-row justify-center relative mx-auto">
         {loading ? (
           <div
-            class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            class="top-50 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
             role="status"
           >
             <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"></span>
@@ -114,13 +118,13 @@ function Browse(props) {
             effect={"coverflow"}
             coverflowEffect={{
               rotate: 0,
-              stretch: 0,
+              stretch: 70,
               depth: 100,
               modifier: 3,
             }}
             modules={[Navigation, EffectCoverflow, A11y]}
-            spaceBetween={.1}
-            slidesPerView={2.3}
+            spaceBetween={0.1}
+            slidesPerView={2}
             pagination={{ el: ".swiper-pagination", clickable: true }}
             navigation={{
               nextEl: ".swiper-button-next",
@@ -136,11 +140,11 @@ function Browse(props) {
             ))}
 
             {/* BUTTON SLIDER CONTROLLERS*/}
-            <div className="slider-controler">
-              <div className="swiper-button-prev slider-arrow ml-12 shadow-md hover:shadow-xl">
+            <div className="slider-controler ">
+              <div className="swiper-button-prev slider-arrow ml-12 shadow-lg hover:shadow-xl">
                 <ion-icon name="arrow-back-outline"></ion-icon>
               </div>
-              <div className="swiper-button-next slider-arrow mr-12 shadow-md hover:shadow-xl">
+              <div className="swiper-button-next slider-arrow mr-12 shadow-lg hover:shadow-xl">
                 <ion-icon name="arrow-forward-outline"></ion-icon>
               </div>
             </div>

@@ -41,34 +41,30 @@ function CarouselCard({ animal, userID }) {
         <div className="w-full gap-4 flex-wrap flex justify-center items-center">
           {/* <!-- CARD --> */}
           <div
-            className={`flex w-[50rem] h-[400px] p-0 m-8 rounded-[35px] bg-white ${
-              inactive ? "blur-[2px] opacity-95" : "shadow-md hover:shadow-lg"
+            className={`flex w-[50rem] h-[400px] p-0 m-8 rounded-[30px] bg-white ${
+              inactive ? "blur-[2px] opacity-95" : "shadow-lg hover:shadow-xl"
             }`}
           >
             {/* !------ LEFT COLUMN FOR PET IMAGE -----> */}
-            <div className="relative flex flex-col basis-1/2 justify-center p-0 m-0">
+            <div className="relative flex flex-col basis-1/2 justify-center p-2">
               {/* LEFT COLUMN - IMAGE CAROUSEL */}
-              <div className="carousel w-full h-full">
+              <div className="carousel w-full h-full rounded-[28px]">
                 {animal.avatars?.map((image, i) => (
                   <div
                     id={`${animal.name}/${i}`}
                     className="carousel-item w-full"
                   >
-                    <img
-                      className="object-cover w-full rounded-[35px]"
-                      src={image}
-                      alt=""
-                    />
+                    <img className="object-cover w-full" src={image} alt="" />
                   </div>
                 ))}
               </div>
 
               {/* LEFT COLUMN - CAROUSEL BUTTONS */}
-              <div className="absolute bottom-0 justify-center w-full py-2 space-x-4">
+              <div className="absolute bottom-2 justify-center w-full py-2 space-x-4">
                 {animal.avatars?.map((image, i) => (
                   <a
                     href={`#${animal.name}/${i}`}
-                    className="btn btn-xs btn-circle bg-white p-0 shadow-md hover:shadow-lg opacity-70"
+                    className="rounded-full text-[12px] px-2 bg-white shadow-md hover:shadow-lg opacity-70"
                   >
                     {" "}
                   </a>
