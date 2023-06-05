@@ -11,23 +11,12 @@ function NewPost({ show, showNewPost, handleUpdate }) {
   const [dispositionAnimals, setDispositionAnimals] = useState(false);
   const [dispositionChildren, setDispositionChildren] = useState(false);
   const [dispositionLeash, setDispositionLeash] = useState(false);
-  const [pic, setPic] = useState("");
+  const [pics, setPics] = useState([]);
   const [availability, setAvailability] = useState(null);
-  // const newPet = {
-  //   name: name,
-  //   species: species,
-  //   breed: breed,
-  //   disposition_animals: dispositionAnimals,
-  //   disposition_children: dispositionChildren,
-  //   disposition_leash: dispositionLeash,
-  //   pic: pic.name,
-  //   availability: availability
-  // };
 
   const createNewPet = async (event) => {
     event.preventDefault();
     setLoading(true);
-    // console.log(newPet);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -37,16 +26,18 @@ function NewPost({ show, showNewPost, handleUpdate }) {
       formData.append("disposition_children", dispositionChildren);
       formData.append("disposition_leash", dispositionLeash);
       formData.append("availability", availability);
-      formData.append("pic", pic);
-      console.log("formdata:", formData);
 
+      pics.forEach((pic, index) => {
+        formData.append(`pics[${index}]`, pic);
+      });
+
+      console.log("formdata:", formData);
       const response = await fetch("/api/animals", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         method: "POST",
         body: formData,
-        // body: JSON.stringify(newPet),
       });
 
       if (response.ok) {
@@ -148,28 +139,25 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                     type="file"
                     className="file-input file-input-bordered file-input-sm w-full max-w-lg bg-white text-sm"
                     onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        setPic(e.target.files[0]);
-                      }
+                      const file = e.target.files[0];
+                      setPics((prevPics) => [...prevPics, file]);
                     }}
                   />
                   <input
                     type="file"
                     className="file-input file-input-bordered file-input-sm w-full max-w-lg bg-white text-sm"
-                    // onChange={(e) => {
-                    //   if (e.target.files && e.target.files[0]) {
-                    //     setPic(e.target.files[0]);
-                    //   }
-                    // }}
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      setPics((prevPics) => [...prevPics, file]);
+                    }}
                   />
                   <input
                     type="file"
                     className="file-input file-input-bordered file-input-sm w-full max-w-lg bg-white text-sm"
-                    // onChange={(e) => {
-                    //   if (e.target.files && e.target.files[0]) {
-                    //     setPic(e.target.files[0]);
-                    //   }
-                    // }}
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      setPics((prevPics) => [...prevPics, file]);
+                    }}
                   />
                 </div>
 
