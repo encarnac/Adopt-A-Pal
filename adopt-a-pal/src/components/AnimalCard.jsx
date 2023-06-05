@@ -4,7 +4,9 @@ function AnimalCard({ animal, admin, handleDisplayInfo, deleteAnimal }) {
       ? "badge-success"
       : animal.availability === "Pending"
       ? "badge-warning"
-      : "badge-error";
+      : animal.availability === "Not Available"
+      ? "badge-error"
+      : "bg-[#D6D6D6] text-[#fff]";
 
   return (
     <>
