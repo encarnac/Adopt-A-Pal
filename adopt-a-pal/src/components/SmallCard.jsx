@@ -43,7 +43,7 @@ function SmallCard({ animal, uid, admin, updateCount }) {
   return (
     <>
       <FadeAnimation show={show}>
-        <div class="card mx-[100rem] w-[20rem] h-76 p-2 my-4 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl">
+        <div class="card mx-[100rem] w-[20rem]   p-2 my-4 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl">
           <div className="relative">
             <button
               onClick={() => deleteAnimal()}
@@ -71,7 +71,7 @@ function SmallCard({ animal, uid, admin, updateCount }) {
             className="flex flex-col basis-1/2"
           >
             <img
-              class="object-cover h-52 rounded-xl"
+              class="object-cover h-56 rounded-xl"
               src={animal.avatars[0]}
               alt=""
             />
