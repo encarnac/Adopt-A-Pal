@@ -81,7 +81,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                   <input
                     type="text"
                     placeholder="ex. Dobby"
-                    className="input input-bordered w-full max-w-xl bg-white"
+                    className="input input-bordered w-full max-w-xl bg-white capitalize"
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
@@ -113,7 +113,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                   <input
                     type="text"
                     placeholder="ex. Mini Pinscher"
-                    className="input input-bordered w-full max-w-xl bg-white"
+                    className="input input-bordered w-full max-w-xl bg-white capitalize"
                     onChange={(e) => setBreed(e.target.value)}
                   />
                 </div>
