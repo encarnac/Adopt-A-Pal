@@ -87,7 +87,7 @@ function Browse(props) {
       <NavBar currentPage={"browse"} />
 
       {/* ---- STATIC TOP HALF OF PAGE */}
-      <div className="w-[80vw] flex flex-col mt-28 mb-10 mx-auto px-12 justify-center ">
+      <div className="w-[83vw] flex flex-col mt-28 mb-10 mx-auto px-12 justify-center ">
         {/* PAGE TITLE */}
         <div className="mb-8 text-start text-2xl font-bold text-brown">
           Browse Pets

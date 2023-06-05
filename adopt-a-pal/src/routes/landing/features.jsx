@@ -7,13 +7,13 @@ const Features = () => {
   return (
     <>
       {/* FEATURES TITLE*/}
-      <div className="mx-auto mt-50" id="features">
-        <img src={require("../../assets/features.png")} alt="" />
+      <div className="mx-auto mt-32 mr-3/4">
+        <img src={require("../../assets/features.png")} alt="" id="features"/>
       </div>
 
       {/* FEATURES CARDS */}
       <div className=" w-full pt-[5rem] pb-[10rem] lg:px-20">
-        <div className="justify-items-center max-w-[1240px] mx-[18rem] lg:mx-auto grid lg:grid-cols-3 grid-cols-1 gap-12">
+        <div className="grid lg:grid-cols-3 grid-cols-1 justify-items-center max-w-[1240px] mx-[18rem] lg:mx-auto  gap-12">
           {/* CARD 1 */}
           <div class="h-200 min-w-[15rem] bg-white rounded-[35px] min-w-[18rem] w-full px-10 lg:px-14 py-10 lg:py-0 flex flex-col justify-center shadow-xl duration-300 hover:scale-105 gap-4">
             <img

@@ -4,7 +4,7 @@ function Footer(props) {
   const handleSignupModal = props.handleSignupModal;
   return (
     <div
-      className=" w-full rounded-t-[55px] bg-white text-[#714949] shadow-xl"
+      className=" w-full rounded-t-[55px] bg-white text-[#714949] shadow-xl mt-24"
       id="contact-us"
     >
       {/* FOOTER CONTAINER */}
@@ -12,16 +12,17 @@ function Footer(props) {
         {/* TOP */}
         <div className="w-full pt-12 flex flex-col md:flex-row space-y-5 md:justify-between">
           {/* LEFT COLUMN - CALL TO ACTION BUTTON */}
-          <div className=" sm:w-2/5 flex flex-col space-y-5 justify-items-center">
-            <p className="opacity-60 text-[35px] md:text-[55px] text-[#714949] text-start font-bold">
+          <div className=" md:w-2/5 flex flex-col space-y-5 justify-items-center">
+            <p className="opacity-60 text-[24px] md:text-[35px] md:text-[55px] text-[#714949] text-start font-bold">
               Ready to find the <span className="text-[#FF7578]">one</span>?
             </p>
-             <div className="flex flex-row md:justify-start">
-            <Link onClick={() => handleSignupModal(true)}>
-            <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[7em] rounded-full font-medium text-[23px] my-6-0 py-2">
-              Get Started
-            </button>
-            </Link></div>
+            <div className="flex flex-row md:justify-start">
+              <Link onClick={() => handleSignupModal(true)}>
+                <button className="bg-[#F2968F] hover:bg-[#ef8e87] rounded-full md:mx-0 px-8 py-2 md:py-4 text-white text-lg font-medium ">
+                  Get Started
+                </button>
+              </Link>
+            </div>
           </div>
 
           {/* RIGHT COLUMN - SOCIAL ICON LINKS */}
