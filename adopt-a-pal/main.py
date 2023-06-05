@@ -306,19 +306,22 @@ def animals():
 
         dispositions = []
 
-        if bool(content["disposition_animals"]) is True:
+        # print(content["disposition_animals"])
+        # print(content["disposition_children"])
+        # print(content["disposition_leash"])
+        if content.get("disposition_animals", "").lower() == "true":
             dispositions.append("Good with other animals")
 
-        if bool(content["disposition_children"]) is True:
+        if content.get("disposition_children", "").lower() == "true":
             dispositions.append("Good with children")
 
-        if bool(content["disposition_leash"]) is True:
+        if content.get("disposition_leash", "").lower() == "true":
             dispositions.append("Animal must be leashed at all times")
 
         animal.update({
             "dispositions": dispositions
         })
-
+        print(animal)
         files = list(request.files.values())
 
         if len(files) == 0:
@@ -338,7 +341,6 @@ def animals():
         new_animal_key = client.key(ANIMALS, int(eid))
         res = client.get(key=new_animal_key)
         res["id"] = int(eid)
-
         return Response(json.dumps(res, default=str), status=201, mimetype='application/json')
     else:
         return jsonify(message='405')
