@@ -19,9 +19,9 @@ function Header(props) {
             <h1 className="font-bold text-[55px] text-[#714949] md:text-left">
               Swipe. <span className="text-[#FF7578]">Adopt.</span> Love.
             </h1>
-            <div className="flex flex-row md:justify-start ml-8 md:ml-0">
+            <div className="flex flex-row justify-center md:justify-start ml-8 md:ml-0">
               <Link onClick={() => handleSignupModal(true)}>
-                <button className="bg-[#F2968F] hover:bg-[#ef8e87] text-white w-[8em] rounded-full font-medium font-small my-6 mx-auto md:mx-0 py-4">
+                <button className="bg-[#F2968F] hover:bg-[#ef8e87] rounded-full my-6 mx-auto md:mx-0 px-10 py-4 md:py-4 text-white text-xl font-medium ">
                   Get Started
                 </button>
               </Link>

@@ -94,7 +94,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                   <select
                     value={species}
                     onChange={(e) => setSpecies(e.target.value)}
-                    className="select select-bordered bg-white text-light-grey"
+                    className="select select-bordered bg-white"
                   >
                     <option disabled selected>
                       Select...
@@ -126,7 +126,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                   <select
                     value={availability}
                     onChange={(e) => setAvailability(e.target.value)}
-                    className="select select-bordered bg-white text-light-grey"
+                    className="select select-bordered bg-white"
                   >
                     <option disabled selected>
                       Select...
@@ -139,19 +139,37 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                 </div>
 
                 {/* PHOTO - FILE INPUT */}
-                <div className="form-control w-full max-w-md">
+                <div className="form-control w-full max-w-md gap-4">
                   <label className="label">
                     <span className="label-text">Upload Photo</span>
                   </label>
 
                   <input
                     type="file"
-                    className="file-input file-input-bordered w-full max-w-lg bg-white text-sm"
+                    className="file-input file-input-bordered file-input-sm w-full max-w-lg bg-white text-sm"
                     onChange={(e) => {
                       if (e.target.files && e.target.files[0]) {
                         setPic(e.target.files[0]);
                       }
                     }}
+                  />
+                  <input
+                    type="file"
+                    className="file-input file-input-bordered file-input-sm w-full max-w-lg bg-white text-sm"
+                    // onChange={(e) => {
+                    //   if (e.target.files && e.target.files[0]) {
+                    //     setPic(e.target.files[0]);
+                    //   }
+                    // }}
+                  />
+                  <input
+                    type="file"
+                    className="file-input file-input-bordered file-input-sm w-full max-w-lg bg-white text-sm"
+                    // onChange={(e) => {
+                    //   if (e.target.files && e.target.files[0]) {
+                    //     setPic(e.target.files[0]);
+                    //   }
+                    // }}
                   />
                 </div>
 
@@ -215,7 +233,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                       <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"></span>
                     </div>
                   ) : (
-                    <span>Create</span>
+                    <span className="text-white">Create</span>
                   )}
                 </button>
               </div>

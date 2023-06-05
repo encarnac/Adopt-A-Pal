@@ -3,12 +3,12 @@ function Footer(props) {
   return (
     <div className=" w-full rounded-t-[55px] bg-white shadow-xl mt-auto">
       {/* FOOTER CONTAINER */}
-      <div className="xl:px-40 pb-12 px-20  ">
+      <div className="xl:px-40 pb-12 px-20 ">
         {/* TOP HALF oF FOOTER */}
-        <div className="w-full pt-12 flex md:flex-row flex-col md:justify-between">
+        <div className="w-full pt-12 flex flex-col md:flex-row justify-between gap-8">
           {/* TOP HALF , LEFT COLUMN */}
-          <div className="flex flex-col basis-1/2 ">
-            <div className="flex flex-row text-[25px] font-bold text-brown">
+          <div className="flex flex-col basis-1/2 justify-start">
+            <div className="flex flex-row text-[25px] justify-center md:justify-start font-bold text-brown">
               <svg
                 width="35"
                 height="35"
@@ -43,22 +43,22 @@ function Footer(props) {
               </svg>
               &nbsp;Adopt-a-Pal
             </div>
-            <div className="flex flex-row text-[20px] text-taupe pl-10">
+            <div className="flex flex-row justify-center md:justify-start text-[20px] text-taupe pl-10 pr-4">
               Swipe. Adopt. Love
             </div>
           </div>
 
           {/* TOP HALF , MIDDLE COLUMN */}
-          <div className="flex flex-col basis-1/4 text-end">
-            <p className="font-bold text-brown">Help</p>
+          <div className="flex flex-col basis-1/4 text-center md:text-end">
+            <p className="font-bold text-brown text-[20px]">Help</p>
             <p className="text-taupe text-[18px]">Terms & Conditions</p>
             <p className="text-taupe text-[18px]">Privacy Policy</p>
           </div>
 
           {/* TOP HALF , RIGHT COLUMN */}
-          <div className="flex flex-col">
-            <p className="font-bold text-brown">Contact Us</p>
-            <div className="flex flex-row space-x-3 justify-end">
+          <div className="flex flex-col ">
+            <p className="font-bold text-brown text-[20px]">Contact Us</p>
+            <div className="flex flex-row space-x-3 justify-center md:justify-end">
               <a href="https://github.com/Spatch7/Adopt-A-Pal">
                 <svg
                   stroke="#735858"
