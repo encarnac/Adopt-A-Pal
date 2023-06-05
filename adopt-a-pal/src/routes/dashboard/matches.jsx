@@ -4,12 +4,12 @@ import SmallCard from "../../components/SmallCard";
 function Matches({ palDataList, loading, uid }) {
   const [count, setCount] = useState(0);
   const updateCount = () => {
-    setCount(count => count - 1);
-  }
+    setCount((count) => count - 1);
+  };
 
   useEffect(() => {
-    setCount(palDataList?.length)
-  }, [palDataList])
+    setCount(palDataList?.length);
+  }, [palDataList]);
 
   return (
     <>
@@ -20,15 +20,17 @@ function Matches({ palDataList, loading, uid }) {
           Your Matches
         </div>
 
-        <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 justify-items-center auto-cols-auto gap-x-56 lg:gap-x-24 gap-y-8 mb-32 mx-auto px-2">
-          {loading && (
+        {loading && (
+          <div className="mx-auto">
             <div
-              class="ml-[50vw] mt-[10vh] gap-12 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+              class="h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
               role="status"
             >
               <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"></span>
             </div>
-          )}
+          </div>
+        )}
+        <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 justify-items-center auto-cols-auto gap-x-56 lg:gap-x-24 gap-y-8 mb-32 mx-auto px-2">
           {palDataList?.map((animal, i) => (
             <SmallCard
               animal={animal}

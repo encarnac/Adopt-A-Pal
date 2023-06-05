@@ -75,7 +75,7 @@ function FilterBar({ handleAnimalUrl, admin }) {
   return (
     <>
       <form onSubmit={handleSearch} className=" mx-auto">
-        <div className="join justify-stretch items-center justify-items content-center flex flex-row flex-wrap md:no-wrap gap-x-2 mb-8 gap-y-2 w-full">
+        <div className="join justify-center items-center justify-items content-center flex flex-row flex-wrap md:no-wrap gap-x-2 mb-8 gap-y-2 w-full">
           {/* AVAILABILITY - DROP DOWN SELECT (FOR ADMIN ONLY) */}
           {admin === true && (
             <select

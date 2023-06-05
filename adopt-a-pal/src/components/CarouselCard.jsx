@@ -63,8 +63,9 @@ function CarouselCard({ animal, userID }) {
               <div className="absolute bottom-2 justify-center w-full py-2 space-x-4">
                 {animal.avatars?.map((image, i) => (
                   <a
+                    
                     href={`#${animal.name}/${i}`}
-                    className="rounded-full text-[12px] px-2 bg-white shadow-md hover:shadow-lg opacity-70"
+                    className={`rounded-full text-[12px] px-2 bg-white shadow-md hover:shadow-lg opacity-70 ${inactive ? "disabled" : ""}`}
                   >
                     {" "}
                   </a>
