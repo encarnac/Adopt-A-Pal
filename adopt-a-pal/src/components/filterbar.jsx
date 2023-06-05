@@ -37,6 +37,7 @@ function FilterBar({ handleAnimalUrl, admin }) {
       : setDispositionLeash(true);
   };
 
+  // Handles new search queries
   const handleSearch = (event) => {
     event.preventDefault();
     handleAnimalUrl(
@@ -44,10 +45,37 @@ function FilterBar({ handleAnimalUrl, admin }) {
     );
   };
 
+  const animalUrl = '/api/animals';
+  const [breedOptions, setBreedOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(animalUrl);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
+        const animalData = await response.json();
+        const breeds = animalData.map((animal) => animal.breed);
+
+        setBreedOptions(breeds);
+
+        console.log("BREEDS = ", breeds);
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    };
+    fetchData();
+  }, [animalUrl]);
+
+
+
   return (
     <>
-      <form onSubmit={handleSearch} className="">
-        <div className="join justify-center items-center content-center flex flex-row flex-wrap md:no-wrap gap-x-2 mb-8 gap-y-2 w-full">
+      <form onSubmit={handleSearch} className=" mx-auto">
+        <div className="join justify-stretch items-center justify-items content-center flex flex-row flex-wrap md:no-wrap gap-x-2 mb-8 gap-y-2 w-full">
           {/* AVAILABILITY - DROP DOWN SELECT (FOR ADMIN ONLY) */}
           {admin === true && (
             <select
@@ -55,7 +83,7 @@ function FilterBar({ handleAnimalUrl, admin }) {
               onChange={(e) => setAvailability(e.target.value)}
               className="select bg-white border-primary opacity-50 text-brown join-item"
             >
-              <option disabled selected>
+              <option disabled selected value="">
                 Availability
               </option>
               <option value="">All</option>
@@ -72,7 +100,7 @@ function FilterBar({ handleAnimalUrl, admin }) {
             onChange={(e) => setDate(e.target.value)}
             className="select bg-white border-primary opacity-50 text-brown join-item"
           >
-            <option disabled selected>
+            <option value="" disabled selected>
               Date Posted
             </option>
             <option value="">All</option>
@@ -87,13 +115,28 @@ function FilterBar({ handleAnimalUrl, admin }) {
             onChange={(e) => setSpecies(e.target.value)}
             className="select bg-white border-primary opacity-50 text-brown join-item"
           >
-            <option disabled selected>
+            <option disabled selected value=""> 
               Species
             </option>
             <option value="">All</option>
             <option value="cat">Cat</option>
             <option value="dog">Dog</option>
             <option value="other">Other</option>
+          </select>
+
+          {/* BREED - TEXT INPUT */}
+          <select
+            value={breed}
+            onChange={(e) => setBreed(e.target.value)}
+            className="select bg-white border-primary opacity-50 text-brown join-item"
+          >
+            <option disabled selected value="">
+              Breed
+            </option>
+            <option value="">All</option>
+            {breedOptions?.map((option, i) => (
+              <option value={`${option}`}>{option}</option>
+            ))}
           </select>
 
           {/* DISPOSITIONS FOR CHILDREN - BUTTON  */}
@@ -131,13 +174,6 @@ function FilterBar({ handleAnimalUrl, admin }) {
           >
             Leash Required
           </button>
-
-          {/* BREED - TEXT INPUT */}
-          <input
-            className="input input-bordered border-primary bg-white opacity-50 text-brown text-sm join-item "
-            placeholder="Breed"
-            onChange={(e) => setBreed(e.target.value)}
-          />
 
           {/* SUBMIT BUTTON */}
           <button
