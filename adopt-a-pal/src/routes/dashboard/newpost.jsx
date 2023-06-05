@@ -4,6 +4,7 @@ import "../../styles.css";
 
 function NewPost({ show, showNewPost, handleUpdate }) {
   const [loading, setLoading] = useState(false);
+  const [warning, setWarning] = useState(false);
   const token = localStorage.getItem("token");
   const [name, setName] = useState(null);
   const [species, setSpecies] = useState(null);
@@ -44,10 +45,16 @@ function NewPost({ show, showNewPost, handleUpdate }) {
         const confirmation = await response.json();
         console.log("SUCCESS = ", confirmation);
         showNewPost();
-        handleUpdate(confirmation);
         setLoading(false);
+        setWarning(false);
+        setPics([]);
+        handleUpdate(confirmation);
+        
       }
+      
     } catch (error) {
+      setLoading(false);
+      setWarning(true);
       console.log(error);
       throw new Error(error.message);
     }
@@ -60,10 +67,10 @@ function NewPost({ show, showNewPost, handleUpdate }) {
       <div className="fixed z-50 inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
         <FadeAnimation show={show}>
           <div className="modal modal-open">
-            <div className="modal-box w-11/12 max-w-xl bg-white opacity-95 px-16 py-8">
+            <div className="modal-box w-11/12 max-w-xl bg-white opacity-95 px-16 py-6">
               <h3 className="font-bold text-2xl text-brown">New Post</h3>
 
-              <form className="py-4 space-y-2" onSubmit={createNewPet}>
+              <form className="py-4 space-y-1" onSubmit={createNewPet}>
                 {/* NAME - TEXT INPUT */}
                 <div className="form-control w-full max-w-md">
                   <label className="label">
@@ -130,7 +137,7 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                 </div>
 
                 {/* PHOTO - FILE INPUT */}
-                <div className="form-control w-full max-w-md gap-4">
+                <div className="form-control w-full max-w-md gap-2">
                   <label className="label">
                     <span className="label-text">Upload Photo</span>
                   </label>
@@ -212,18 +219,23 @@ function NewPost({ show, showNewPost, handleUpdate }) {
                 >
                   Cancel
                 </button>
-                <button className="btn btn-primary" onClick={createNewPet}>
-                  {loading ? (
-                    <div
-                      class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                      role="status"
-                    >
-                      <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"></span>
-                    </div>
-                  ) : (
-                    <span className="text-white">Create</span>
-                  )}
-                </button>
+                <div className="indicator">
+                  { warning && <span className="indicator-item bg-[#D9C6C7]/90 badge badge-info shadow">
+                    Try Again
+                  </span>}
+                  <button className="btn btn-primary" onClick={createNewPet}>
+                    {loading ? (
+                      <div
+                        class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-neutral-100 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                        role="status"
+                      >
+                        <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"></span>
+                      </div>
+                    ) : (
+                      <span className="text-white">Create</span>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
